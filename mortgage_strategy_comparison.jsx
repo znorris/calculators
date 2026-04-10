@@ -157,34 +157,33 @@ export default function App() {
   const [dragEnd, setDragEnd] = useState(null);
 
   // Persistent storage
+  const STORAGE_KEY = "mortgage-calc-inputs";
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
-    (async () => {
-      try {
-        const result = await window.storage.get("mortgage-calc-inputs");
-        if (result && result.value) {
-          const d = JSON.parse(result.value);
-          if (d.origLoan != null) setOrigLoan(d.origLoan);
-          if (d.termYears != null) setTermYears(d.termYears);
-          if (d.mortRate != null) setMortRate(d.mortRate);
-          if (d.curBal != null) setCurBal(d.curBal);
-          if (d.startMo != null) setStartMo(d.startMo);
-          if (d.startYr != null) setStartYr(d.startYr);
-          if (d.returnRate != null) setReturnRate(d.returnRate);
-          if (d.extra != null) setExtra(d.extra);
-          if (d.fedTax != null) setFedTax(d.fedTax);
-          if (d.stateTax != null) setStateTax(d.stateTax);
-          if (d.payoffOff != null) setPayoffOff(d.payoffOff);
-        }
-      } catch (e) { /* no saved data */ }
-      setLoaded(true);
-    })();
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const d = JSON.parse(raw);
+        if (d.origLoan != null) setOrigLoan(d.origLoan);
+        if (d.termYears != null) setTermYears(d.termYears);
+        if (d.mortRate != null) setMortRate(d.mortRate);
+        if (d.curBal != null) setCurBal(d.curBal);
+        if (d.startMo != null) setStartMo(d.startMo);
+        if (d.startYr != null) setStartYr(d.startYr);
+        if (d.returnRate != null) setReturnRate(d.returnRate);
+        if (d.extra != null) setExtra(d.extra);
+        if (d.fedTax != null) setFedTax(d.fedTax);
+        if (d.stateTax != null) setStateTax(d.stateTax);
+        if (d.payoffOff != null) setPayoffOff(d.payoffOff);
+      }
+    } catch (e) { /* no saved data */ }
+    setLoaded(true);
   }, []);
 
   useEffect(() => {
     if (!loaded) return;
     const data = { origLoan, termYears, mortRate, curBal, startMo, startYr, returnRate, extra, fedTax, stateTax, payoffOff };
-    window.storage.set("mortgage-calc-inputs", JSON.stringify(data)).catch(() => {});
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (e) { /* storage full or unavailable */ }
   }, [loaded, origLoan, termYears, mortRate, curBal, startMo, startYr, returnRate, extra, fedTax, stateTax, payoffOff]);
 
   // Derived loan object
@@ -308,7 +307,7 @@ export default function App() {
     setStartMo(3); setStartYr(2026);
     setReturnRate(7); setExtra(500); setFedTax(0.15); setStateTax(0.093);
     setPayoffOff(0); resetZoom();
-    window.storage.delete("mortgage-calc-inputs").catch(() => {});
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
   }
 
   if (!loaded) return (
