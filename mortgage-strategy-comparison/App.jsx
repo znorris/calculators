@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine, ReferenceArea } from "recharts";
 
 function calcPmt(p, r, n) {
@@ -364,7 +364,7 @@ export default function App() {
                     <option key={i} value={i}>{m}</option>
                   ))}
                 </select>
-                <input type="number" min={1990} max={2030} value={startYr} onChange={e => { const v = parseInt(e.target.value); if (!isNaN(v)) setStartYr(v); }}
+                <NumInput min={1990} max={2040} value={startYr} onChange={v => setStartYr(Math.round(v))}
                   style={{ flex: "1 1 70px", padding: "7px 8px", borderRadius: 6, border: "1px solid #dde0e6", fontSize: 13, fontWeight: 600, color: "#1e293b", background: "#fff", boxSizing: "border-box" }} />
               </div>
             </div>
@@ -377,8 +377,7 @@ export default function App() {
             <label style={lbl}>Expected Market Return<Tip text="The average annual return you expect from your investments. The S&P 500 has historically returned ~10% before inflation, ~7% after. 6-8% is a conservative to moderate range." /></label>
             <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
               <div style={{ position: "relative", flex: "0 0 90px" }}>
-                <input type="number" min={1} max={15} step={0.1} value={returnRate}
-                  onChange={e => { const v = parseFloat(e.target.value); if (!isNaN(v) && v >= 0 && v <= 20) setReturnRate(v); }}
+                <NumInput min={0} max={20} step={0.1} value={returnRate} onChange={setReturnRate}
                   style={{ width: "100%", padding: "7px 28px 7px 10px", borderRadius: 6, border: "1px solid #dde0e6", fontSize: 14, fontWeight: 600, color: "#1e3a5f", background: "#fff", boxSizing: "border-box" }}
                 />
                 <span style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", fontSize: 13, color: "#94a3b8", pointerEvents: "none" }}>%</span>
@@ -399,8 +398,7 @@ export default function App() {
             <label style={lbl}>Extra Monthly<Tip text="The additional amount beyond your normal mortgage payment that you can put toward either extra principal (B) or investing (C) each month." /></label>
             <div style={{ position: "relative" }}>
               <span style={{ position: "absolute", left: 8, top: "50%", transform: "translateY(-50%)", fontSize: 13, color: "#94a3b8", pointerEvents: "none" }}>$</span>
-              <input type="number" min={0} step={100} value={extra}
-                onChange={e => { const v = parseFloat(e.target.value); if (!isNaN(v) && v >= 0) setExtra(v); }}
+              <NumInput min={0} step={100} value={extra} onChange={setExtra}
                 style={{ width: "100%", padding: "7px 10px 7px 20px", borderRadius: 6, border: "1px solid #dde0e6", fontSize: 14, fontWeight: 600, color: "#1e3a5f", background: "#fff", boxSizing: "border-box" }}
               />
             </div>
@@ -426,8 +424,8 @@ export default function App() {
             <label style={lbl}>State Tax on Gains<Tip text="Your state's tax rate on investment gains. Ranges from 0% in states with no income tax (TX, FL, WA, NV, etc.) to 13%+ in high-tax states. Some states tax gains as ordinary income rather than at a preferential rate." /></label>
             <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
               <div style={{ position: "relative", flex: "0 0 90px" }}>
-                <input type="number" min={0} max={15} step={0.1} value={parseFloat((stateTax * 100).toFixed(1))}
-                  onChange={e => { const v = parseFloat(e.target.value); if (!isNaN(v) && v >= 0 && v <= 20) setStateTax(v / 100); }}
+                <NumInput min={0} max={20} step={0.1} value={parseFloat((stateTax * 100).toFixed(1))}
+                  onChange={v => setStateTax(v / 100)}
                   style={{ width: "100%", padding: "7px 28px 7px 10px", borderRadius: 6, border: "1px solid #dde0e6", fontSize: 14, fontWeight: 600, color: "#1e3a5f", background: "#fff", boxSizing: "border-box" }}
                 />
                 <span style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", fontSize: 13, color: "#94a3b8", pointerEvents: "none" }}>%</span>
@@ -710,9 +708,8 @@ function LoanField({ label, value, onChange, prefix, suffix, step = 1 }) {
     <div style={{ flex: "1 1 140px", minWidth: 0 }}>
       <div style={{ fontSize: 10, fontWeight: 600, color: "#94a3b8", marginBottom: 3, textTransform: "uppercase", letterSpacing: "0.3px" }}>{label}</div>
       <div style={{ position: "relative" }}>
-        {prefix && <span style={{ position: "absolute", left: 8, top: "50%", transform: "translateY(-50%)", fontSize: 13, color: "#94a3b8", pointerEvents: "none" }}>{prefix}</span>}
-        <input type="number" step={step} value={value}
-          onChange={e => { const v = parseFloat(e.target.value); if (!isNaN(v) && v >= 0) onChange(v); }}
+        {prefix && <span style={{ position: "absolute", left: 8, top: "50%", transform: "translateY(-50%)", fontSize: 13, color: "#94a3b8", pointerEvents: "none", zIndex: 1 }}>{prefix}</span>}
+        <NumInput min={0} step={step} value={value} onChange={onChange}
           style={{
             width: "100%", padding: `7px ${suffix ? 28 : 10}px 7px ${prefix ? 20 : 10}px`,
             borderRadius: 6, border: "1px solid #dde0e6", fontSize: 13, fontWeight: 600,
@@ -825,3 +822,43 @@ function Tip({ text, align }) {
 
 const lbl = { display: "block", fontSize: 11, fontWeight: 600, color: "#64748b", marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.4px" };
 const sel = { width: "100%", padding: "7px 10px", borderRadius: 6, border: "1px solid #dde0e6", fontSize: 13, color: "#374151", background: "#fff" };
+
+// Controlled number input that allows free typing, empty fields, and commits on blur
+function NumInput({ value, onChange, min, max, step = 1, style }) {
+  const [raw, setRaw] = useState(String(value));
+  const prev = useRef(value);
+  // Sync from parent if parent value changed externally (reset, presets)
+  if (value !== prev.current && String(value) !== raw) {
+    setRaw(String(value));
+  }
+  prev.current = value;
+
+  return (
+    <input
+      type="text"
+      inputMode="decimal"
+      value={raw}
+      onChange={e => {
+        const s = e.target.value;
+        setRaw(s);
+        const v = parseFloat(s);
+        if (!isNaN(v) && (min == null || v >= min) && (max == null || v <= max)) {
+          onChange(v);
+        }
+      }}
+      onBlur={() => {
+        const v = parseFloat(raw);
+        if (isNaN(v) || (min != null && v < min)) {
+          onChange(min != null ? min : 0);
+          setRaw(String(min != null ? min : 0));
+        } else if (max != null && v > max) {
+          onChange(max);
+          setRaw(String(max));
+        } else {
+          setRaw(String(v));
+        }
+      }}
+      style={style}
+    />
+  );
+}
