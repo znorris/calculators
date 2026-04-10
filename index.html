@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculators</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font-family: system-ui, -apple-system, sans-serif; background: #f8f9fa; color: #1a1a1a; padding: 2rem; }
+      h1 { margin-bottom: 0.5rem; }
+      p.subtitle { color: #666; margin-bottom: 2rem; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+      .card {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 1.5rem;
+        text-decoration: none;
+        color: inherit;
+        transition: box-shadow 0.15s;
+      }
+      .card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+      .card h2 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+      .card p { font-size: 0.9rem; color: #555; }
+    </style>
+  </head>
+  <body>
+    <h1>Calculators</h1>
+    <p class="subtitle">A collection of useful calculators.</p>
+    <div class="grid">
+      <a class="card" href="mortgage-strategy-comparison/">
+        <h2>Mortgage Strategy Comparison</h2>
+        <p>Compare paying extra on your mortgage vs. investing the difference. Models payoff timelines, net worth, and tax implications.</p>
+      </a>
+    </div>
+  </body>
+</html>
