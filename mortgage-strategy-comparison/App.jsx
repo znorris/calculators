@@ -147,7 +147,7 @@ export default function App() {
   const [returnRate, setReturnRate] = useState(7);
   const [extra, setExtra] = useState(500);
   const [fedTax, setFedTax] = useState(0.15);
-  const [stateTax, setStateTax] = useState(0.093);
+  const [stateTax, setStateTax] = useState(0.05);
   const [divYld] = useState(0.015);
   const [payoffOff, setPayoffOff] = useState(0);
 
@@ -157,33 +157,34 @@ export default function App() {
   const [dragEnd, setDragEnd] = useState(null);
 
   // Persistent storage
-  const STORAGE_KEY = "mortgage-calc-inputs";
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const d = JSON.parse(raw);
-        if (d.origLoan != null) setOrigLoan(d.origLoan);
-        if (d.termYears != null) setTermYears(d.termYears);
-        if (d.mortRate != null) setMortRate(d.mortRate);
-        if (d.curBal != null) setCurBal(d.curBal);
-        if (d.startMo != null) setStartMo(d.startMo);
-        if (d.startYr != null) setStartYr(d.startYr);
-        if (d.returnRate != null) setReturnRate(d.returnRate);
-        if (d.extra != null) setExtra(d.extra);
-        if (d.fedTax != null) setFedTax(d.fedTax);
-        if (d.stateTax != null) setStateTax(d.stateTax);
-        if (d.payoffOff != null) setPayoffOff(d.payoffOff);
-      }
-    } catch (e) { /* no saved data */ }
-    setLoaded(true);
+    (async () => {
+      try {
+        const result = await window.storage.get("mortgage-calc-inputs");
+        if (result && result.value) {
+          const d = JSON.parse(result.value);
+          if (d.origLoan != null) setOrigLoan(d.origLoan);
+          if (d.termYears != null) setTermYears(d.termYears);
+          if (d.mortRate != null) setMortRate(d.mortRate);
+          if (d.curBal != null) setCurBal(d.curBal);
+          if (d.startMo != null) setStartMo(d.startMo);
+          if (d.startYr != null) setStartYr(d.startYr);
+          if (d.returnRate != null) setReturnRate(d.returnRate);
+          if (d.extra != null) setExtra(d.extra);
+          if (d.fedTax != null) setFedTax(d.fedTax);
+          if (d.stateTax != null) setStateTax(d.stateTax);
+          if (d.payoffOff != null) setPayoffOff(d.payoffOff);
+        }
+      } catch (e) { /* no saved data */ }
+      setLoaded(true);
+    })();
   }, []);
 
   useEffect(() => {
     if (!loaded) return;
     const data = { origLoan, termYears, mortRate, curBal, startMo, startYr, returnRate, extra, fedTax, stateTax, payoffOff };
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (e) { /* storage full or unavailable */ }
+    window.storage.set("mortgage-calc-inputs", JSON.stringify(data)).catch(() => {});
   }, [loaded, origLoan, termYears, mortRate, curBal, startMo, startYr, returnRate, extra, fedTax, stateTax, payoffOff]);
 
   // Derived loan object
@@ -305,9 +306,9 @@ export default function App() {
   function resetAll() {
     setOrigLoan(100000); setTermYears(30); setMortRate(6); setCurBal(100000);
     setStartMo(3); setStartYr(2026);
-    setReturnRate(7); setExtra(500); setFedTax(0.15); setStateTax(0.093);
+    setReturnRate(7); setExtra(500); setFedTax(0.15); setStateTax(0.05);
     setPayoffOff(0); resetZoom();
-    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+    window.storage.delete("mortgage-calc-inputs").catch(() => {});
   }
 
   if (!loaded) return (
@@ -392,19 +393,24 @@ export default function App() {
             </div>
           </div>
         </div>
+        <p style={{ fontSize: 10, color: "#94a3b8", margin: "6px 0 0", lineHeight: 1.5 }}>
+          Enter your expected return after fund expenses. Low-cost index funds (e.g. FZROX) charge near 0%; actively managed funds may charge 0.5–1%+.
+        </p>
 
         {/* Tax inputs */}
         <div style={{ display: "flex", gap: 14, flexWrap: "wrap", alignItems: "flex-end", borderTop: "1px solid #eef0f4", paddingTop: 12 }}>
           <div style={{ flex: "1 1 160px" }}>
-            <label style={lbl}>Federal LTCG Rate<Tip text="Federal long-term capital gains tax rate on investments held over 1 year. Depends on your taxable income." /></label>
+            <label style={lbl}>Federal LTCG Rate<Tip text="Federal long-term capital gains tax rate on investments held over 1 year. High earners may also owe the 3.8% Net Investment Income Tax (NIIT) if AGI exceeds $200K single / $250K married." /></label>
             <select value={fedTax} onChange={e => setFedTax(+e.target.value)} style={sel}>
               <option value={0}>0%</option>
               <option value={0.15}>15%</option>
+              <option value={0.188}>18.8% (15% + 3.8% NIIT)</option>
               <option value={0.20}>20%</option>
+              <option value={0.238}>23.8% (20% + 3.8% NIIT)</option>
             </select>
           </div>
           <div style={{ flex: "1 1 200px" }}>
-            <label style={lbl}>State Tax on Gains<Tip text="Your state's tax rate on investment gains. Varies widely — 0% in states like TX, FL, WA; up to 13.3% in CA. Some states tax gains as ordinary income." /></label>
+            <label style={lbl}>State Tax on Gains<Tip text="Your state's tax rate on investment gains. Ranges from 0% in states with no income tax (TX, FL, WA, NV, etc.) to 13%+ in high-tax states. Some states tax gains as ordinary income rather than at a preferential rate." /></label>
             <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
               <div style={{ position: "relative", flex: "0 0 90px" }}>
                 <input type="number" min={0} max={15} step={0.1} value={parseFloat((stateTax * 100).toFixed(1))}
@@ -414,7 +420,7 @@ export default function App() {
                 <span style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", fontSize: 13, color: "#94a3b8", pointerEvents: "none" }}>%</span>
               </div>
               <div style={{ display: "flex", gap: 4 }}>
-                {[0, 5, 9.3, 13.3].map(r => (
+                {[0, 5, 9, 13].map(r => (
                   <button key={r} onClick={() => setStateTax(r / 100)} style={{
                     border: "none", borderRadius: 5, padding: "6px 8px", fontSize: 11, cursor: "pointer",
                     background: Math.abs(stateTax * 100 - r) < 0.05 ? "#1e3a5f" : "#f1f5f9",
@@ -429,6 +435,9 @@ export default function App() {
             Combined: {((fedTax + stateTax) * 100).toFixed(1)}%<Tip align="right" text="Total tax rate applied to investment gains when you sell. Federal + state combined." />
           </div>
         </div>
+        <p style={{ fontSize: 10, color: "#94a3b8", margin: "6px 0 0", lineHeight: 1.5 }}>
+          A large lump-sum sale may push your income into a higher tax bracket for that year. Consider spreading the sale across two tax years to minimize the impact. Contributions from the last 12 months are taxed at short-term (ordinary income) rates, not the long-term rates shown here — selling only shares held over 1 year avoids this.
+        </p>
       </div>
 
       {/* ── EXECUTIVE SUMMARY ── */}
