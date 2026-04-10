@@ -356,16 +356,16 @@ export default function App() {
             <LoanField label="Term (years)" value={termYears} onChange={setTermYears} />
             <LoanField label="Interest rate" value={mortRate} onChange={setMortRate} suffix="%" step={0.125} />
             <LoanField label="Current balance" value={curBal} onChange={setCurBal} prefix="$" />
-            <div style={{ flex: "1 1 180px", minWidth: 0 }}>
+            <div style={{ flex: "0 0 auto", minWidth: 0 }}>
               <div style={{ fontSize: 10, fontWeight: 600, color: "#94a3b8", marginBottom: 3, textTransform: "uppercase", letterSpacing: "0.3px" }}>Loan start</div>
               <div style={{ display: "flex", gap: 4 }}>
-                <select value={startMo} onChange={e => setStartMo(+e.target.value)} style={{ flex: "1 1 80px", padding: "7px 6px", borderRadius: 6, border: "1px solid #dde0e6", fontSize: 13, fontWeight: 600, color: "#1e293b", background: "#fff" }}>
+                <select value={startMo} onChange={e => setStartMo(+e.target.value)} style={{ width: 72, padding: "7px 6px", borderRadius: 6, border: "1px solid #dde0e6", fontSize: 13, fontWeight: 600, color: "#1e293b", background: "#fff" }}>
                   {["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].map((m, i) => (
                     <option key={i} value={i}>{m}</option>
                   ))}
                 </select>
                 <NumInput min={1990} max={2040} value={startYr} onChange={v => setStartYr(Math.round(v))}
-                  style={{ flex: "1 1 70px", padding: "7px 8px", borderRadius: 6, border: "1px solid #dde0e6", fontSize: 13, fontWeight: 600, color: "#1e293b", background: "#fff", boxSizing: "border-box" }} />
+                  style={{ width: 64, padding: "7px 8px", borderRadius: 6, border: "1px solid #dde0e6", fontSize: 13, fontWeight: 600, color: "#1e293b", background: "#fff", boxSizing: "border-box" }} />
               </div>
             </div>
           </div>
