@@ -317,7 +317,21 @@ export default function App() {
   );
 
   return (
-    <div style={{ fontFamily: "'DM Sans', -apple-system, sans-serif", maxWidth: 920, margin: "0 auto", padding: "24px 16px", color: "#1a1a2e", background: "#f7f8fb", minHeight: "100vh" }}>
+    <>
+    <style>{`
+      @media (max-width: 600px) {
+        .mort-app { padding: 16px 10px !important; }
+        .mort-app h1 { font-size: 18px !important; }
+        .mort-app h2 { font-size: 14px !important; }
+        .chart-legend { gap: 6px !important; }
+        .chart-legend > div { font-size: 9px !important; }
+        .chart-legend > div svg { width: 20px !important; }
+        .mort-app input, .mort-app select { font-size: 16px !important; }
+        .mort-app .recharts-responsive-container { min-height: 240px; }
+      }
+      input[type=number]::-webkit-inner-spin-button { opacity: 1; }
+    `}</style>
+    <div className="mort-app" style={{ fontFamily: "'DM Sans', -apple-system, sans-serif", maxWidth: 920, margin: "0 auto", padding: "24px 16px", color: "#1a1a2e", background: "#f7f8fb", minHeight: "100vh" }}>
 
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
         <div>
@@ -369,10 +383,10 @@ export default function App() {
                 />
                 <span style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", fontSize: 13, color: "#94a3b8", pointerEvents: "none" }}>%</span>
               </div>
-              <div style={{ display: "flex", gap: 4 }}>
+              <div style={{ display: "flex", gap: 6 }}>
                 {[6, 7, 8, 10].map(r => (
                   <button key={r} onClick={() => setReturnRate(r)} style={{
-                    border: "none", borderRadius: 5, padding: "6px 10px", fontSize: 11, cursor: "pointer",
+                    border: "none", borderRadius: 6, padding: "8px 12px", fontSize: 12, cursor: "pointer",
                     background: returnRate === r ? "#1e3a5f" : "#f1f5f9",
                     color: returnRate === r ? "#fff" : "#64748b",
                     fontWeight: returnRate === r ? 600 : 400,
@@ -418,10 +432,10 @@ export default function App() {
                 />
                 <span style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", fontSize: 13, color: "#94a3b8", pointerEvents: "none" }}>%</span>
               </div>
-              <div style={{ display: "flex", gap: 4 }}>
+              <div style={{ display: "flex", gap: 6 }}>
                 {[0, 5, 9, 13].map(r => (
                   <button key={r} onClick={() => setStateTax(r / 100)} style={{
-                    border: "none", borderRadius: 5, padding: "6px 8px", fontSize: 11, cursor: "pointer",
+                    border: "none", borderRadius: 6, padding: "8px 10px", fontSize: 12, cursor: "pointer",
                     background: Math.abs(stateTax * 100 - r) < 0.05 ? "#1e3a5f" : "#f1f5f9",
                     color: Math.abs(stateTax * 100 - r) < 0.05 ? "#fff" : "#64748b",
                     fontWeight: Math.abs(stateTax * 100 - r) < 0.05 ? 600 : 400,
@@ -498,7 +512,8 @@ export default function App() {
       )}
 
       {/* ── THREE-WAY COMPARISON ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 0, marginBottom: 20, borderRadius: 10, overflow: "hidden", border: "1px solid #dde0e6" }}>
+      <h2 style={{ fontSize: 15, fontWeight: 700, margin: "0 0 12px", color: "#0f172a" }}>Strategy Comparison</h2>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: 0, marginBottom: 20, borderRadius: 10, overflow: "hidden", border: "1px solid #dde0e6" }}>
         <StratCard color="#94a3b8" tag="A: Normal Schedule" time={mStr(s.rem)} date={mDate(s.rem)}
           rows={[
             [<>Total interest paid<Tip text="Total mortgage interest you'll pay over the life of this strategy." /></>, fmt(s.intA)],
@@ -595,13 +610,13 @@ export default function App() {
             <Legend content={() => null} />
           </AreaChart>
         </ResponsiveContainer>
-        <div style={{ display: "flex", gap: 12, justifyContent: "center", padding: "10px 0 6px", borderTop: "1px solid #f1f3f5", marginTop: 4, flexWrap: "wrap" }}>
+        <div className="chart-legend" style={{ display: "flex", gap: 12, justifyContent: "center", padding: "10px 0 6px", borderTop: "1px solid #f1f3f5", marginTop: 4, flexWrap: "wrap" }}>
           <LK color="#94a3b8" dash="4 3" width={1.5} label="A: Mortgage (normal)" />
           <LK color="#6366f1" dash="" width={2} label="B: Mortgage (extra pmts)" />
           <LK color="#059669" dash="" width={2.5} label="C: Portfolio (after tax)" />
           <LK color="#059669" dash="4 3" width={1} label="C: Portfolio (pre-tax)" />
         </div>
-        <div style={{ display: "flex", gap: 12, justifyContent: "center", padding: "4px 0 4px", flexWrap: "wrap" }}>
+        <div className="chart-legend" style={{ display: "flex", gap: 12, justifyContent: "center", padding: "4px 0 4px", flexWrap: "wrap" }}>
           {base.crossover && <LK color="#f59e0b" dash="6 2" width={2} label={`Crossover — ${mDate(base.crossover)}`} />}
           <LK color="#dc2626" dash="6 2" width={2} label={`C payoff — ${mDate(chosen)}`} />
           <LK color="#6366f1" dash="4 4" width={1.5} label={`B payoff — ${mDate(s.payoffB)}`} />
@@ -663,7 +678,7 @@ export default function App() {
               <ReferenceLine x={s.payoffB} stroke="#6366f1" strokeWidth={1.5} strokeDasharray="4 4" />
             </AreaChart>
           </ResponsiveContainer>
-          <div style={{ display: "flex", gap: 14, justifyContent: "center", padding: "8px 0 4px", borderTop: "1px solid #f1f3f5", marginTop: 4, flexWrap: "wrap" }}>
+          <div className="chart-legend" style={{ display: "flex", gap: 14, justifyContent: "center", padding: "8px 0 4px", borderTop: "1px solid #f1f3f5", marginTop: 4, flexWrap: "wrap" }}>
             <LK color="#059669" dash="" width={2.5} label="Net advantage of waiting" />
             {optimalData.peakMonth && <LK color="#16a34a" dash="6 2" width={2} label={`Optimal payoff — ${mDate(optimalData.peakMonth)}`} />}
             <LK color="#dc2626" dash="6 2" width={2} label={`Your chosen payoff — ${mDate(chosen)}`} />
@@ -684,6 +699,7 @@ export default function App() {
         </p>
       </div>
     </div>
+    </>
   );
 }
 
@@ -711,7 +727,11 @@ function LoanField({ label, value, onChange, prefix, suffix, step = 1 }) {
 
 function StratCard({ color, tag: t, time, date, rows, bonusRows, highlight }) {
   return (
-    <div style={{ background: highlight ? "#f0fdf4" : "#fff", padding: "16px 14px", borderLeft: highlight ? `3px solid #16a34a` : `1px solid #eef0f4` }}>
+    <div style={{
+      background: highlight ? "#f0fdf4" : "#fff", padding: "16px 14px",
+      borderLeft: highlight ? `3px solid #16a34a` : `1px solid #eef0f4`,
+      borderBottom: "1px solid #eef0f4",
+    }}>
       <div style={{ fontSize: 10, fontWeight: 700, color, textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: 8 }}>{t}</div>
       <div style={{ fontSize: 24, fontWeight: 700, color: "#1e293b", marginBottom: 1 }}>{time}</div>
       <div style={{ fontSize: 11, color: "#64748b", marginBottom: 12 }}>Paid off <strong>{date}</strong></div>
