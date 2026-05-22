@@ -470,12 +470,8 @@ export default function App() {
           </Prose>
         </Section>
 
-        {/* ── 4. Interest rate trap / tailwind ── */}
-        <Section title={
-          rateDir === "more" ? "The interest rate trap"
-            : rateDir === "less" ? "Interest rate tailwind"
-              : "Rate environment"
-        }>
+        {/* ── 4. Rate impact on borrowing power ── */}
+        <Section title="Rate impact on borrowing power">
           <div style={{ overflowX: "auto", marginBottom: 8 }}>
             <table className="hpc-compare" style={tableStyle}>
               <thead>
