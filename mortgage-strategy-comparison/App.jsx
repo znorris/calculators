@@ -4,6 +4,7 @@ import { parseUrlParams, stripUrlParams } from "../shared/urlState.js";
 import { ShareButton } from "../shared/ShareButton.jsx";
 import { ScenariosMenu } from "../shared/ScenariosMenu.jsx";
 import { ShareBanner } from "../shared/ShareBanner.jsx";
+import { Breadcrumb } from "../shared/Breadcrumb.jsx";
 
 const INPUTS_KEY = "mortgage-calc-inputs";
 const SCENARIOS_KEY = "mortgage-calc-scenarios";
@@ -354,6 +355,8 @@ export default function App() {
       input[type=number]::-webkit-inner-spin-button { opacity: 1; }
     `}</style>
     <div className="mort-app" style={{ fontFamily: "'DM Sans', -apple-system, sans-serif", maxWidth: 920, margin: "0 auto", padding: "24px 16px", color: "#1a1a2e", background: "#f7f8fb", minHeight: "100vh" }}>
+
+      <Breadcrumb current="Mortgage Strategy Comparison" />
 
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16, gap: 12, flexWrap: "wrap" }}>
         <div style={{ flex: "1 1 280px", minWidth: 0 }}>

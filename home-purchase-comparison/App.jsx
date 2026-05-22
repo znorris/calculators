@@ -4,6 +4,7 @@ import { parseUrlParams, stripUrlParams } from "../shared/urlState.js";
 import { ShareButton } from "../shared/ShareButton.jsx";
 import { ScenariosMenu } from "../shared/ScenariosMenu.jsx";
 import { ShareBanner } from "../shared/ShareBanner.jsx";
+import { Breadcrumb } from "../shared/Breadcrumb.jsx";
 
 const INPUTS_KEY = "home-purchase-comparison-inputs";
 const SCENARIOS_KEY = "home-purchase-comparison-scenarios";
@@ -322,6 +323,8 @@ export default function App() {
         fontFamily: "'DM Sans', -apple-system, sans-serif", maxWidth: 920, margin: "0 auto",
         padding: "24px 16px", color: "#1a1a2e", background: "#f7f8fb", minHeight: "100vh",
       }}>
+
+        <Breadcrumb current="Home Purchase Comparison" />
 
         {/* ── Header ── */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16, gap: 12, flexWrap: "wrap" }}>
