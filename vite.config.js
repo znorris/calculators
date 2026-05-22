@@ -9,6 +9,7 @@ export default defineConfig({
       input: {
         main: "index.html",
         "mortgage-strategy-comparison": "mortgage-strategy-comparison/index.html",
+        "home-purchase-comparison": "home-purchase-comparison/index.html",
       },
     },
   },
