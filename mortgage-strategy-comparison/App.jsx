@@ -1,5 +1,13 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine, ReferenceArea } from "recharts";
+import { parseUrlParams, stripUrlParams } from "../shared/urlState.js";
+import { ShareButton } from "../shared/ShareButton.jsx";
+import { ScenariosMenu } from "../shared/ScenariosMenu.jsx";
+import { ShareBanner } from "../shared/ShareBanner.jsx";
+
+const INPUTS_KEY = "mortgage-calc-inputs";
+const SCENARIOS_KEY = "mortgage-calc-scenarios";
+const URL_SCHEMA = { booleans: [], strings: [], enums: {} };
 
 function calcPmt(p, r, n) {
   const mr = r / 12;
@@ -157,24 +165,38 @@ export default function App() {
   const [dragEnd, setDragEnd] = useState(null);
 
   // Persistent storage
-  const STORAGE_KEY = "mortgage-calc-inputs";
   const [loaded, setLoaded] = useState(false);
+  const [activeScenarioId, setActiveScenarioId] = useState(null);
+  const [loadedFromUrl, setLoadedFromUrl] = useState(false);
+
+  function applyInputs(d) {
+    if (d.origLoan != null) setOrigLoan(d.origLoan);
+    if (d.termYears != null) setTermYears(d.termYears);
+    if (d.mortRate != null) setMortRate(d.mortRate);
+    if (d.curBal != null) setCurBal(d.curBal);
+    if (d.startMo != null) setStartMo(d.startMo);
+    if (d.startYr != null) setStartYr(d.startYr);
+    if (d.returnRate != null) setReturnRate(d.returnRate);
+    if (d.extra != null) setExtra(d.extra);
+    if (d.fedTax != null) setFedTax(d.fedTax);
+    if (d.stateTax != null) setStateTax(d.stateTax);
+    if (d.payoffOff != null) setPayoffOff(d.payoffOff);
+  }
+
+  function getCurrentInputs() {
+    return { origLoan, termYears, mortRate, curBal, startMo, startYr, returnRate, extra, fedTax, stateTax, payoffOff };
+  }
+
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const d = JSON.parse(raw);
-        if (d.origLoan != null) setOrigLoan(d.origLoan);
-        if (d.termYears != null) setTermYears(d.termYears);
-        if (d.mortRate != null) setMortRate(d.mortRate);
-        if (d.curBal != null) setCurBal(d.curBal);
-        if (d.startMo != null) setStartMo(d.startMo);
-        if (d.startYr != null) setStartYr(d.startYr);
-        if (d.returnRate != null) setReturnRate(d.returnRate);
-        if (d.extra != null) setExtra(d.extra);
-        if (d.fedTax != null) setFedTax(d.fedTax);
-        if (d.stateTax != null) setStateTax(d.stateTax);
-        if (d.payoffOff != null) setPayoffOff(d.payoffOff);
+      const urlState = parseUrlParams(URL_SCHEMA);
+      if (urlState) {
+        applyInputs(urlState);
+        stripUrlParams();
+        setLoadedFromUrl(true);
+      } else {
+        const raw = localStorage.getItem(INPUTS_KEY);
+        if (raw) applyInputs(JSON.parse(raw));
       }
     } catch (e) { /* no saved data */ }
     setLoaded(true);
@@ -182,8 +204,7 @@ export default function App() {
 
   useEffect(() => {
     if (!loaded) return;
-    const data = { origLoan, termYears, mortRate, curBal, startMo, startYr, returnRate, extra, fedTax, stateTax, payoffOff };
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (e) { /* storage full or unavailable */ }
+    try { localStorage.setItem(INPUTS_KEY, JSON.stringify(getCurrentInputs())); } catch (e) {}
   }, [loaded, origLoan, termYears, mortRate, curBal, startMo, startYr, returnRate, extra, fedTax, stateTax, payoffOff]);
 
   // Derived loan object
@@ -307,7 +328,8 @@ export default function App() {
     setStartMo(3); setStartYr(2026);
     setReturnRate(7); setExtra(500); setFedTax(0.15); setStateTax(0.05);
     setPayoffOff(0); resetZoom();
-    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+    setActiveScenarioId(null);
+    try { localStorage.removeItem(INPUTS_KEY); } catch (e) {}
   }
 
   if (!loaded) return (
@@ -333,17 +355,32 @@ export default function App() {
     `}</style>
     <div className="mort-app" style={{ fontFamily: "'DM Sans', -apple-system, sans-serif", maxWidth: 920, margin: "0 auto", padding: "24px 16px", color: "#1a1a2e", background: "#f7f8fb", minHeight: "100vh" }}>
 
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
-        <div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16, gap: 12, flexWrap: "wrap" }}>
+        <div style={{ flex: "1 1 280px", minWidth: 0 }}>
           <h1 style={{ fontSize: 21, fontWeight: 700, margin: "0 0 3px", color: "#0f172a" }}>Mortgage Strategy Comparison</h1>
           <p style={{ fontSize: 13, color: "#64748b", margin: 0 }}>{fmt(extra)}/mo available · {mortRate}% rate · {fmt(curBal)} remaining</p>
         </div>
-        <button onClick={resetAll} style={{
-          border: "1px solid #dde0e6", borderRadius: 6, padding: "6px 14px",
-          fontSize: 12, fontWeight: 600, color: "#475569", background: "#fff",
-          cursor: "pointer", whiteSpace: "nowrap", flexShrink: 0,
-        }}>Reset all</button>
+        <div style={{ display: "flex", gap: 6, flexShrink: 0, alignItems: "center" }}>
+          <ScenariosMenu
+            storageKey={SCENARIOS_KEY}
+            getCurrentState={getCurrentInputs}
+            applyScenario={applyInputs}
+            activeId={activeScenarioId}
+            setActiveId={setActiveScenarioId}
+            buttonStyle={msHeaderBtnStyle}
+          />
+          <ShareButton getState={getCurrentInputs} style={msHeaderBtnStyle} />
+          <button onClick={resetAll} style={msHeaderBtnStyle}>Reset all</button>
+        </div>
       </div>
+
+      <ShareBanner
+        visible={loadedFromUrl}
+        onDismiss={() => setLoadedFromUrl(false)}
+        scenariosKey={SCENARIOS_KEY}
+        getState={getCurrentInputs}
+        setActiveId={setActiveScenarioId}
+      />
 
       {/* ── INPUTS ── */}
       <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 22, background: "#fff", borderRadius: 10, padding: "14px 16px", border: "1px solid #e2e5ea" }}>
@@ -820,6 +857,11 @@ function Tip({ text, align }) {
   );
 }
 
+const msHeaderBtnStyle = {
+  border: "1px solid #dde0e6", borderRadius: 6, padding: "6px 14px",
+  fontSize: 12, fontWeight: 600, color: "#475569", background: "#fff",
+  cursor: "pointer", whiteSpace: "nowrap", flexShrink: 0,
+};
 const lbl = { display: "block", fontSize: 11, fontWeight: 600, color: "#64748b", marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.4px" };
 const sel = { width: "100%", padding: "7px 10px", borderRadius: 6, border: "1px solid #dde0e6", fontSize: 13, color: "#374151", background: "#fff" };
 

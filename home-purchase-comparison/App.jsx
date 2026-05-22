@@ -1,5 +1,17 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, CartesianGrid, ReferenceDot, Label } from "recharts";
+import { parseUrlParams, stripUrlParams } from "../shared/urlState.js";
+import { ShareButton } from "../shared/ShareButton.jsx";
+import { ScenariosMenu } from "../shared/ScenariosMenu.jsx";
+import { ShareBanner } from "../shared/ShareBanner.jsx";
+
+const INPUTS_KEY = "home-purchase-comparison-inputs";
+const SCENARIOS_KEY = "home-purchase-comparison-scenarios";
+const URL_SCHEMA = {
+  booleans: ["includeTxCosts"],
+  strings: ["tgtTaxMode"],
+  enums: { tgtTaxMode: ["rate", "annual"] },
+};
 
 // ── Math helpers ──
 
@@ -96,33 +108,51 @@ export default function App() {
   }, []);
 
   // ── Persistence ──
-  const STORAGE_KEY = "home-purchase-comparison-inputs";
   const [loaded, setLoaded] = useState(false);
+  const [activeScenarioId, setActiveScenarioId] = useState(null);
+  const [loadedFromUrl, setLoadedFromUrl] = useState(false);
+
+  function applyInputs(d) {
+    if (d.curValue != null) setCurValue(d.curValue);
+    if (d.origLoan != null) setOrigLoan(d.origLoan);
+    if (d.oldRate != null) setOldRate(d.oldRate);
+    if (d.oldTermYears != null) setOldTermYears(d.oldTermYears);
+    if (d.curBalance != null) setCurBalance(d.curBalance);
+    if (d.startMo != null) setStartMo(d.startMo);
+    if (d.startYr != null) setStartYr(d.startYr);
+    if (d.curAnnualTax != null) setCurAnnualTax(d.curAnnualTax);
+    if (d.curAnnualIns != null) setCurAnnualIns(d.curAnnualIns);
+    if (d.tgtPrice != null) setTgtPrice(d.tgtPrice);
+    if (d.newRate != null) setNewRate(d.newRate);
+    if (d.newTermYears != null) setNewTermYears(d.newTermYears);
+    if (d.tgtTaxMode != null) setTgtTaxMode(d.tgtTaxMode);
+    if (d.tgtTaxRate != null) setTgtTaxRate(d.tgtTaxRate);
+    if (d.tgtAnnualTax != null) setTgtAnnualTax(d.tgtAnnualTax);
+    if (d.tgtAnnualIns != null) setTgtAnnualIns(d.tgtAnnualIns);
+    if (d.includeTxCosts != null) setIncludeTxCosts(d.includeTxCosts);
+    if (d.realtorPct != null) setRealtorPct(d.realtorPct);
+    if (d.otherSellingCosts != null) setOtherSellingCosts(d.otherSellingCosts);
+    if (d.closingPct != null) setClosingPct(d.closingPct);
+  }
+
+  function getCurrentInputs() {
+    return {
+      curValue, origLoan, oldRate, oldTermYears, curBalance, startMo, startYr,
+      curAnnualTax, curAnnualIns, tgtPrice, newRate, newTermYears, tgtTaxMode, tgtTaxRate,
+      tgtAnnualTax, tgtAnnualIns, includeTxCosts, realtorPct, otherSellingCosts, closingPct,
+    };
+  }
+
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const d = JSON.parse(raw);
-        if (d.curValue != null) setCurValue(d.curValue);
-        if (d.origLoan != null) setOrigLoan(d.origLoan);
-        if (d.oldRate != null) setOldRate(d.oldRate);
-        if (d.oldTermYears != null) setOldTermYears(d.oldTermYears);
-        if (d.curBalance != null) setCurBalance(d.curBalance);
-        if (d.startMo != null) setStartMo(d.startMo);
-        if (d.startYr != null) setStartYr(d.startYr);
-        if (d.curAnnualTax != null) setCurAnnualTax(d.curAnnualTax);
-        if (d.curAnnualIns != null) setCurAnnualIns(d.curAnnualIns);
-        if (d.tgtPrice != null) setTgtPrice(d.tgtPrice);
-        if (d.newRate != null) setNewRate(d.newRate);
-        if (d.newTermYears != null) setNewTermYears(d.newTermYears);
-        if (d.tgtTaxMode != null) setTgtTaxMode(d.tgtTaxMode);
-        if (d.tgtTaxRate != null) setTgtTaxRate(d.tgtTaxRate);
-        if (d.tgtAnnualTax != null) setTgtAnnualTax(d.tgtAnnualTax);
-        if (d.tgtAnnualIns != null) setTgtAnnualIns(d.tgtAnnualIns);
-        if (d.includeTxCosts != null) setIncludeTxCosts(d.includeTxCosts);
-        if (d.realtorPct != null) setRealtorPct(d.realtorPct);
-        if (d.otherSellingCosts != null) setOtherSellingCosts(d.otherSellingCosts);
-        if (d.closingPct != null) setClosingPct(d.closingPct);
+      const urlState = parseUrlParams(URL_SCHEMA);
+      if (urlState) {
+        applyInputs(urlState);
+        stripUrlParams();
+        setLoadedFromUrl(true);
+      } else {
+        const raw = localStorage.getItem(INPUTS_KEY);
+        if (raw) applyInputs(JSON.parse(raw));
       }
     } catch (e) { /* no saved data */ }
     setLoaded(true);
@@ -130,12 +160,7 @@ export default function App() {
 
   useEffect(() => {
     if (!loaded) return;
-    const data = {
-      curValue, origLoan, oldRate, oldTermYears, curBalance, startMo, startYr,
-      curAnnualTax, curAnnualIns, tgtPrice, newRate, newTermYears, tgtTaxMode, tgtTaxRate,
-      tgtAnnualTax, tgtAnnualIns, includeTxCosts, realtorPct, otherSellingCosts, closingPct,
-    };
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (e) {}
+    try { localStorage.setItem(INPUTS_KEY, JSON.stringify(getCurrentInputs())); } catch (e) {}
   }, [loaded, curValue, origLoan, oldRate, oldTermYears, curBalance, startMo, startYr,
       curAnnualTax, curAnnualIns, tgtPrice, newRate, newTermYears, tgtTaxMode, tgtTaxRate,
       tgtAnnualTax, tgtAnnualIns, includeTxCosts, realtorPct, otherSellingCosts, closingPct]);
@@ -147,7 +172,8 @@ export default function App() {
     setTgtPrice(550000); setNewRate(6.5); setNewTermYears(30);
     setTgtTaxMode("rate"); setTgtTaxRate(1.1); setTgtAnnualTax(6000); setTgtAnnualIns(1800);
     setIncludeTxCosts(true); setRealtorPct(5.5); setOtherSellingCosts(5000); setClosingPct(2.5);
-    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+    setActiveScenarioId(null);
+    try { localStorage.removeItem(INPUTS_KEY); } catch (e) {}
   }
 
   // ── Derived calculations ──
@@ -298,19 +324,34 @@ export default function App() {
       }}>
 
         {/* ── Header ── */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
-          <div>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16, gap: 12, flexWrap: "wrap" }}>
+          <div style={{ flex: "1 1 280px", minWidth: 0 }}>
             <h1 style={{ fontSize: 21, fontWeight: 700, margin: "0 0 3px", color: "#0f172a" }}>Home Purchase Comparison</h1>
             <p style={{ fontSize: 13, color: "#64748b", margin: 0 }}>
               Compare the true cost of moving — monthly payment, lifetime interest, and how rate changes affect your buying power.
             </p>
           </div>
-          <button onClick={resetAll} style={{
-            border: "1px solid #dde0e6", borderRadius: 6, padding: "6px 14px",
-            fontSize: 12, fontWeight: 600, color: "#475569", background: "#fff",
-            cursor: "pointer", whiteSpace: "nowrap", flexShrink: 0,
-          }}>Reset all</button>
+          <div style={{ display: "flex", gap: 6, flexShrink: 0, alignItems: "center" }}>
+            <ScenariosMenu
+              storageKey={SCENARIOS_KEY}
+              getCurrentState={getCurrentInputs}
+              applyScenario={applyInputs}
+              activeId={activeScenarioId}
+              setActiveId={setActiveScenarioId}
+              buttonStyle={headerBtnStyle}
+            />
+            <ShareButton getState={getCurrentInputs} style={headerBtnStyle} />
+            <button onClick={resetAll} style={headerBtnStyle}>Reset all</button>
+          </div>
         </div>
+
+        <ShareBanner
+          visible={loadedFromUrl}
+          onDismiss={() => setLoadedFromUrl(false)}
+          scenariosKey={SCENARIOS_KEY}
+          getState={getCurrentInputs}
+          setActiveId={setActiveScenarioId}
+        />
 
         {/* ── INPUTS ── */}
         <div className="hpc-cols" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 22 }}>
@@ -800,6 +841,11 @@ function NumInput({ value, onChange, min, max, step = 1, style }) {
 }
 
 // ── Styles ──
+const headerBtnStyle = {
+  border: "1px solid #dde0e6", borderRadius: 6, padding: "6px 14px",
+  fontSize: 12, fontWeight: 600, color: "#475569", background: "#fff",
+  cursor: "pointer", whiteSpace: "nowrap", flexShrink: 0,
+};
 const lbl = { display: "block", fontSize: 10, fontWeight: 600, color: "#94a3b8", marginBottom: 3, textTransform: "uppercase", letterSpacing: "0.3px" };
 const sel = { padding: "7px 8px", borderRadius: 6, border: "1px solid #dde0e6", fontSize: 13, fontWeight: 600, color: "#1e293b", background: "#fff" };
 const inputStyle = () => ({
