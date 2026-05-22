@@ -68,11 +68,29 @@ export function ScenariosMenu({
 
   return (
     <div style={{ position: "relative" }} ref={ref}>
+      <style>{`
+        .sv-scen-dropdown {
+          position: absolute;
+          top: calc(100% + 4px);
+          right: 0;
+          z-index: 100;
+          background: #fff;
+          border: 1px solid #e2e5ea;
+          border-radius: 8px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+          min-width: 260px;
+          max-width: calc(100vw - 24px);
+          padding: 8px;
+        }
+        @media (max-width: 640px) {
+          .sv-scen-dropdown { right: auto; left: 0; }
+        }
+      `}</style>
       <button onClick={() => setOpen(o => !o)} style={buttonStyle}>
         Scenarios {open ? "▴" : "▾"}
       </button>
       {open && (
-        <div style={dropdownStyle}>
+        <div className="sv-scen-dropdown">
           {scenarios.length === 0 && (
             <div style={{ fontSize: 11, color: "#94a3b8", padding: "6px 8px", fontStyle: "italic" }}>
               No saved scenarios yet.
@@ -160,12 +178,6 @@ export function ScenariosMenu({
     </div>
   );
 }
-
-const dropdownStyle = {
-  position: "absolute", top: "calc(100% + 4px)", right: 0, zIndex: 100,
-  background: "#fff", border: "1px solid #e2e5ea", borderRadius: 8,
-  boxShadow: "0 4px 12px rgba(0,0,0,0.08)", minWidth: 260, padding: 8,
-};
 
 const iconBtn = {
   border: "none", background: "transparent", color: "#94a3b8",
