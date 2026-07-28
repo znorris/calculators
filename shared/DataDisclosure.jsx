@@ -106,9 +106,11 @@ export function DataDisclosure({ storageKeys = [], sharesViaUrl = false, onClear
       {sharesViaUrl && (
         <Item title="Share links are the one exception">
           Copying a share link encodes your inputs into the link itself. That data then travels wherever you send
-          the link, and it is encoded rather than encrypted, so anyone holding the link can read it. Anything that
-          handles a URL may also retain it, including chat and email services, browser history, and server logs.
-          Treat a share link as you would a document containing the figures in it, because that is what it is.
+          the link, and it is encoded rather than encrypted, so anyone holding the link can read it. Chat and
+          email services and browser history may retain it. The payload sits after the <Code>#</Code> in the
+          link, which browsers never send to a server, so it stays out of web server logs and out of search
+          engines. Treat a share link as you would a document containing the figures in it, because that is what
+          it is.
         </Item>
       )}
 

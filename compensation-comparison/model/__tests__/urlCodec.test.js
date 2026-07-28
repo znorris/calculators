@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { encodeShare, decodeShare } from "../urlCodec.js";
+import { encodeShare, decodeShare, readPayload } from "../urlCodec.js";
 import { createOffer } from "../offer.js";
 import { createComparison, addOffer } from "../comparison.js";
 import { indexById } from "../storage.js";
@@ -100,5 +100,36 @@ describe("share codec", () => {
       .replace(/\//g, "_")
       .replace(/=+$/, "");
     expect(decodeShare(bad)).toBeNull();
+  });
+});
+
+describe("payload location", () => {
+  it("reads a payload from the fragment", () => {
+    expect(readPayload({ hash: "#c=abc", search: "" })).toBe("abc");
+  });
+
+  it("still reads a legacy query-string payload", () => {
+    expect(readPayload({ hash: "", search: "?c=abc" })).toBe("abc");
+  });
+
+  it("prefers the fragment when both are present", () => {
+    expect(readPayload({ hash: "#c=new", search: "?c=old" })).toBe("new");
+  });
+
+  it("is null when neither carries one", () => {
+    expect(readPayload({ hash: "#data-handling", search: "?utm=x" })).toBeNull();
+  });
+
+  it("survives a bare hash and a missing search", () => {
+    expect(readPayload({ hash: "#", search: undefined })).toBeNull();
+    expect(readPayload({})).toBeNull();
+  });
+
+  it("round-trips through a fragment, which is what a share link now carries", () => {
+    const { comparison, offersById } = fixture();
+    const encoded = encodeShare(comparison, offersById);
+    const decoded = decodeShare(readPayload({ hash: `#c=${encoded}`, search: "" }));
+    expect(decoded.offers).toHaveLength(2);
+    expect(decoded.comparison.name).toBe("2026 search");
   });
 });

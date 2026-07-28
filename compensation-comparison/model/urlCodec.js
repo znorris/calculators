@@ -9,6 +9,17 @@
 // Encoding is base64url over JSON. It is not compact, but it round-trips
 // exactly, needs no per-field registry to stay in sync with the schema, and
 // keeps unknown fields intact when an older build opens a newer link.
+//
+// THE PAYLOAD GOES IN THE FRAGMENT, NOT THE QUERY STRING.
+//
+// A fragment is never transmitted to the server, so someone's salary cannot
+// land in GitHub Pages or CDN access logs, where a query string would. Search
+// engines do not index a fragment as a distinct URL, so a share link posted
+// somewhere crawlable cannot be indexed with the figures in it. Referrer
+// headers strip fragments too.
+//
+// Old query-string links are still accepted on read, since accepting one
+// creates no exposure; generating one did.
 
 import { normalizeOffer } from "./offer.js";
 import { normalizeComparison } from "./comparison.js";
@@ -55,7 +66,7 @@ export function encodeShare(comparison, offersById) {
 export function buildShareUrl(comparison, offersById) {
   const encoded = encodeShare(comparison, offersById);
   const { origin, pathname } = window.location;
-  return `${origin}${pathname}?${PARAM}=${encoded}`;
+  return `${origin}${pathname}#${PARAM}=${encoded}`;
 }
 
 /**
@@ -89,9 +100,21 @@ export function decodeShare(encoded) {
 }
 
 /** Read a shared comparison out of the current URL. */
+/**
+ * Read a payload out of the current URL, preferring the fragment.
+ *
+ * Query strings are still accepted so a link generated before the move to
+ * fragments still opens. Accepting one leaks nothing; generating one did.
+ */
 export function parseShareUrl() {
   if (typeof window === "undefined") return null;
-  return decodeShare(new URLSearchParams(window.location.search).get(PARAM));
+  return decodeShare(readPayload(window.location));
+}
+
+export function readPayload({ hash, search }) {
+  const fromHash = new URLSearchParams(String(hash || "").replace(/^#/, "")).get(PARAM);
+  if (fromHash) return fromHash;
+  return new URLSearchParams(search || "").get(PARAM);
 }
 
 export function stripShareParam() {
