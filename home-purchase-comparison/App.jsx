@@ -13,11 +13,12 @@ const SCENARIOS_KEY = "home-purchase-comparison-scenarios";
 /** Caveats specific to this calculator, beyond the shared disclosure. */
 const DISCLOSURE_NOTES = [
   {
-    title: "What this does not know",
+    title: "What this does not account for",
     body:
-      "Rates, taxes, insurance, and any appreciation you enter are assumptions. Closing costs, private " +
-      "mortgage insurance, HOA dues, maintenance, and the cost of selling are not modeled unless you enter " +
-      "them, and each can move the comparison materially.",
+      "Rates, taxes, insurance, and any appreciation you enter are assumptions. Property tax, insurance, and " +
+      "transaction cost figures are estimates and should be verified with a local lender and real estate " +
+      "agent. Closing costs, private mortgage insurance, HOA dues, maintenance, and the cost of selling are " +
+      "not modeled unless you enter them, and each can move the comparison materially.",
   },
 ];
 
@@ -679,9 +680,6 @@ export default function App() {
               Property tax and insurance figures are estimates. A local lender quote and a current insurance quote on the target home would refine the actual escrow.
             </li>
           </ul>
-          <p style={{ fontSize: 10.5, color: "#94a3b8", margin: "12px 0 0", fontStyle: "italic", lineHeight: 1.5 }}>
-            This is an analytical comparison, not financial advice. Property tax, insurance, and transaction cost figures are estimates and should be verified with a local lender and real estate agent.
-          </p>
         </Section>
 
       <DataDisclosure

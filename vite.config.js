@@ -11,6 +11,7 @@ export default defineConfig({
         "mortgage-strategy-comparison": "mortgage-strategy-comparison/index.html",
         "home-purchase-comparison": "home-purchase-comparison/index.html",
         "compensation-comparison": "compensation-comparison/index.html",
+        "compensation-assumptions": "compensation-comparison/assumptions/index.html",
       },
     },
   },

@@ -25,6 +25,7 @@ const rule = "#cbd5e1";
 const accent = "#4f46e5";
 const negative = "#dc2626";
 const positive = "#047857";
+const faint = "#94a3b8";
 const tint = "#f1f5f9";
 
 const section = {
@@ -155,46 +156,79 @@ export function DataDisclosure({ storageKeys = [], sharesViaUrl = false, onClear
 }
 
 /**
- * What the output is and is not worth. Kept separate from the data disclosure.
+ * What the output is and is not worth, as a page footer.
  *
- * @param extraNotes  [{ title, body }] modeling limits specific to this calculator
+ * Footer treatment rather than a card, matching how the mortgage calculator
+ * already closed its page, and used identically on every page so the same
+ * words appear in the same place wherever a reader lands. Kept separate from
+ * the data disclosure: one is a checkable statement about data flow, the other
+ * a legal limitation on relying on the numbers, and merging them lets the
+ * credibility of the first appear to cover the second.
+ *
+ * @param extraNotes  [{ title, body }] modeling limits specific to this page
  */
 export function WarrantyDisclaimer({ extraNotes = [] }) {
   return (
-    <section id={WARRANTY_ANCHOR} style={section} aria-labelledby={`${WARRANTY_ANCHOR}-heading`}>
-      <h2 id={`${WARRANTY_ANCHOR}-heading`} style={heading}>
+    <footer
+      id={WARRANTY_ANCHOR}
+      style={{
+        marginTop: 28,
+        paddingTop: 14,
+        borderTop: `1px solid ${hairline}`,
+        textAlign: "center",
+        scrollMarginTop: 16,
+      }}
+      aria-labelledby={`${WARRANTY_ANCHOR}-heading`}
+    >
+      <h2
+        id={`${WARRANTY_ANCHOR}-heading`}
+        style={{
+          fontSize: 10,
+          fontWeight: 700,
+          textTransform: "uppercase",
+          letterSpacing: 0.4,
+          color: muted,
+          margin: "0 0 8px",
+        }}
+      >
         Disclaimer
       </h2>
 
-      <Item title="No warranty">
+      <p style={footerText}>
         This calculator is provided as is, with no warranty of any kind, express or implied, including any
-        warranty of accuracy, merchantability, or fitness for a particular purpose. It may contain errors.
-      </Item>
+        warranty of accuracy, merchantability, or fitness for a particular purpose. It may contain errors. Every
+        figure rests on assumptions you supply and on published rates that change, and a projection is not a
+        forecast: small changes to an assumption can move the result substantially, and past performance does
+        not guarantee future results.
+      </p>
 
-      <Item title="Not advice">
+      <p style={footerText}>
         Nothing here is tax, legal, investment, or financial advice, and using it creates no professional
         relationship. Verify anything you intend to rely on with a qualified professional and with primary
-        sources.
-      </Item>
-
-      <Item title="Estimates, not predictions">
-        Every figure rests on assumptions you supply and on published rates that change. Small changes to an
-        assumption can move the result substantially, and a projection is not a forecast of what will happen.
-      </Item>
+        sources. You are solely responsible for any decision you make, and the author accepts no liability for
+        any loss arising from use of this tool or from reliance on its output.
+      </p>
 
       {extraNotes.map((note) => (
-        <Item key={note.title} title={note.title}>
-          {note.body}
-        </Item>
+        <p key={note.title} style={footerText}>
+          <strong style={{ fontWeight: 600 }}>{note.title}.</strong> {note.body}
+        </p>
       ))}
 
-      <Item title="Your decision, your responsibility">
-        You are solely responsible for any decision you make. The author accepts no liability for any loss
-        arising from use of this tool or from reliance on its output.
-      </Item>
-    </section>
+      <p style={{ fontSize: 10, color: faint, margin: "10px 0 0" }}>
+        &copy; {new Date().getFullYear()} Zach Norris. All rights reserved.
+      </p>
+    </footer>
   );
 }
+
+const footerText = {
+  fontSize: 10.5,
+  lineHeight: 1.65,
+  color: muted,
+  margin: "0 auto 8px",
+  maxWidth: 660,
+};
 
 function Item({ title, children }) {
   return (

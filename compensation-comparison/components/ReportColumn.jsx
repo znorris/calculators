@@ -225,6 +225,15 @@ export function ReportColumn({ projections, offersById, baseline, comparison, is
               </li>
             ))}
           </ul>
+          <p style={{ fontSize: 11, margin: "8px 0 0", lineHeight: 1.5 }}>
+            <a
+              href="assumptions/"
+              style={{ color: color.accent, textDecoration: "underline", textUnderlineOffset: 2 }}
+            >
+              See every tax constant this uses
+            </a>
+            , read live from the same code that computes these figures.
+          </p>
         </Block>
       </div>
     </article>

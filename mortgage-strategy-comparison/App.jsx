@@ -13,12 +13,13 @@ const SCENARIOS_KEY = "mortgage-calc-scenarios";
 /** Caveats specific to this calculator, beyond the shared disclosure. */
 const DISCLOSURE_NOTES = [
   {
-    title: "What this does not know",
+    title: "What this does not account for",
     body:
-      "Investment returns, tax rates, and the sale timing you enter are assumptions, not forecasts. Real " +
-      "returns vary year to year rather than compounding smoothly, a large lump-sum sale can push you into a " +
-      "higher bracket in that year, and shares held under a year are taxed at ordinary income rates rather " +
-      "than the long-term rates shown.",
+      "Market volatility, inflation, your individual tax circumstances, investment fees, and changes in tax " +
+      "law. Real returns vary year to year rather than compounding smoothly, a large lump-sum sale can push " +
+      "you into a higher bracket in that year, and shares held under a year are taxed at ordinary income rates " +
+      "rather than the long-term rates shown. Consult a qualified financial advisor and tax professional " +
+      "before making financial decisions.",
   },
 ];
 
@@ -759,17 +760,6 @@ export default function App() {
 
       <WarrantyDisclaimer extraNotes={DISCLOSURE_NOTES} />
 
-      <div style={{ marginTop: 20, paddingTop: 14, borderTop: "1px solid #e2e5ea", textAlign: "center" }}>
-        <p style={{ fontSize: 10, color: "#94a3b8", lineHeight: 1.6, margin: "0 0 8px", maxWidth: 640, marginLeft: "auto", marginRight: "auto" }}>
-          This tool is for educational and illustrative purposes only and does not constitute financial, tax, or investment advice. 
-          All projections are hypothetical, based on the assumptions you provide, and do not account for market volatility, 
-          inflation, individual tax circumstances, investment fees, or changes in tax law. Past market performance does not 
-          guarantee future results. Consult a qualified financial advisor and tax professional before making financial decisions.
-        </p>
-        <p style={{ fontSize: 10, color: "#b0b8c8", margin: 0 }}>
-          © {new Date().getFullYear()} Zach Norris. All rights reserved.
-        </p>
-      </div>
     </div>
     </>
   );
