@@ -92,6 +92,36 @@ export function offerLabel(offer, fallback = "Untitled offer") {
 }
 
 /**
+ * Spreadsheet-style column letters: 0 is A, 25 is Z, 26 is AA.
+ *
+ * Unbounded, so a comparison with more than 26 offers keeps going rather than
+ * wrapping around to a name already in use.
+ */
+export function columnLetters(index) {
+  let out = "";
+  let n = index;
+  do {
+    out = String.fromCharCode(65 + (n % 26)) + out;
+    n = Math.floor(n / 26) - 1;
+  } while (n >= 0);
+  return out;
+}
+
+/**
+ * The next default offer name, as the first letter not already taken.
+ *
+ * Counting offers would reuse a letter after a removal: delete Offer A from a
+ * pair and the count says 1, which is B, which already exists.
+ */
+export function nextOfferName(offers) {
+  const taken = new Set(offers.map((o) => (o?.name || "").trim()));
+  for (let i = 0; ; i += 1) {
+    const candidate = `Offer ${columnLetters(i)}`;
+    if (!taken.has(candidate)) return candidate;
+  }
+}
+
+/**
  * Whether a field holds something the user actually entered, as opposed to
  * sitting at its default. Drives the auto-expand rule.
  */

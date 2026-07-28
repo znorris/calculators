@@ -8,7 +8,13 @@ import { OfferColumn } from "./components/OfferColumn.jsx";
 import { ReportColumn } from "./components/ReportColumn.jsx";
 import { SettingsBar } from "./components/SettingsBar.jsx";
 import { DataDisclosure, DataDisclosureLink, WarrantyDisclaimer } from "../shared/DataDisclosure.jsx";
-import { createOffer, duplicateOffer, setField, sectionsWithData } from "./model/offer.js";
+import {
+  createOffer,
+  duplicateOffer,
+  setField,
+  sectionsWithData,
+  nextOfferName,
+} from "./model/offer.js";
 import {
   createComparison,
   normalizeComparison,
@@ -179,7 +185,7 @@ export default function App() {
   // Switching to a newly created column matters on a phone, where only one
   // column shows and a new offer would otherwise appear to do nothing.
   function handleAddOffer() {
-    const offer = createOffer({ name: `Offer ${comparison.offerIds.length + 1}` });
+    const offer = createOffer({ name: nextOfferName(offers) });
     setOffers((prev) => upsertOffer(prev, offer));
     setComparison((prev) => addOffer(prev, offer.id));
     setActiveColumn(offer.id);

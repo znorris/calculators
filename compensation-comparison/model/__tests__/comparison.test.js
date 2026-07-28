@@ -13,7 +13,14 @@ import {
   REPORT_COLUMN_ID,
   DEFAULT_HORIZON_YEARS,
 } from "../comparison.js";
-import { createOffer, duplicateOffer, sectionsWithData, sectionHasData } from "../offer.js";
+import {
+  createOffer,
+  duplicateOffer,
+  sectionsWithData,
+  sectionHasData,
+  columnLetters,
+  nextOfferName,
+} from "../offer.js";
 import { SECTIONS } from "../schema.js";
 import { deleteOffer, upsertOffer, indexById } from "../storage.js";
 
@@ -219,5 +226,44 @@ describe("section auto-expansion", () => {
     for (const section of SECTIONS.filter((s) => s.alwaysOpen)) {
       expect(open, section.id).toContain(section.id);
     }
+  });
+});
+
+describe("default offer naming", () => {
+  it("counts in spreadsheet column letters", () => {
+    expect(columnLetters(0)).toBe("A");
+    expect(columnLetters(1)).toBe("B");
+    expect(columnLetters(25)).toBe("Z");
+  });
+
+  it("keeps going past Z rather than repeating a letter", () => {
+    expect(columnLetters(26)).toBe("AA");
+    expect(columnLetters(27)).toBe("AB");
+    expect(columnLetters(51)).toBe("AZ");
+    expect(columnLetters(52)).toBe("BA");
+  });
+
+  it("follows the seeded pair with C, not 3", () => {
+    const seeded = [createOffer({ name: "Offer A" }), createOffer({ name: "Offer B" })];
+    expect(nextOfferName(seeded)).toBe("Offer C");
+  });
+
+  it("names the first offer A", () => {
+    expect(nextOfferName([])).toBe("Offer A");
+  });
+
+  it("reuses a freed letter instead of colliding, after a removal", () => {
+    // Counting offers would say 1, which is B, which is still present.
+    const afterRemovingA = [createOffer({ name: "Offer B" })];
+    expect(nextOfferName(afterRemovingA)).toBe("Offer A");
+  });
+
+  it("skips letters taken by renamed offers", () => {
+    const offers = [createOffer({ name: "Offer A" }), createOffer({ name: "Northwind" })];
+    expect(nextOfferName(offers)).toBe("Offer B");
+  });
+
+  it("ignores surrounding whitespace when checking what is taken", () => {
+    expect(nextOfferName([createOffer({ name: "  Offer A  " })])).toBe("Offer B");
   });
 });
