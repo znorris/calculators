@@ -636,7 +636,7 @@ export const SECTIONS = [
         type: "bool",
         label: "Price commute time as lost time",
         default: false,
-        help: "Values unpaid travel at your own effective hourly rate. Off by default because it is a judgment, not a cost.",
+        help: "Values unpaid travel at your own effective hourly rate, a judgment call rather than a hard cost. Off by default.",
         showIf: (o) => o.workArrangement !== "remote",
       },
       {

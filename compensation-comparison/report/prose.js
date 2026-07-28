@@ -88,9 +88,11 @@ export function offerSentences({ projection, offer, regimes, baseline, offersByI
     out.push({
       topic: "overtake",
       text:
-        gap >= 0
+        gap > 0
           ? `${name} leads ${baselineName} on cumulative take-home in every year, ending ${money(gap)} ahead.`
-          : `${name} trails ${baselineName} on cumulative take-home in every year, ending ${money(Math.abs(gap))} behind.`,
+          : gap < 0
+            ? `${name} trails ${baselineName} on cumulative take-home in every year, ending ${money(Math.abs(gap))} behind.`
+            : `${name} and ${baselineName} end with the same cumulative take-home.`,
     });
   }
 
@@ -100,7 +102,8 @@ export function offerSentences({ projection, offer, regimes, baseline, offersByI
       topic: "cashVsTotal",
       text:
         `${name} pays more take-home than the baseline in ${runPhrase(run)} while still trailing on ` +
-        `cumulative total compensation, because more of the baseline's value arrives as employer contributions.`,
+        `cumulative total compensation, because more of the baseline's value in those years comes from equity ` +
+        `or employer contributions that never reach a paycheck.`,
     });
   }
 
@@ -131,8 +134,9 @@ export function offerSentences({ projection, offer, regimes, baseline, offersByI
       out.push({
         topic: "equity",
         text:
-          `${runPhrase(regimes.equityMix.heavy[0])} draws more than ${percent(regimes.equityMix.threshold, 0)} ` +
-          `of total compensation from equity${regimes.equityMix.cashHeavy.length ? `, against ${runPhrase(regimes.equityMix.cashHeavy[0])} that lean on cash` : ""}.`,
+          `More than ${percent(regimes.equityMix.threshold, 0)} of total compensation comes from equity in ` +
+          `${runPhrase(regimes.equityMix.heavy[0])}` +
+          `${regimes.equityMix.cashHeavy.length ? `, versus mostly cash in ${runPhrase(regimes.equityMix.cashHeavy[0])}` : ""}.`,
       });
     }
 
@@ -225,7 +229,7 @@ export function offerSentences({ projection, offer, regimes, baseline, offersByI
     const parts = [];
     if (b.timeOff > 0) {
       parts.push(
-        `${b.daysOff} days off worth ${money(b.timeOff)}${offer.unlimitedPto ? ", at the days you expect to actually take" : ""}`,
+        `${b.daysOff} days off worth ${money(b.timeOff)}${offer.unlimitedPto ? ", based on the days you expect to take" : ""}`,
       );
     }
     if (b.holidays > 0) parts.push(`${offer.paidHolidays} paid holidays worth ${money(b.holidays)}`);
@@ -267,7 +271,7 @@ export function offerSentences({ projection, offer, regimes, baseline, offersByI
   for (const run of regimes.taxElevated) {
     out.push({
       topic: "tax",
-      text: `${runPhrase(run)} carries an effective tax rate above ${percent(TAX_ELEVATED_THRESHOLD)}.`,
+      text: `The effective tax rate is above ${percent(TAX_ELEVATED_THRESHOLD)} in ${runPhrase(run)}.`,
     });
   }
 
@@ -360,7 +364,7 @@ export function assumptionNotes({ projections, offersById, comparison }) {
   const withVariable = projections.filter((p) => p.years[0]?.variable);
   if (withVariable.length) {
     notes.push(
-      `Variable pay is computed at the attainment you entered, not at 100% of quota. A quoted on-target figure is what the plan pays at exactly quota, which most people do not hit; asking what share of the team hit quota last year is worth more than any assumption here.`,
+      `Variable pay is computed at the attainment you entered, not at 100% of quota. A quoted on-target figure is what the plan pays at exactly quota, which most people do not hit.`,
       `Territory quality, lead flow, and your own ramp beyond the months entered are not modeled, and all three move real attainment more than the plan's shape does.`,
     );
   }

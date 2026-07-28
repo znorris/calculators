@@ -61,7 +61,7 @@ export function ComparisonsMenu({
           </span>
         </button>
         <button type="button" onClick={onCreate} style={{ ...button, minHeight: 34 }}>
-          New comparison
+          Add comparison
         </button>
       </div>
 

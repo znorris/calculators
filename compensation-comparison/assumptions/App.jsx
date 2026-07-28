@@ -1,11 +1,8 @@
-// Every constant the compensation calculator runs on, read live from the same
-// modules it uses.
+// Every constant the compensation calculator runs on.
 //
-// Nothing on this page is retyped. If a bracket changes in
-// calc/data/federal.js, this page changes with it, and if it did not, the page
-// would become a second source of truth quietly disagreeing with the one that
-// computes your answer. That is the entire point of the page: a reader can
-// check the assumptions rather than take them on faith.
+// Values are imported from the calculator's own modules rather than restated
+// here, so the page cannot disagree with the code that produces a user's
+// results. Adding a constant to this page means importing it, never copying it.
 
 import { Breadcrumb } from "../../shared/Breadcrumb.jsx";
 import { FEDERAL, AVAILABLE_TAX_YEARS, DEFAULT_TAX_YEAR } from "../calc/data/federal.js";
@@ -48,8 +45,8 @@ export default function App() {
           What the compensation calculator assumes
         </h1>
         <p style={{ fontSize: 12.5, color: color.body, margin: 0, maxWidth: 720, lineHeight: 1.6 }}>
-          Every figure below is read at page load from the same modules that compute your results. If a number
-          looks wrong, it is wrong in the calculator too.
+          These are the exact tax tables, limits, and rates the calculator uses for the selected year. If a
+          number here looks wrong, it is wrong in your results too.
         </p>
       </header>
 

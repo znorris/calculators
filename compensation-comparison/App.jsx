@@ -57,8 +57,8 @@ const COMP_DISCLOSURE_NOTES = [
       "revenue department where published, and each state record carries a confidence marker; where a state " +
       "has not yet released the current year, the prior year is carried forward. City income taxes beyond a " +
       "rate you enter, and several equity mechanisms, are not modeled. The Assumptions section of the report " +
-      "lists what is and is not included. Every constant is published at assumptions/, read live from the "
-      + "same code that computes your results.",
+      "lists what is and is not included. Every constant is published at assumptions/ and always matches "
+      + "what this calculator uses.",
   },
 ];
 

@@ -232,7 +232,7 @@ export function ReportColumn({ projections, offersById, baseline, comparison, is
             >
               See every tax constant this uses
             </a>
-            , read live from the same code that computes these figures.
+            .
           </p>
         </Block>
       </div>
