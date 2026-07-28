@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect, useRef } from "react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine, ReferenceArea } from "recharts";
 import { parseUrlParams, stripUrlParams } from "../shared/urlState.js";
 import { ShareButton } from "../shared/ShareButton.jsx";
-import { DataDisclosure, DataDisclosureLink } from "../shared/DataDisclosure.jsx";
+import { DataDisclosure, DataDisclosureLink, WarrantyDisclaimer } from "../shared/DataDisclosure.jsx";
 import { ScenariosMenu } from "../shared/ScenariosMenu.jsx";
 import { ShareBanner } from "../shared/ShareBanner.jsx";
 import { Breadcrumb } from "../shared/Breadcrumb.jsx";
@@ -754,9 +754,10 @@ export default function App() {
       <DataDisclosure
         storageKeys={["mortgage-calc-inputs", "mortgage-calc-scenarios"]}
         sharesViaUrl
-        extraNotes={DISCLOSURE_NOTES}
         onClearStoredData={clearStoredData}
       />
+
+      <WarrantyDisclaimer extraNotes={DISCLOSURE_NOTES} />
 
       <div style={{ marginTop: 20, paddingTop: 14, borderTop: "1px solid #e2e5ea", textAlign: "center" }}>
         <p style={{ fontSize: 10, color: "#94a3b8", lineHeight: 1.6, margin: "0 0 8px", maxWidth: 640, marginLeft: "auto", marginRight: "auto" }}>

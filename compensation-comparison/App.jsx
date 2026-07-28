@@ -7,7 +7,7 @@ import { ColumnStrip } from "./components/ColumnStrip.jsx";
 import { OfferColumn } from "./components/OfferColumn.jsx";
 import { ReportColumn } from "./components/ReportColumn.jsx";
 import { SettingsBar } from "./components/SettingsBar.jsx";
-import { DataDisclosure, DataDisclosureLink } from "../shared/DataDisclosure.jsx";
+import { DataDisclosure, DataDisclosureLink, WarrantyDisclaimer } from "../shared/DataDisclosure.jsx";
 import { createOffer, duplicateOffer, setField, sectionsWithData } from "./model/offer.js";
 import {
   createComparison,
@@ -298,9 +298,10 @@ export default function App() {
       <DataDisclosure
         storageKeys={["comp-comparison:offers", "comp-comparison:current"]}
         sharesViaUrl
-        extraNotes={COMP_DISCLOSURE_NOTES}
         onClearStoredData={handleClearStoredData}
       />
+
+      <WarrantyDisclaimer extraNotes={COMP_DISCLOSURE_NOTES} />
     </div>
   );
 }

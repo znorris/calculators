@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect, useRef } from "react";
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, CartesianGrid, ReferenceDot, Label } from "recharts";
 import { parseUrlParams, stripUrlParams } from "../shared/urlState.js";
 import { ShareButton } from "../shared/ShareButton.jsx";
-import { DataDisclosure, DataDisclosureLink } from "../shared/DataDisclosure.jsx";
+import { DataDisclosure, DataDisclosureLink, WarrantyDisclaimer } from "../shared/DataDisclosure.jsx";
 import { ScenariosMenu } from "../shared/ScenariosMenu.jsx";
 import { ShareBanner } from "../shared/ShareBanner.jsx";
 import { Breadcrumb } from "../shared/Breadcrumb.jsx";
@@ -687,9 +687,10 @@ export default function App() {
       <DataDisclosure
         storageKeys={["home-purchase-comparison-inputs", "home-purchase-comparison-scenarios"]}
         sharesViaUrl
-        extraNotes={DISCLOSURE_NOTES}
         onClearStoredData={clearStoredData}
       />
+
+      <WarrantyDisclaimer extraNotes={DISCLOSURE_NOTES} />
 
       </div>
     </>
