@@ -343,6 +343,32 @@ function TrendSection({ projections, offersById, horizonYears }) {
   );
 }
 
+/** How each stacked series reads its value out of a projected year. */
+const SERIES_VALUE = {
+  base: (y) => y.wages.total,
+  bonus: (y) => y.bonusTotal,
+  equity: (y) => y.equity.total,
+  retirement: (y) => y.retirement.employer,
+};
+
+/**
+ * Series keys that at least one offer has a nonzero value for.
+ *
+ * Checked across every offer rather than only the charted one, so a component
+ * one offer provides and another does not stays visible, which is the point of
+ * comparing them.
+ */
+function seriesWithData(projections, horizonYears) {
+  const present = new Set();
+  for (const [key, read] of Object.entries(SERIES_VALUE)) {
+    const anyOffer = projections.some((p) =>
+      p.years.slice(0, horizonYears).some((y) => Math.round(read(y)) !== 0),
+    );
+    if (anyOffer) present.add(key);
+  }
+  return present;
+}
+
 /**
  * Composition of each year's compensation, stacked. Every chart in the report
  * shares a Year 1..N x-axis so a reader scrolling on a phone can hold a year
@@ -364,6 +390,14 @@ function MixChart({ projections, offersById, baseline, horizonYears }) {
     equity: Math.round(y.equity.total),
     retirement: Math.round(y.retirement.employer),
   }));
+
+  // Show a component only when some offer actually has it, matching the rule
+  // the section containers already use: present if any offer has data, absent
+  // otherwise. Without this, every comparison carries an Equity and a Bonus
+  // legend entry whether or not anyone has either.
+  const present = seriesWithData(projections, horizonYears);
+  const activeSeries = SERIES.filter((s) => present.has(s.key));
+  if (activeSeries.length === 0) return null;
 
   return (
     <div style={{ marginBottom: 14 }}>
@@ -390,7 +424,7 @@ function MixChart({ projections, offersById, baseline, horizonYears }) {
             contentStyle={{ fontSize: 11, borderRadius: 6, border: `1px solid ${color.hairline}` }}
           />
           <Legend wrapperStyle={{ fontSize: 10 }} />
-          {SERIES.map((s) => (
+          {activeSeries.map((s) => (
             <Bar key={s.key} dataKey={s.key} stackId="a" fill={s.fill} name={s.label} />
           ))}
         </BarChart>
