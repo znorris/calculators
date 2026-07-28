@@ -8,6 +8,7 @@
 import { federalTables } from "./data/federal.js";
 import { computeAllTaxes } from "./tax.js";
 import { baseWagesForYear, bonusesForYear, retirementForYear, matchVestedFraction } from "./pay.js";
+import { projectEquity, equityRange } from "./equity.js";
 
 /**
  * Project one offer across the horizon.
@@ -20,6 +21,9 @@ export function projectOffer(offer, context) {
   const { filingStatus, taxYear, horizonYears } = context;
   const limits = federalTables(taxYear).retirementLimits;
 
+  const equity = projectEquity(offer, horizonYears, offer.stockGrowthRate || 0);
+  const equityBand = equityRange(offer, horizonYears);
+
   const years = [];
 
   for (let i = 0; i < horizonYears; i += 1) {
@@ -27,7 +31,14 @@ export function projectOffer(offer, context) {
     const bonuses = bonusesForYear(offer, i, wages.total);
     const bonusTotal = bonuses.reduce((sum, b) => sum + b.amount, 0);
 
-    const grossWages = wages.total + bonusTotal;
+    // RSU vesting is ordinary income in the year it vests, so it belongs in
+    // gross wages and can push the year into higher brackets. Option value is
+    // taxed at exercise, which this build does not model, so it is excluded
+    // from the tax base and counted only toward total compensation.
+    const grossWages = wages.total + bonusTotal + equity.taxable[i];
+
+    // Retirement contributions are computed on base wages only. Plans differ
+    // on whether bonuses and vesting count as eligible compensation.
     const retirement = retirementForYear(offer, wages.total, limits, i);
 
     // Only a traditional deferral reduces the income tax base. A Roth
@@ -51,13 +62,20 @@ export function projectOffer(offer, context) {
     // Total compensation counts employer-side dollars, which never appear in
     // a paycheck. The employer match is counted as contributed, not as a
     // balance grown at a return rate.
-    const totalCompensation = grossWages + retirement.employer;
+    const totalCompensation = grossWages + retirement.employer + equity.untaxed[i];
 
     years.push({
       year: i + 1,
       wages,
       bonuses,
       bonusTotal,
+      equity: {
+        taxable: equity.taxable[i],
+        untaxed: equity.untaxed[i],
+        total: equity.total[i],
+        low: equityBand?.low.total[i] ?? null,
+        high: equityBand?.high.total[i] ?? null,
+      },
       grossWages,
       taxes,
       retirement,
@@ -70,8 +88,10 @@ export function projectOffer(offer, context) {
   return {
     offerId: offer.id,
     years,
+    equity,
+    equityBand,
     cumulative: accumulate(years),
-    exitYears: exitYearSeries(offer, years),
+    exitYears: exitYearSeries(offer, years, equity),
   };
 }
 
@@ -93,18 +113,21 @@ function accumulate(years) {
   let totalCompensation = 0;
   let employerRetirement = 0;
   let taxesPaid = 0;
+  let equity = 0;
 
   return years.map((y) => {
     takeHome += y.takeHome;
     totalCompensation += y.totalCompensation;
     employerRetirement += y.retirement.employer;
     taxesPaid += y.taxes.total;
+    equity += y.equity.total;
     return {
       year: y.year,
       takeHome,
       totalCompensation,
       employerRetirement,
       taxesPaid,
+      equity,
     };
   });
 }
@@ -118,18 +141,23 @@ function accumulate(years) {
  *
  *   - employer match not yet vested at that year of service
  *   - any one-time bonus still inside its clawback window
+ *   - equity granted but not yet vested at that exit
  *
- * Unvested equity belongs here too and is not yet modeled, since this build
- * covers the cash path only.
+ * Unvested equity is usually the largest of the three, which is why the
+ * headline horizon total is not what most people walk away with.
  */
-export function exitYearSeries(offer, years) {
+export function exitYearSeries(offer, years, equity) {
   const out = [];
   let takeHome = 0;
   let employerMatch = 0;
+  let vestedEquity = 0;
 
   for (const y of years) {
     takeHome += y.takeHome;
     employerMatch += y.retirement.employer;
+    // RSU value already reached the bank account through take-home; only the
+    // untaxed option value is added separately so it is not double counted.
+    vestedEquity += y.equity.untaxed;
 
     const yearsOfService = y.year;
     const vestedFraction = matchVestedFraction(offer, yearsOfService);
@@ -144,13 +172,18 @@ export function exitYearSeries(offer, years) {
       }
     }
 
+    const forfeitedEquity = equity?.forfeitedIfLeavingAfter?.[y.year - 1] ?? 0;
+
     out.push({
       year: y.year,
       takeHome,
       vestedMatch: employerMatch * vestedFraction,
       forfeitedMatch,
       clawback,
-      realized: takeHome + employerMatch * vestedFraction - clawback,
+      vestedEquity,
+      forfeitedEquity,
+      forfeitedTotal: forfeitedMatch + clawback + forfeitedEquity,
+      realized: takeHome + employerMatch * vestedFraction + vestedEquity - clawback,
     });
   }
 

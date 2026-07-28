@@ -104,6 +104,50 @@ export function offerSentences({ projection, offer, regimes, baseline, offersByI
     });
   }
 
+  // Equity. Stated before tax because a large vest is usually what drives the
+  // tax regime rather than the other way round.
+  if (regimes.hasEquity) {
+    const cumulativeEquity = total.equity;
+    const band = projection.equityBand;
+    out.push({
+      topic: "equity",
+      text: band
+        ? `Equity vests to ${money(cumulativeEquity)} over ${horizonYears} years, ranging from ` +
+          `${money(sum(band.low.total))} under the conservative growth rate to ${money(sum(band.high.total))} ` +
+          `under the optimistic one.`
+        : `Equity vests to ${money(cumulativeEquity)} over ${horizonYears} years.`,
+    });
+
+    for (const grant of regimes.preCliff) {
+      out.push({
+        topic: "equity",
+        text: grant.neverVests
+          ? `${grant.label} does not begin vesting within the ${horizonYears}-year horizon.`
+          : `${grant.label} vests nothing through Year ${grant.throughYear}, so leaving before then forfeits all of it.`,
+      });
+    }
+
+    if (regimes.equityMix?.heavy.length) {
+      out.push({
+        topic: "equity",
+        text:
+          `${runPhrase(regimes.equityMix.heavy[0])} draws more than ${percent(regimes.equityMix.threshold, 0)} ` +
+          `of total compensation from equity${regimes.equityMix.cashHeavy.length ? `, against ${runPhrase(regimes.equityMix.cashHeavy[0])} that lean on cash` : ""}.`,
+      });
+    }
+
+    if (regimes.equityPeak) {
+      out.push({
+        topic: "equity",
+        text:
+          `Equity peaks in Year ${regimes.equityPeak.year} at ${money(regimes.equityPeak.value)}` +
+          (regimes.equityPeak.dropsTo != null && regimes.equityPeak.dropsTo < regimes.equityPeak.value
+            ? `, then falls to ${money(regimes.equityPeak.dropsTo)} the following year.`
+            : `.`),
+      });
+    }
+  }
+
   // Tax regime, stated with the threshold that defines it.
   for (const run of regimes.taxElevated) {
     out.push({
@@ -122,15 +166,19 @@ export function offerSentences({ projection, offer, regimes, baseline, offersByI
   }
 
   // Exit years, because the horizon total is not what most readers realize.
-  const exits = projection.exitYears.filter((e) => e.forfeitedMatch > 0 || e.clawback > 0);
+  const exits = projection.exitYears.filter((e) => e.forfeitedTotal > 0);
   if (exits.length) {
     const worst = exits[0];
+    const lost = [
+      worst.forfeitedEquity > 0 ? `${money(worst.forfeitedEquity)} in unvested equity` : null,
+      worst.forfeitedMatch > 0 ? `${money(worst.forfeitedMatch)} in unvested employer match` : null,
+      worst.clawback > 0 ? `${money(worst.clawback)} in bonus still inside its clawback window` : null,
+    ].filter(Boolean);
     out.push({
       topic: "exit",
       text:
         `Leaving at the end of Year ${worst.year} realizes ${money(worst.realized)} of the projected ` +
-        `${money(total.totalCompensation)}, forfeiting ${money(worst.forfeitedMatch)} in unvested employer ` +
-        `match${worst.clawback > 0 ? ` and repaying ${money(worst.clawback)} in bonus still inside its clawback window` : ""}.`,
+        `${money(total.totalCompensation)}, giving up ${joinList(lost)}.`,
     });
   }
   if (regimes.forfeitureCleared && regimes.forfeitureCleared.year > 1) {
@@ -179,6 +227,21 @@ export function assumptionNotes({ projections, offersById, comparison }) {
     );
   }
 
+  const withEquity = projections.filter((p) => p.equity?.hasGrants);
+  if (withEquity.length) {
+    notes.push(
+      `Equity is valued at the grant amount grown by the rate you set, which is an assumption and not a forecast. Dilution, liquidation preferences, and the gap between a 409A valuation and a preferred share price are not modeled.`,
+    );
+    if (withEquity.some((p) => p.equity.hasOptions)) {
+      notes.push(
+        `Option grants are valued at the spread between the share price and the strike price, counted toward total compensation but not taxed. Real tax depends on when you exercise, which this does not model, and an ISO exercise can trigger alternative minimum tax.`,
+      );
+    }
+    notes.push(
+      `RSU vesting is treated as ordinary income in the year it vests, so a large vest can push that year into a higher bracket. Employers withhold on vesting at a flat supplemental rate that may be below your actual rate.`,
+    );
+  }
+
   notes.push(
     `Raises compound at the rate set on each offer and are an assumption, not a commitment.`,
     `Employer retirement contributions count as dollars contributed, subject to the vesting schedule. No investment return is projected.`,
@@ -203,6 +266,18 @@ function filingLabel(status) {
 
 function last(arr) {
   return arr[arr.length - 1];
+}
+
+function sum(arr) {
+  return (arr || []).reduce((total, n) => total + n, 0);
+}
+
+/** "a", "a and b", "a, b, and c". */
+function joinList(parts) {
+  if (parts.length === 0) return "nothing";
+  if (parts.length === 1) return parts[0];
+  if (parts.length === 2) return `${parts[0]} and ${parts[1]}`;
+  return `${parts.slice(0, -1).join(", ")}, and ${parts[parts.length - 1]}`;
 }
 
 export { ordinal };

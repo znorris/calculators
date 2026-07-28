@@ -43,6 +43,34 @@ export const CITY_TAX_BASES = [
   { value: "taxable", label: "Income after deductions" },
 ];
 
+export const EQUITY_INSTRUMENTS = [
+  { value: "rsu", label: "RSUs" },
+  { value: "nso", label: "Options (NSO)" },
+  { value: "iso", label: "Options (ISO)" },
+];
+
+/**
+ * Vesting curves, as a percentage of the grant vesting in each year.
+ *
+ * A one-year cliff needs no field of its own; it is year one at zero. The
+ * named shapes are real published schedules, and they exist as presets because
+ * the difference between them is what a multi-year view is for: dividing a
+ * grant by four overstates years one and two of a back-loaded schedule and
+ * understates years three and four.
+ */
+export const VESTING_PRESETS = [
+  { value: "even4", label: "Even over 4 years (25/25/25/25)", schedule: [25, 25, 25, 25] },
+  { value: "even3", label: "Even over 3 years (34/33/33)", schedule: [34, 33, 33] },
+  { value: "cliff4", label: "1-year cliff, then even (0/33/33/34)", schedule: [0, 33, 33, 34] },
+  { value: "backloaded", label: "Back-loaded (5/15/40/40)", schedule: [5, 15, 40, 40] },
+  { value: "frontloaded", label: "Front-loaded (40/28/20/12)", schedule: [40, 28, 20, 12] },
+  { value: "custom", label: "Custom", schedule: null },
+];
+
+export function presetSchedule(value) {
+  return VESTING_PRESETS.find((p) => p.value === value)?.schedule || null;
+}
+
 /** Sections in render order. */
 export const SECTIONS = [
   {
@@ -195,6 +223,102 @@ export const SECTIONS = [
             default: 1,
             help: "A target bonus that historically pays out at 80% should be entered as 80%.",
             showIf: (b) => b.recurrence === "annual",
+          },
+        ],
+      },
+    ],
+  },
+
+  {
+    id: "equity",
+    label: "Equity",
+    fields: [
+      {
+        id: "stockGrowthRate",
+        type: "percent",
+        label: "Expected annual stock growth",
+        default: 0,
+        help: "Applied to every grant's value each year of the horizon.",
+      },
+      {
+        id: "stockGrowthLow",
+        type: "percent",
+        label: "Conservative growth",
+        default: null,
+        help: "Optional. Leave blank to show a single figure rather than a range.",
+      },
+      {
+        id: "stockGrowthHigh",
+        type: "percent",
+        label: "Optimistic growth",
+        default: null,
+      },
+      {
+        id: "grants",
+        type: "list",
+        label: "Grants",
+        default: [],
+        addLabel: "Add grant",
+        itemNoun: "Grant",
+        itemFields: [
+          { id: "label", type: "text", label: "Name", default: "", placeholder: "Initial grant" },
+          {
+            id: "instrument",
+            type: "enum",
+            label: "Instrument",
+            default: "rsu",
+            options: EQUITY_INSTRUMENTS,
+          },
+          {
+            id: "grantYear",
+            type: "int",
+            label: "Granted in year",
+            default: 1,
+            help: "A refresher granted in year 2 vests forward on its own clock, overlapping the initial grant.",
+          },
+          {
+            id: "grantValue",
+            type: "money",
+            label: "Grant value",
+            default: 0,
+            showIf: (g) => g.instrument === "rsu",
+          },
+          {
+            id: "shares",
+            type: "int",
+            label: "Number of shares",
+            default: 0,
+            showIf: (g) => g.instrument !== "rsu",
+          },
+          {
+            id: "strikePrice",
+            type: "money",
+            label: "Strike price per share",
+            default: 0,
+            showIf: (g) => g.instrument !== "rsu",
+          },
+          {
+            id: "sharePrice",
+            type: "money",
+            label: "Current share price",
+            default: 0,
+            showIf: (g) => g.instrument !== "rsu",
+          },
+          {
+            id: "vestingPreset",
+            type: "enum",
+            label: "Vesting schedule",
+            default: "even4",
+            options: VESTING_PRESETS,
+          },
+          {
+            id: "vestingCustom",
+            type: "text",
+            label: "Percent per year",
+            default: "",
+            placeholder: "10, 20, 30, 40",
+            help: "Comma separated, one number per year.",
+            showIf: (g) => g.vestingPreset === "custom",
           },
         ],
       },

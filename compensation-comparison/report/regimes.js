@@ -102,6 +102,58 @@ export function leadsOnCashTrailsOnTotal(projection, baseline) {
   });
 }
 
+/** Threshold above which a year counts as equity-heavy. */
+export const EQUITY_HEAVY_THRESHOLD = 0.3;
+
+/**
+ * Years where equity is a large share of total compensation, and their
+ * complement. This is the closest analogue to a temperature season: one
+ * quantity crossing one stated threshold, reported as a pair covering the
+ * whole horizon.
+ */
+export function equityMixRuns(projection, threshold = EQUITY_HEAVY_THRESHOLD) {
+  const share = (y) => (y.totalCompensation > 0 ? y.equity.total / y.totalCompensation : 0);
+  return {
+    threshold,
+    heavy: runsWhere(projection.years, (y) => share(y) > threshold),
+    cashHeavy: runsWhere(projection.years, (y) => share(y) <= threshold),
+  };
+}
+
+/**
+ * The span before a grant's first tranche vests.
+ *
+ * Read straight off the schedule rather than derived from a threshold, so it
+ * needs no smoothing and no cutoff. A grant whose first year is zero has a
+ * cliff; one that starts vesting immediately has none.
+ */
+export function preCliffRuns(projection) {
+  const out = [];
+  for (const grant of projection.equity?.perGrant || []) {
+    const firstVest = grant.byYear.findIndex((v) => v > 0);
+    if (firstVest === -1) {
+      out.push({ label: grant.label, neverVests: true });
+      continue;
+    }
+    if (firstVest > 0) out.push({ label: grant.label, throughYear: firstVest });
+  }
+  return out;
+}
+
+/** The year equity vesting peaks, and what it drops to afterward. */
+export function equityPeak(projection) {
+  const years = projection.years.filter((y) => y.equity.total > 0);
+  if (years.length === 0) return null;
+  let best = years[0];
+  for (const y of years) if (y.equity.total > best.equity.total) best = y;
+  const after = projection.years[best.year]; // the following year, if any
+  return {
+    year: best.year,
+    value: best.equity.total,
+    dropsTo: after ? after.equity.total : null,
+  };
+}
+
 /** Every regime for one offer against the baseline. */
 export function deriveRegimes(projection, baseline) {
   const isBaseline = baseline && projection.offerId === baseline.offerId;
@@ -114,5 +166,9 @@ export function deriveRegimes(projection, baseline) {
     wageBase: wageBaseCrossing(projection),
     forfeitureCleared: forfeitureClearedYear(projection),
     cashLeadTotalTrail: isBaseline ? [] : leadsOnCashTrailsOnTotal(projection, baseline),
+    hasEquity: !!projection.equity?.hasGrants,
+    equityMix: projection.equity?.hasGrants ? equityMixRuns(projection) : null,
+    preCliff: preCliffRuns(projection),
+    equityPeak: equityPeak(projection),
   };
 }

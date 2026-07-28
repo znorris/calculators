@@ -14,6 +14,7 @@ import { card, color } from "../theme.js";
 const SERIES = [
   { key: "base", label: "Base pay", fill: "#4f46e5" },
   { key: "bonus", label: "Bonus", fill: "#0284c7" },
+  { key: "equity", label: "Equity", fill: "#7c3aed" },
   { key: "retirement", label: "Employer retirement", fill: "#047857" },
 ];
 
@@ -185,6 +186,7 @@ function MixChart({ projections, offersById, baseline, horizonYears }) {
     year: `Y${i + 1}`,
     base: Math.round(y.wages.total),
     bonus: Math.round(y.bonusTotal),
+    equity: Math.round(y.equity.total),
     retirement: Math.round(y.retirement.employer),
   }));
 
@@ -293,7 +295,7 @@ function ExitTable({ projections, offersById }) {
             <td style={td}>Year {i + 1}</td>
             {projections.map((p) => {
               const exit = p.exitYears[i];
-              const lost = exit ? exit.forfeitedMatch + exit.clawback : 0;
+              const lost = exit ? exit.forfeitedTotal : 0;
               return (
                 <td key={p.offerId} style={{ ...td, textAlign: "right", fontVariantNumeric: "tabular-nums" }}>
                   {exit ? money(exit.realized) : "—"}

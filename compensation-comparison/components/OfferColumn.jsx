@@ -3,7 +3,7 @@
 
 import { Section } from "./Section.jsx";
 import { Field } from "./Field.jsx";
-import { BonusList } from "./BonusList.jsx";
+import { ListEditor } from "./ListEditor.jsx";
 import { SECTIONS, isFieldVisible } from "../model/schema.js";
 import { sectionHasData, offerLabel } from "../model/offer.js";
 import { money } from "../format.js";
@@ -118,7 +118,7 @@ export function OfferColumn({
             .filter((field) => isFieldVisible(field, offer))
             .map((field) =>
               field.type === "list" ? (
-                <BonusList
+                <ListEditor
                   key={field.id}
                   field={field}
                   items={offer[field.id] || []}
