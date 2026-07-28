@@ -18,9 +18,9 @@ import { SECTIONS } from "../schema.js";
 import { deleteOffer, upsertOffer, indexById } from "../storage.js";
 
 describe("createComparison", () => {
-  it("defaults to a five-year horizon", () => {
+  it("defaults to a ten-year horizon, long enough for the trend charts to read", () => {
     expect(createComparison().horizonYears).toBe(DEFAULT_HORIZON_YEARS);
-    expect(DEFAULT_HORIZON_YEARS).toBe(5);
+    expect(DEFAULT_HORIZON_YEARS).toBe(10);
   });
 
   it("pins the report by default, since that is the column you keep in view", () => {

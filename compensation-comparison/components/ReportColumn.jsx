@@ -9,7 +9,14 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, Cart
 import { overviewSentences, offerSentences, assumptionNotes } from "../report/prose.js";
 import { deriveRegimes } from "../report/regimes.js";
 import { scoreAll, moneyAndFitAgree } from "../calc/fit.js";
-import { MIN_HORIZON_YEARS, MAX_HORIZON_YEARS, clampHorizon } from "../model/comparison.js";
+import {
+  MIN_HORIZON_YEARS,
+  MAX_HORIZON_YEARS,
+  MIN_YEARS_FOR_TREND,
+  clampHorizon,
+} from "../model/comparison.js";
+import { TrendChart } from "./TrendChart.jsx";
+import { offerColor } from "../theme.js";
 import { money, signedMoney, signedPercent } from "../format.js";
 import { card, color } from "../theme.js";
 
@@ -156,6 +163,8 @@ export function ReportColumn({ projections, offersById, baseline, comparison, is
           </Scroller>
         </Block>
 
+        <TrendSection projections={projections} offersById={offersById} horizonYears={horizonYears} />
+
         <Heading>Where the money comes from</Heading>
         <MixChart
           projections={projections}
@@ -213,6 +222,124 @@ export function ReportColumn({ projections, offersById, baseline, comparison, is
         </Block>
       </div>
     </article>
+  );
+}
+
+/**
+ * Trends over the horizon: read any year off the line instead of picking one.
+ *
+ * Series are keyed by offer id rather than by name, so two offers sharing a
+ * name cannot collide into one line. Equity gets its own chart, and only when
+ * an offer actually has grants, because a flat zero line teaches nothing.
+ */
+function TrendSection({ projections, offersById, horizonYears }) {
+  if (horizonYears < MIN_YEARS_FOR_TREND) {
+    return (
+      <div>
+        <Heading>Over time</Heading>
+        <Block>
+          <Paragraph>
+            A {horizonYears}-year horizon has too few points to plot. Raise the horizon in the header to see the
+            trend, or read the year-by-year figures below.
+          </Paragraph>
+        </Block>
+      </div>
+    );
+  }
+
+  const named = projections.map((p, i) => ({
+    projection: p,
+    offer: offersById[p.offerId],
+    color: offerColor(i),
+  }));
+
+  const series = named.map(({ projection, offer, color: c }) => ({
+    key: projection.offerId,
+    name: offer?.name?.trim() || "Untitled",
+    color: c,
+  }));
+
+  function rows(pick) {
+    return Array.from({ length: horizonYears }, (_, i) => {
+      const row = { year: i + 1 };
+      for (const { projection } of named) row[projection.offerId] = Math.round(pick(projection, i));
+      return row;
+    });
+  }
+
+  const totalRows = rows((p, i) => p.cumulative[i]?.totalCompensation ?? 0);
+  const takeHomeRows = rows((p, i) => p.cumulative[i]?.takeHome ?? 0);
+
+  // Equity only when someone has a grant, and a band only where the user gave
+  // both a conservative and an optimistic growth rate.
+  const withEquity = named.filter(({ projection }) => projection.equity?.hasGrants);
+  let equityRows = null;
+  let equitySeries = null;
+  let bandedNames = [];
+
+  if (withEquity.length) {
+    equitySeries = withEquity.map(({ projection, offer, color: c }) => {
+      const hasBand = Boolean(projection.equityBand);
+      if (hasBand) bandedNames.push(offer?.name?.trim() || "Untitled");
+      return {
+        key: projection.offerId,
+        name: offer?.name?.trim() || "Untitled",
+        color: c,
+        bandLowKey: hasBand ? `${projection.offerId}__low` : undefined,
+        bandHighKey: hasBand ? `${projection.offerId}__high` : undefined,
+      };
+    });
+
+    const running = new Map();
+    equityRows = Array.from({ length: horizonYears }, (_, i) => {
+      const row = { year: i + 1 };
+      for (const { projection } of withEquity) {
+        const acc = running.get(projection.offerId) || { base: 0, low: 0, high: 0 };
+        acc.base += projection.equity.total[i] ?? 0;
+        acc.low += projection.equityBand?.low.total[i] ?? 0;
+        acc.high += projection.equityBand?.high.total[i] ?? 0;
+        running.set(projection.offerId, acc);
+        row[projection.offerId] = Math.round(acc.base);
+        if (projection.equityBand) {
+          row[`${projection.offerId}__low`] = Math.round(acc.low);
+          row[`${projection.offerId}__high`] = Math.round(acc.high);
+        }
+      }
+      return row;
+    });
+  }
+
+  return (
+    <div>
+      <Heading>Total compensation over time</Heading>
+      <TrendChart
+        data={totalRows}
+        series={series}
+        caption="Cumulative total compensation. Touch or hover any year to read every offer at that point."
+      />
+
+      <Heading>Take-home over time</Heading>
+      <TrendChart
+        data={takeHomeRows}
+        series={series}
+        caption="Cumulative pay after tax and deductions. An offer can lead the chart above and trail this one."
+      />
+
+      {equityRows && (
+        <>
+          <Heading>Equity over time</Heading>
+          <TrendChart
+            data={equityRows}
+            series={equitySeries}
+            caption={
+              bandedNames.length
+                ? `Cumulative equity value. The shaded band spans the conservative and optimistic growth rates you set for ${bandedNames.join(" and ")}; the line is the expected rate.`
+                : "Cumulative equity value at the expected growth rate. Set a conservative and an optimistic rate on an offer to see a range."
+            }
+          />
+        </>
+      )}
+    </div>
   );
 }
 

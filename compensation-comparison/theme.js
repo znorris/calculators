@@ -35,6 +35,16 @@ export const color = {
  * surface and carries prose, a chart, and two tables, none of which are
  * legible in the same width as a stack of input fields.
  */
+/**
+ * One color per offer, assigned by position and reused across every chart so a
+ * given offer keeps its color throughout the report.
+ */
+export const SERIES_COLORS = ["#4f46e5", "#0284c7", "#047857", "#b45309", "#be123c", "#7c3aed"];
+
+export function offerColor(index) {
+  return SERIES_COLORS[index % SERIES_COLORS.length];
+}
+
 export const COLUMN_WIDTH = {
   offer: 300,
   pinned: 380,

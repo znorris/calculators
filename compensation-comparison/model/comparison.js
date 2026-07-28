@@ -14,7 +14,16 @@ function newId(prefix) {
   return `${prefix}-${idCounter}-${String(Math.floor(performance.now() * 1000))}`;
 }
 
-export const DEFAULT_HORIZON_YEARS = 5;
+/**
+ * Ten years by default, so the charts have a curve worth reading rather than a
+ * couple of points. The control stays adjustable because a fixed window is
+ * wrong for fixed-term work: a one-year contract is set to 1 and the charts
+ * cover one year.
+ */
+export const DEFAULT_HORIZON_YEARS = 10;
+
+/** Below this, a line has too few points to read; the year table serves better. */
+export const MIN_YEARS_FOR_TREND = 3;
 
 /**
  * Non-monetary factors, and how much each matters to you.
