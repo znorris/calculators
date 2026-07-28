@@ -11,6 +11,7 @@ import { normalizeComparison, comparisonsReferencing } from "./comparison.js";
 
 const OFFERS_KEY = "comp-comparison:offers";
 const COMPARISONS_KEY = "comp-comparison:comparisons";
+const CURRENT_KEY = "comp-comparison:current";
 
 function readJson(key, fallback) {
   try {
@@ -48,6 +49,35 @@ export function loadComparisons() {
 
 export function saveComparisons(comparisons) {
   return writeJson(COMPARISONS_KEY, comparisons);
+}
+
+/**
+ * The comparison currently being edited.
+ *
+ * Distinct from the named comparisons above, which are a library the user
+ * saves into deliberately. This is the working state, and it holds everything
+ * scoped to the comparison rather than to an offer: filing status, tax year,
+ * horizon, the baseline pointer, the pinned column, and the factor weights.
+ * Without it, every one of those resets on reload.
+ */
+export function loadCurrentComparison() {
+  try {
+    const raw = localStorage.getItem(CURRENT_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+export function saveCurrentComparison(comparison) {
+  try {
+    localStorage.setItem(CURRENT_KEY, JSON.stringify(comparison));
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 /** Index an offer array by id. */

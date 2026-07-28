@@ -10,6 +10,7 @@ import { SettingsBar } from "./components/SettingsBar.jsx";
 import { createOffer, duplicateOffer, setField, sectionsWithData } from "./model/offer.js";
 import {
   createComparison,
+  normalizeComparison,
   addOffer,
   removeOffer,
   moveOffer,
@@ -21,7 +22,14 @@ import {
   removeFactor,
   REPORT_COLUMN_ID,
 } from "./model/comparison.js";
-import { loadOffers, saveOffers, indexById, upsertOffer } from "./model/storage.js";
+import {
+  loadOffers,
+  saveOffers,
+  loadCurrentComparison,
+  saveCurrentComparison,
+  indexById,
+  upsertOffer,
+} from "./model/storage.js";
 import { parseShareUrl, stripShareParam, buildShareUrl } from "./model/urlCodec.js";
 import { projectAll } from "./calc/project.js";
 import { color } from "./theme.js";
@@ -49,6 +57,24 @@ function initialState() {
   const stored = loadOffers();
   const offers = stored.length ? stored : seedOffers();
   const ids = offers.map((o) => o.id);
+
+  // Restore the working comparison, which carries everything scoped to the
+  // person rather than to an offer. Its offer references are re-checked
+  // against the library, since an offer could have been deleted since.
+  const savedComparison = loadCurrentComparison();
+  if (savedComparison) {
+    const restored = normalizeComparison(savedComparison);
+    const present = new Set(ids);
+    restored.offerIds = restored.offerIds.filter((id) => present.has(id));
+    // An offer added outside this comparison should still show up rather than
+    // being invisible with no way to reach it.
+    for (const id of ids) if (!restored.offerIds.includes(id)) restored.offerIds.push(id);
+    if (!restored.offerIds.includes(restored.baselineId)) {
+      restored.baselineId = restored.offerIds[0] ?? null;
+    }
+    return { offers, comparison: restored, fromShare: false };
+  }
+
   return {
     offers,
     comparison: createComparison({ offerIds: ids, baselineId: ids[0] ?? null }),
@@ -71,6 +97,10 @@ export default function App() {
   useEffect(() => {
     saveOffers(offers);
   }, [offers]);
+
+  useEffect(() => {
+    saveCurrentComparison(comparison);
+  }, [comparison]);
 
   const offersById = useMemo(() => indexById(offers), [offers]);
 
