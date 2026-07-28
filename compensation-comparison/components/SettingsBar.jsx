@@ -88,8 +88,10 @@ function FactorWeights({ factors, onUpdate, onRemove, onAdd }) {
 
 export function SettingsBar({ comparison, onChange, onAddOffer, onShare, onUpdateFactor, onRemoveFactor, onAddFactor }) {
   const isNarrow = useIsNarrow();
-  const [open, setOpen] = useState(false);
-  const expanded = !isNarrow || open;
+  // Collapsible on every viewport. Starts open on a wide screen, where the
+  // space is free, and closed on a phone, where this bar would otherwise push
+  // the report below the fold.
+  const [expanded, setExpanded] = useState(() => !isNarrow);
 
   // The horizon is not listed here. It is set in the report header, so
   // repeating it in a summary of controls that live in this bar would point at
@@ -101,44 +103,46 @@ export function SettingsBar({ comparison, onChange, onAddOffer, onShare, onUpdat
 
   return (
     <div style={{ ...card, marginBottom: 16, overflow: "hidden" }}>
-      {isNarrow && (
-        <button
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          aria-expanded={expanded}
-          style={{
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-            minHeight: 44,
-            padding: "10px 14px",
-            background: "transparent",
-            border: "none",
-            cursor: "pointer",
-            fontFamily: "inherit",
-            textAlign: "left",
-          }}
-        >
-          <span aria-hidden="true" style={{ fontSize: 9, color: color.faint, width: 8 }}>
-            {expanded ? "▾" : "▸"}
-          </span>
-          <span style={{ flex: 1, fontSize: 12.5, color: color.body, fontWeight: 600 }}>{summary}</span>
-          <span style={{ fontSize: 11.5, color: color.accent, fontWeight: 600 }}>
-            {expanded ? "Done" : "Settings"}
-          </span>
-        </button>
-      )}
+      <button
+        type="button"
+        onClick={() => setExpanded((v) => !v)}
+        aria-expanded={expanded}
+        aria-controls="settings-body"
+        style={{
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+          minHeight: 44,
+          padding: "10px 14px",
+          background: "transparent",
+          border: "none",
+          cursor: "pointer",
+          fontFamily: "inherit",
+          textAlign: "left",
+        }}
+      >
+        <span aria-hidden="true" style={{ fontSize: 9, color: color.faint, width: 8 }}>
+          {expanded ? "▾" : "▸"}
+        </span>
+        <span style={{ flex: 1, fontSize: 12.5, color: color.body, fontWeight: 600 }}>
+          {expanded ? "Settings" : summary}
+        </span>
+        <span style={{ fontSize: 11.5, color: color.accent, fontWeight: 600 }}>
+          {expanded ? "Hide" : "Edit"}
+        </span>
+      </button>
 
       {expanded && (
         <div
+          id="settings-body"
           style={{
             display: "flex",
             flexWrap: "wrap",
             gap: 14,
             alignItems: "flex-start",
-            padding: isNarrow ? "0 14px 12px" : "12px 14px",
-            borderTop: isNarrow ? `1px solid ${color.hairline}` : "none",
+            padding: "12px 14px",
+            borderTop: `1px solid ${color.hairline}`,
           }}
         >
           <div style={{ flex: "1 1 190px", minWidth: 170 }}>
