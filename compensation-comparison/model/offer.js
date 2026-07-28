@@ -33,6 +33,10 @@ export function createOffer(overrides = {}) {
     createdAt: Date.now(),
     updatedAt: Date.now(),
     ...defaultValues(),
+    // Not a schema field. The factors themselves belong to the comparison,
+    // since how much you care about work-life balance is a property of you;
+    // only the per-offer rating lives here, keyed by factor id.
+    factorRatings: {},
     ...overrides,
   };
 }
@@ -75,6 +79,7 @@ export function normalizeOffer(raw) {
   out.id = raw?.id || newId("offer");
   out.createdAt = raw?.createdAt || Date.now();
   out.updatedAt = raw?.updatedAt || Date.now();
+  out.factorRatings = raw?.factorRatings && typeof raw.factorRatings === "object" ? raw.factorRatings : {};
   for (const [key, value] of Object.entries(defaults)) {
     if (Array.isArray(value) && !Array.isArray(out[key])) out[key] = [];
   }

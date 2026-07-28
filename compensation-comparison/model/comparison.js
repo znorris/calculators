@@ -15,6 +15,28 @@ function newId(prefix) {
 }
 
 export const DEFAULT_HORIZON_YEARS = 5;
+
+/**
+ * Non-monetary factors, and how much each matters to you.
+ *
+ * These live on the comparison rather than on an offer for the same reason
+ * filing status does: how much you care about work-life balance is a property
+ * of you, identical across every offer being weighed. What varies per offer is
+ * the rating, which is stored on the offer.
+ *
+ * Weights run 0 to 5, where 0 removes a factor from the score without deleting
+ * it. Ratings run 1 to 5.
+ */
+export const DEFAULT_FACTORS = [
+  { id: "growth", label: "Career growth", weight: 3 },
+  { id: "manager", label: "Manager and team", weight: 3 },
+  { id: "balance", label: "Work-life balance", weight: 3 },
+  { id: "stability", label: "Company stability", weight: 3 },
+  { id: "interest", label: "Interest in the work", weight: 3 },
+];
+
+export const MAX_WEIGHT = 5;
+export const MAX_RATING = 5;
 export const MIN_HORIZON_YEARS = 1;
 export const MAX_HORIZON_YEARS = 10;
 
@@ -29,6 +51,7 @@ export function createComparison(overrides = {}) {
     dependents: 0,
     taxYear: 2026,
     horizonYears: DEFAULT_HORIZON_YEARS,
+    factors: DEFAULT_FACTORS.map((f) => ({ ...f })),
     createdAt: Date.now(),
     updatedAt: Date.now(),
     ...overrides,
@@ -102,7 +125,38 @@ export function normalizeComparison(raw) {
   out.offerIds = Array.isArray(raw?.offerIds) ? raw.offerIds.filter(Boolean) : [];
   if (!out.offerIds.includes(out.baselineId)) out.baselineId = out.offerIds[0] ?? null;
   out.horizonYears = clampHorizon(out.horizonYears);
+  out.factors = Array.isArray(raw?.factors) && raw.factors.length
+    ? raw.factors.filter((f) => f && f.id)
+    : DEFAULT_FACTORS.map((f) => ({ ...f }));
   return out;
+}
+
+let factorCounter = 0;
+
+export function addFactor(comparison, label = "") {
+  factorCounter += 1;
+  const id = `factor-${factorCounter}-${comparison.factors.length}`;
+  return {
+    ...comparison,
+    factors: [...comparison.factors, { id, label, weight: 3 }],
+    updatedAt: Date.now(),
+  };
+}
+
+export function updateFactor(comparison, factorId, patch) {
+  return {
+    ...comparison,
+    factors: comparison.factors.map((f) => (f.id === factorId ? { ...f, ...patch } : f)),
+    updatedAt: Date.now(),
+  };
+}
+
+export function removeFactor(comparison, factorId) {
+  return {
+    ...comparison,
+    factors: comparison.factors.filter((f) => f.id !== factorId),
+    updatedAt: Date.now(),
+  };
 }
 
 export function clampHorizon(years) {

@@ -16,6 +16,9 @@ import {
   setBaseline,
   setPinned,
   columnOrder,
+  addFactor,
+  updateFactor,
+  removeFactor,
   REPORT_COLUMN_ID,
 } from "./model/comparison.js";
 import { loadOffers, saveOffers, indexById, upsertOffer } from "./model/storage.js";
@@ -115,6 +118,18 @@ export default function App() {
     setOffers((prev) => prev.map((o) => (o.id === offerId ? setField(o, fieldId, value) : o)));
   }
 
+  function rateFactor(offerId, factorId, value) {
+    setOffers((prev) =>
+      prev.map((o) => {
+        if (o.id !== offerId) return o;
+        const ratings = { ...(o.factorRatings || {}) };
+        if (value == null) delete ratings[factorId];
+        else ratings[factorId] = value;
+        return { ...o, factorRatings: ratings, updatedAt: Date.now() };
+      }),
+    );
+  }
+
   // Switching to a newly created column matters on a phone, where only one
   // column shows and a new offer would otherwise appear to do nothing.
   function handleAddOffer() {
@@ -176,6 +191,8 @@ export default function App() {
           onMoveRight={() => setComparison((prev) => moveOffer(prev, offer.id, i + 1))}
           canMoveLeft={i > 0}
           canMoveRight={i < activeOffers.length - 1}
+          factors={comparison.factors}
+          onRateFactor={rateFactor}
         />
       ),
     })),
@@ -202,6 +219,9 @@ export default function App() {
         onChange={(patch) => setComparison((prev) => ({ ...prev, ...patch }))}
         onAddOffer={handleAddOffer}
         onShare={handleShare}
+        onAddFactor={() => setComparison((prev) => addFactor(prev))}
+        onUpdateFactor={(id, patch) => setComparison((prev) => updateFactor(prev, id, patch))}
+        onRemoveFactor={(id) => setComparison((prev) => removeFactor(prev, id))}
       />
 
       <ColumnStrip

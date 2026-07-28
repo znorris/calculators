@@ -8,6 +8,7 @@
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, CartesianGrid } from "recharts";
 import { overviewSentences, offerSentences, assumptionNotes } from "../report/prose.js";
 import { deriveRegimes } from "../report/regimes.js";
+import { scoreAll, moneyAndFitAgree } from "../calc/fit.js";
 import { money, signedMoney, signedPercent } from "../format.js";
 import { card, color } from "../theme.js";
 
@@ -64,6 +65,10 @@ function Paragraph({ children }) {
  */
 function Scroller({ children }) {
   return <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}>{children}</div>;
+}
+
+function last(arr) {
+  return arr[arr.length - 1];
 }
 
 export function ReportColumn({ projections, offersById, baseline, comparison, isPinned }) {
@@ -141,6 +146,8 @@ export function ReportColumn({ projections, offersById, baseline, comparison, is
             </div>
           );
         })}
+
+        <FitSection projections={projections} offersById={offersById} comparison={comparison} />
 
         <Heading>If you leave early</Heading>
         <Block>
@@ -225,6 +232,85 @@ function MixChart({ projections, offersById, baseline, horizonYears }) {
         Composition of {subjectName}'s annual compensation, the baseline offer. Employer retirement is counted
         as dollars contributed, not as a balance grown at a return rate.
       </p>
+    </div>
+  );
+}
+
+/**
+ * Fit, reported as its own figure beside the money and never folded into it.
+ *
+ * Blending a dollar total with 1-to-5 ratings hides how much a rating moved
+ * the answer, which is the specific criticism the research found of the tools
+ * that do it. Where the two disagree, saying so is more useful than papering
+ * over it with a composite.
+ */
+function FitSection({ projections, offersById, comparison }) {
+  const offers = projections.map((p) => offersById[p.offerId]).filter(Boolean);
+  const { scores, biggestGap, leader } = scoreAll(offers, comparison.factors || []);
+  const rated = offers.filter((o) => scores.get(o.id));
+  if (rated.length === 0) return null;
+
+  const moneyLeader = [...projections].sort(
+    (a, b) => last(b.cumulative).totalCompensation - last(a.cumulative).totalCompensation,
+  )[0];
+  const agree = moneyAndFitAgree(moneyLeader?.offerId, leader?.id);
+
+  return (
+    <div>
+      <Heading>Fit</Heading>
+      <Block>
+        <Scroller>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 11.5 }}>
+            <thead>
+              <tr>
+                <th style={th}>Offer</th>
+                <th style={{ ...th, textAlign: "right" }}>Fit</th>
+                <th style={{ ...th, textAlign: "right" }}>Rated</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rated.map((offer) => {
+                const score = scores.get(offer.id);
+                return (
+                  <tr key={offer.id}>
+                    <td style={td}>{offer.name?.trim() || "Untitled"}</td>
+                    <td style={{ ...td, textAlign: "right", fontVariantNumeric: "tabular-nums" }}>
+                      {Math.round(score.percent)}%
+                    </td>
+                    <td style={{ ...td, textAlign: "right", color: color.muted }}>
+                      {score.ratedCount} of {score.totalCount}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </Scroller>
+
+        {agree === false && (
+          <Paragraph>
+            <strong>{offersById[moneyLeader.offerId]?.name?.trim() || "One offer"}</strong> leads on money while{" "}
+            <strong>{leader.name?.trim() || "another"}</strong> leads on fit, so there is a real trade here rather
+            than a clear winner.
+          </Paragraph>
+        )}
+        {agree === true && (
+          <Paragraph>
+            <strong>{leader.name?.trim() || "The same offer"}</strong> leads on both money and fit.
+          </Paragraph>
+        )}
+        {biggestGap && (
+          <Paragraph>
+            The factor separating them most is {biggestGap.factor.label.toLowerCase()}, where{" "}
+            {biggestGap.best.name?.trim() || "one offer"} rates {biggestGap.spread} points above{" "}
+            {biggestGap.worst.name?.trim() || "the other"} at a weight of {biggestGap.factor.weight}.
+          </Paragraph>
+        )}
+        <p style={{ fontSize: 11, color: color.muted, margin: "4px 0 0", lineHeight: 1.45 }}>
+          Fit is your weights times your ratings, out of the maximum those same factors could score. It is
+          deliberately not combined with the dollar figures.
+        </p>
+      </Block>
     </div>
   );
 }

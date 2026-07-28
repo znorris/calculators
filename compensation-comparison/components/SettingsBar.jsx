@@ -11,7 +11,7 @@ import { Field } from "./Field.jsx";
 import { useIsNarrow } from "./ColumnStrip.jsx";
 import { FILING_STATUSES } from "../model/schema.js";
 import { AVAILABLE_TAX_YEARS } from "../calc/data/federal.js";
-import { MIN_HORIZON_YEARS, MAX_HORIZON_YEARS, clampHorizon } from "../model/comparison.js";
+import { MIN_HORIZON_YEARS, MAX_HORIZON_YEARS, clampHorizon, MAX_WEIGHT } from "../model/comparison.js";
 import { card, color, button, buttonPrimary, label as labelStyle, input as inputStyle } from "../theme.js";
 
 const FILING_FIELD = {
@@ -36,7 +36,57 @@ const FILING_SHORT = {
   headOfHousehold: "Head of household",
 };
 
-export function SettingsBar({ comparison, onChange, onAddOffer, onShare }) {
+function FactorWeights({ factors, onUpdate, onRemove, onAdd }) {
+  return (
+    <div style={{ width: "100%", borderTop: `1px solid ${color.hairline}`, paddingTop: 10, marginTop: 2 }}>
+      <p style={{ ...labelStyle, marginBottom: 6 }}>What matters to you, beyond money</p>
+      {factors.map((factor) => (
+        <div key={factor.id} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
+          <input
+            type="text"
+            value={factor.label}
+            placeholder="Factor"
+            onChange={(e) => onUpdate(factor.id, { label: e.target.value })}
+            style={{ ...inputStyle, flex: "1 1 120px", minWidth: 0 }}
+            aria-label="Factor name"
+          />
+          <input
+            type="range"
+            min={0}
+            max={MAX_WEIGHT}
+            step={1}
+            value={factor.weight}
+            onChange={(e) => onUpdate(factor.id, { weight: Number(e.target.value) })}
+            style={{ flex: "0 1 90px", accentColor: color.accent }}
+            aria-label={`Importance of ${factor.label || "factor"}`}
+          />
+          <span
+            style={{ fontSize: 11.5, color: factor.weight === 0 ? color.faint : color.body, width: 46, flex: "0 0 auto" }}
+          >
+            {factor.weight === 0 ? "off" : `w ${factor.weight}`}
+          </span>
+          <button
+            type="button"
+            onClick={() => onRemove(factor.id)}
+            style={{ ...button, minHeight: 30, padding: "4px 8px", flex: "0 0 auto" }}
+            aria-label={`Remove ${factor.label || "factor"}`}
+          >
+            ×
+          </button>
+        </div>
+      ))}
+      <button type="button" onClick={onAdd} style={{ ...button, minHeight: 32 }}>
+        Add factor
+      </button>
+      <p style={{ fontSize: 10.5, color: color.muted, margin: "6px 0 0", lineHeight: 1.45 }}>
+        Weight 0 turns a factor off without deleting it. The fit score is reported next to the money, never
+        mixed into it.
+      </p>
+    </div>
+  );
+}
+
+export function SettingsBar({ comparison, onChange, onAddOffer, onShare, onUpdateFactor, onRemoveFactor, onAddFactor }) {
   const isNarrow = useIsNarrow();
   const [open, setOpen] = useState(false);
   const expanded = !isNarrow || open;
@@ -118,6 +168,13 @@ export function SettingsBar({ comparison, onChange, onAddOffer, onShare }) {
               style={inputStyle}
             />
           </div>
+
+          <FactorWeights
+            factors={comparison.factors || []}
+            onUpdate={onUpdateFactor}
+            onRemove={onRemoveFactor}
+            onAdd={onAddFactor}
+          />
         </div>
       )}
 

@@ -4,6 +4,7 @@
 import { Section } from "./Section.jsx";
 import { Field } from "./Field.jsx";
 import { ListEditor } from "./ListEditor.jsx";
+import { FactorRatings } from "./FactorRatings.jsx";
 import { SECTIONS, isFieldVisible } from "../model/schema.js";
 import { sectionHasData, offerLabel } from "../model/offer.js";
 import { money } from "../format.js";
@@ -24,6 +25,8 @@ export function OfferColumn({
   onMoveRight,
   canMoveLeft,
   canMoveRight,
+  factors,
+  onRateFactor,
 }) {
   const total = projection?.cumulative?.[projection.cumulative.length - 1];
 
@@ -135,6 +138,26 @@ export function OfferColumn({
             )}
         </Section>
       ))}
+
+      {/*
+        Not a schema section. The factor list lives on the comparison because
+        importance is a property of the person, so this container is driven by
+        that list rather than by the offer schema.
+      */}
+      <Section
+        section={FIT_SECTION}
+        open={openSections.has(FIT_SECTION.id)}
+        hasData={Object.values(offer.factorRatings || {}).some((r) => r > 0)}
+        onToggle={() => onToggleSection(FIT_SECTION.id)}
+      >
+        <FactorRatings
+          factors={factors}
+          ratings={offer.factorRatings}
+          onRate={(factorId, value) => onRateFactor(offer.id, factorId, value)}
+        />
+      </Section>
     </article>
   );
 }
+
+const FIT_SECTION = { id: "fit", label: "Fit" };
