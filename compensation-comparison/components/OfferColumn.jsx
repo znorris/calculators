@@ -10,6 +10,24 @@ import { sectionHasData, offerLabel } from "../model/offer.js";
 import { money } from "../format.js";
 import { card, color, iconButton } from "../theme.js";
 
+const FIT_SECTION = { id: "fit", label: "Fit" };
+
+/**
+ * Shared by the baseline label and the control that sets it, so the two are
+ * the same size and sit in the same place. Only the color and the underline
+ * differ, which is what distinguishes a state from an action.
+ */
+const baselineMarker = {
+  fontSize: 10.5,
+  fontWeight: 700,
+  color: color.accent,
+  textTransform: "uppercase",
+  letterSpacing: 0.4,
+  flex: "0 0 auto",
+  whiteSpace: "nowrap",
+  lineHeight: 1.4,
+};
+
 export function OfferColumn({
   offer,
   projection,
@@ -62,19 +80,31 @@ export function OfferColumn({
           >
             {offerLabel(offer)}
           </h2>
-          {isBaseline && (
-            <span
+          {/*
+            The baseline marker and the control that sets it occupy the same
+            slot, so the button row below holds the same four controls on every
+            column and nothing shifts position when the baseline moves.
+          */}
+          {isBaseline ? (
+            <span style={baselineMarker}>Baseline</span>
+          ) : (
+            <button
+              type="button"
+              onClick={onMakeBaseline}
               style={{
-                fontSize: 10.5,
-                fontWeight: 700,
-                color: color.accent,
-                textTransform: "uppercase",
-                letterSpacing: 0.4,
-                flex: "0 0 auto",
+                ...baselineMarker,
+                color: color.muted,
+                background: "none",
+                border: "none",
+                padding: 0,
+                cursor: "pointer",
+                fontFamily: "inherit",
+                textDecoration: "underline",
+                textUnderlineOffset: 2,
               }}
             >
-              Baseline
-            </span>
+              Make baseline
+            </button>
           )}
         </div>
 
@@ -92,11 +122,6 @@ export function OfferColumn({
           <button type="button" style={iconButton} onClick={onMoveRight} disabled={!canMoveRight} aria-label="Move column right">
             →
           </button>
-          {!isBaseline && (
-            <button type="button" style={iconButton} onClick={onMakeBaseline}>
-              Baseline
-            </button>
-          )}
           <button type="button" style={iconButton} onClick={onDuplicate}>
             Duplicate
           </button>
@@ -159,5 +184,3 @@ export function OfferColumn({
     </article>
   );
 }
-
-const FIT_SECTION = { id: "fit", label: "Fit" };

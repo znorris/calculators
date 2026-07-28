@@ -7,6 +7,7 @@ import { ColumnStrip } from "./components/ColumnStrip.jsx";
 import { OfferColumn } from "./components/OfferColumn.jsx";
 import { ReportColumn } from "./components/ReportColumn.jsx";
 import { SettingsBar } from "./components/SettingsBar.jsx";
+import { DataDisclosure, DataDisclosureLink } from "./components/DataDisclosure.jsx";
 import { createOffer, duplicateOffer, setField, sectionsWithData } from "./model/offer.js";
 import {
   createComparison,
@@ -27,6 +28,7 @@ import {
   saveOffers,
   loadCurrentComparison,
   saveCurrentComparison,
+  clearStoredData,
   indexById,
   upsertOffer,
 } from "./model/storage.js";
@@ -185,6 +187,21 @@ export default function App() {
     navigator.clipboard?.writeText(url);
   }
 
+  /**
+   * Wipe stored data and reset the screen in the same action, so it cannot go
+   * on showing figures the user just asked to have deleted.
+   *
+   * Reset to genuinely empty rather than to a seeded pair. The save effects
+   * fire immediately after this, so seeding would write offers straight back
+   * into the storage that was just cleared.
+   */
+  function handleClearStoredData() {
+    clearStoredData();
+    setOffers([]);
+    setComparison(createComparison());
+    setActiveColumn(null);
+  }
+
   // Report first, matching columnOrder. It is the answer; the offer columns
   // are where you type. On a phone that means the first thing you see is the
   // comparison rather than an empty form.
@@ -244,6 +261,8 @@ export default function App() {
         </p>
       </header>
 
+      <DataDisclosureLink />
+
       <SettingsBar
         comparison={comparison}
         onChange={(patch) => setComparison((prev) => ({ ...prev, ...patch }))}
@@ -261,6 +280,8 @@ export default function App() {
         activeId={activeId}
         onActivate={setActiveColumn}
       />
+
+      <DataDisclosure onClearStoredData={handleClearStoredData} />
     </div>
   );
 }

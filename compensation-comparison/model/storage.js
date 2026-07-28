@@ -80,6 +80,22 @@ export function saveCurrentComparison(comparison) {
   }
 }
 
+/**
+ * Remove everything this calculator has stored on the device.
+ *
+ * Named keys rather than `localStorage.clear()`, which would also wipe the
+ * other calculators' saved scenarios on the same origin.
+ */
+export function clearStoredData() {
+  for (const key of [OFFERS_KEY, COMPARISONS_KEY, CURRENT_KEY]) {
+    try {
+      localStorage.removeItem(key);
+    } catch {
+      // Storage disabled. Nothing was stored either, so nothing to remove.
+    }
+  }
+}
+
 /** Index an offer array by id. */
 export function indexById(offers) {
   return Object.fromEntries(offers.map((o) => [o.id, o]));
