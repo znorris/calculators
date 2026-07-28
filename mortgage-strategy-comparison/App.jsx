@@ -2,12 +2,27 @@ import { useState, useMemo, useEffect, useRef } from "react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine, ReferenceArea } from "recharts";
 import { parseUrlParams, stripUrlParams } from "../shared/urlState.js";
 import { ShareButton } from "../shared/ShareButton.jsx";
+import { DataDisclosure, DataDisclosureLink, WarrantyDisclaimer } from "../shared/DataDisclosure.jsx";
 import { ScenariosMenu } from "../shared/ScenariosMenu.jsx";
 import { ShareBanner } from "../shared/ShareBanner.jsx";
 import { Breadcrumb } from "../shared/Breadcrumb.jsx";
 
 const INPUTS_KEY = "mortgage-calc-inputs";
 const SCENARIOS_KEY = "mortgage-calc-scenarios";
+
+/** Caveats specific to this calculator, beyond the shared disclosure. */
+const DISCLOSURE_NOTES = [
+  {
+    title: "What this does not account for",
+    body:
+      "Market volatility, inflation, your individual tax circumstances, investment fees, and changes in tax " +
+      "law. Real returns vary year to year rather than compounding smoothly, a large lump-sum sale can push " +
+      "you into a higher bracket in that year, and shares held under a year are taxed at ordinary income rates " +
+      "rather than the long-term rates shown. Consult a qualified financial advisor and tax professional " +
+      "before making financial decisions.",
+  },
+];
+
 const URL_SCHEMA = { booleans: [], strings: [], enums: {} };
 
 function calcPmt(p, r, n) {
@@ -339,6 +354,15 @@ export default function App() {
     </div>
   );
 
+
+  /** Remove this calculator's stored data and reload into a clean state. */
+  function clearStoredData() {
+    for (const key of ["mortgage-calc-inputs", "mortgage-calc-scenarios"]) {
+      try { localStorage.removeItem(key); } catch (e) {}
+    }
+    window.location.href = window.location.pathname;
+  }
+
   return (
     <>
     <style>{`
@@ -357,6 +381,8 @@ export default function App() {
     <div className="mort-app" style={{ fontFamily: "'DM Sans', -apple-system, sans-serif", maxWidth: 920, margin: "0 auto", padding: "24px 16px", color: "#1a1a2e", background: "#f7f8fb", minHeight: "100vh" }}>
 
       <Breadcrumb current="Mortgage Strategy Comparison" />
+
+      <DataDisclosureLink />
 
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16, gap: 12, flexWrap: "wrap" }}>
         <div style={{ flex: "1 1 280px", minWidth: 0 }}>
@@ -725,17 +751,15 @@ export default function App() {
         </div>
       )}
 
-      <div style={{ marginTop: 20, paddingTop: 14, borderTop: "1px solid #e2e5ea", textAlign: "center" }}>
-        <p style={{ fontSize: 10, color: "#94a3b8", lineHeight: 1.6, margin: "0 0 8px", maxWidth: 640, marginLeft: "auto", marginRight: "auto" }}>
-          This tool is for educational and illustrative purposes only and does not constitute financial, tax, or investment advice. 
-          All projections are hypothetical, based on the assumptions you provide, and do not account for market volatility, 
-          inflation, individual tax circumstances, investment fees, or changes in tax law. Past market performance does not 
-          guarantee future results. Consult a qualified financial advisor and tax professional before making financial decisions.
-        </p>
-        <p style={{ fontSize: 10, color: "#b0b8c8", margin: 0 }}>
-          © {new Date().getFullYear()} Zach Norris. All rights reserved.
-        </p>
-      </div>
+
+      <DataDisclosure
+        storageKeys={["mortgage-calc-inputs", "mortgage-calc-scenarios"]}
+        sharesViaUrl
+        onClearStoredData={clearStoredData}
+      />
+
+      <WarrantyDisclaimer extraNotes={DISCLOSURE_NOTES} />
+
     </div>
     </>
   );

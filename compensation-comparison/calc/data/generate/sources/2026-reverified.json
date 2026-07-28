@@ -1,0 +1,2591 @@
+{
+  "collectedAt": "2026-07-28",
+  "taxYear": 2026,
+  "note": "Re-verification against 2026 employer withholding publications. The first pass looked for return forms, which for tax year 2026 are not published until 2027, and wrongly concluded rates were unavailable.",
+  "states": [
+    {
+      "code": "CA",
+      "name": "California",
+      "kind": "progressive",
+      "confidence": "verified",
+      "yearConfirmed": 2026,
+      "changedFromPrior": true,
+      "whatChanged": "Corrected two bugs that were already in the repo's CA record: (1) marriedJoint brackets had an 11.3% band running unsplit from 891,542 to a fabricated 1,485,906/2,000,000 pair with no bracket for the true 12.3% band start; replaced with the DE 44-verified split (11.3% to 1,000,000, 12.3% from 1,000,000-1,485,906, 13.3% above, since the flat $1,000,000 MHSA line falls inside the true 11.3% MFJ bracket and is not doubled for joint filers). (2) headOfHousehold thresholds were 'independently derived/scaled' estimates (52539/67717/83822/99015/505325/606297/1010435); replaced with DE 44's exact figures (52530/67716/83805/98990/505208/606251/1010417). Also updated standardDeduction from 2025's $5,540/$11,080 to 2026's $5,706/$11,412 (DE 44 Table 3). Single/MFS brackets and SDI rate were already correct.",
+      "brackets": {
+        "single": [
+          {
+            "upTo": 11079,
+            "rate": 0.01
+          },
+          {
+            "upTo": 26264,
+            "rate": 0.02
+          },
+          {
+            "upTo": 41452,
+            "rate": 0.04
+          },
+          {
+            "upTo": 57542,
+            "rate": 0.06
+          },
+          {
+            "upTo": 72724,
+            "rate": 0.08
+          },
+          {
+            "upTo": 371479,
+            "rate": 0.093
+          },
+          {
+            "upTo": 445771,
+            "rate": 0.103
+          },
+          {
+            "upTo": 742953,
+            "rate": 0.113
+          },
+          {
+            "upTo": 1000000,
+            "rate": 0.123
+          },
+          {
+            "upTo": null,
+            "rate": 0.133
+          }
+        ],
+        "marriedSeparate": [
+          {
+            "upTo": 11079,
+            "rate": 0.01
+          },
+          {
+            "upTo": 26264,
+            "rate": 0.02
+          },
+          {
+            "upTo": 41452,
+            "rate": 0.04
+          },
+          {
+            "upTo": 57542,
+            "rate": 0.06
+          },
+          {
+            "upTo": 72724,
+            "rate": 0.08
+          },
+          {
+            "upTo": 371479,
+            "rate": 0.093
+          },
+          {
+            "upTo": 445771,
+            "rate": 0.103
+          },
+          {
+            "upTo": 742953,
+            "rate": 0.113
+          },
+          {
+            "upTo": 1000000,
+            "rate": 0.123
+          },
+          {
+            "upTo": null,
+            "rate": 0.133
+          }
+        ],
+        "marriedJoint": [
+          {
+            "upTo": 22158,
+            "rate": 0.01
+          },
+          {
+            "upTo": 52528,
+            "rate": 0.02
+          },
+          {
+            "upTo": 82904,
+            "rate": 0.04
+          },
+          {
+            "upTo": 115084,
+            "rate": 0.06
+          },
+          {
+            "upTo": 145448,
+            "rate": 0.08
+          },
+          {
+            "upTo": 742958,
+            "rate": 0.093
+          },
+          {
+            "upTo": 891542,
+            "rate": 0.103
+          },
+          {
+            "upTo": 1000000,
+            "rate": 0.113
+          },
+          {
+            "upTo": 1485906,
+            "rate": 0.123
+          },
+          {
+            "upTo": null,
+            "rate": 0.133
+          }
+        ],
+        "headOfHousehold": [
+          {
+            "upTo": 22173,
+            "rate": 0.01
+          },
+          {
+            "upTo": 52530,
+            "rate": 0.02
+          },
+          {
+            "upTo": 67716,
+            "rate": 0.04
+          },
+          {
+            "upTo": 83805,
+            "rate": 0.06
+          },
+          {
+            "upTo": 98990,
+            "rate": 0.08
+          },
+          {
+            "upTo": 505208,
+            "rate": 0.093
+          },
+          {
+            "upTo": 606251,
+            "rate": 0.103
+          },
+          {
+            "upTo": 1000000,
+            "rate": 0.113
+          },
+          {
+            "upTo": 1010417,
+            "rate": 0.123
+          },
+          {
+            "upTo": null,
+            "rate": 0.133
+          }
+        ]
+      },
+      "standardDeduction": {
+        "single": 5706,
+        "marriedSeparate": 5706,
+        "marriedJoint": 11412,
+        "headOfHousehold": 11412
+      },
+      "payrollPrograms": [
+        {
+          "name": "CA SDI/PFL (State Disability Insurance / Paid Family Leave), employee contribution",
+          "rate": 0.013,
+          "wageBase": null
+        }
+      ],
+      "sources": [
+        "https://edd.ca.gov/siteassets/files/pdf_pub_ctr/de44.pdf (California Employer's Guide, DE 44 Rev. 52 (4-26), 2026 withholding schedules)"
+      ],
+      "notes": "Read directly from EDD's DE 44 for 2026 (an employer withholding guide, published well before Jan 1 2026 as required for payroll compliance -- not the FTB return/Form 540 instructions, which for tax year 2026 will not appear until late 2026/early 2027). DE 44's Method B tables gross up the true FTB statutory rates by 1.1x for withholding purposes (e.g. real 9.3% appears as 10.23%); figures above are the true rates recovered by dividing that factor back out, with the dollar thresholds (not grossed up) taken as-is. A separate 1% Mental Health Services Act surcharge applies on taxable income over a flat, non-inflation-indexed $1,000,000 regardless of filing status, folded into the brackets above as extra rate steps at the $1,000,000 line. SDI/PFL confirmed unchanged at 1.3% of all wages with no cap (Senate Bill 951, effective Jan 1, 2024)."
+    },
+    {
+      "code": "NY",
+      "name": "New York",
+      "kind": "progressive",
+      "confidence": "verified",
+      "yearConfirmed": 2026,
+      "changedFromPrior": false,
+      "whatChanged": "No numeric change: the repo's existing figures for NY already matched what a 2026-dated government withholding publication shows. Upgrading confidence from 'probable' to 'verified' because this pass read the actual NYS-50-T-NYS (1/26) withholding tables directly (not just inferred/carried-forward reasoning) and cross-confirmed against the government's 2025 IT-201-I return schedule and the paidfamilyleave.ny.gov 2026 page for the PFL rate/cap.",
+      "brackets": {
+        "single": [
+          {
+            "upTo": 8500,
+            "rate": 0.039
+          },
+          {
+            "upTo": 11700,
+            "rate": 0.044
+          },
+          {
+            "upTo": 13900,
+            "rate": 0.0515
+          },
+          {
+            "upTo": 80650,
+            "rate": 0.054
+          },
+          {
+            "upTo": 215400,
+            "rate": 0.059
+          },
+          {
+            "upTo": 1077550,
+            "rate": 0.0685
+          },
+          {
+            "upTo": 5000000,
+            "rate": 0.0965
+          },
+          {
+            "upTo": 25000000,
+            "rate": 0.103
+          },
+          {
+            "upTo": null,
+            "rate": 0.109
+          }
+        ],
+        "marriedSeparate": [
+          {
+            "upTo": 8500,
+            "rate": 0.039
+          },
+          {
+            "upTo": 11700,
+            "rate": 0.044
+          },
+          {
+            "upTo": 13900,
+            "rate": 0.0515
+          },
+          {
+            "upTo": 80650,
+            "rate": 0.054
+          },
+          {
+            "upTo": 215400,
+            "rate": 0.059
+          },
+          {
+            "upTo": 1077550,
+            "rate": 0.0685
+          },
+          {
+            "upTo": 5000000,
+            "rate": 0.0965
+          },
+          {
+            "upTo": 25000000,
+            "rate": 0.103
+          },
+          {
+            "upTo": null,
+            "rate": 0.109
+          }
+        ],
+        "marriedJoint": [
+          {
+            "upTo": 17150,
+            "rate": 0.039
+          },
+          {
+            "upTo": 23600,
+            "rate": 0.044
+          },
+          {
+            "upTo": 27900,
+            "rate": 0.0515
+          },
+          {
+            "upTo": 161550,
+            "rate": 0.054
+          },
+          {
+            "upTo": 323200,
+            "rate": 0.059
+          },
+          {
+            "upTo": 2155350,
+            "rate": 0.0685
+          },
+          {
+            "upTo": 5000000,
+            "rate": 0.0965
+          },
+          {
+            "upTo": 25000000,
+            "rate": 0.103
+          },
+          {
+            "upTo": null,
+            "rate": 0.109
+          }
+        ],
+        "headOfHousehold": [
+          {
+            "upTo": 12800,
+            "rate": 0.039
+          },
+          {
+            "upTo": 17650,
+            "rate": 0.044
+          },
+          {
+            "upTo": 20900,
+            "rate": 0.0515
+          },
+          {
+            "upTo": 107650,
+            "rate": 0.054
+          },
+          {
+            "upTo": 269300,
+            "rate": 0.059
+          },
+          {
+            "upTo": 1616450,
+            "rate": 0.0685
+          },
+          {
+            "upTo": 5000000,
+            "rate": 0.0965
+          },
+          {
+            "upTo": 25000000,
+            "rate": 0.103
+          },
+          {
+            "upTo": null,
+            "rate": 0.109
+          }
+        ]
+      },
+      "standardDeduction": {
+        "single": 8000,
+        "marriedSeparate": 8000,
+        "marriedJoint": 16050,
+        "headOfHousehold": 11200
+      },
+      "payrollPrograms": [
+        {
+          "name": "NY Paid Family Leave (PFL), employee contribution",
+          "rate": 0.00432,
+          "wageBase": 95349
+        },
+        {
+          "name": "NY State Disability Benefits Law (DBL), employee contribution",
+          "rate": 0.005,
+          "wageBase": 6240
+        }
+      ],
+      "sources": [
+        "https://www.tax.ny.gov/pdf/publications/withholding/nys50_t_nys.pdf (NYS-50-T-NYS (1/26), effective payrolls 1/1/2026-12/31/2026)",
+        "https://www.tax.ny.gov/pdf/current_forms/it/it201i.pdf (IT-201-I (2025) return instructions, for the 2025 rate schedule Chapter 59 Part A modified)",
+        "https://paidfamilyleave.ny.gov/2026"
+      ],
+      "notes": "NYS-50-T-NYS (1/26) states on p.3 that the bottom five bracket rates were revised under Chapter 59 of the Laws of 2025, Part A, effective for payrolls on/after 1/1/2026; its own pre-recapture Method II segments independently reproduce 3.90/4.40/5.15/5.40/5.90% at these same thresholds, matching the reduction pattern (each of the prior 4.00/4.50/5.25/5.50/6.00% rates cut by 0.10 point) applied to the unchanged 2025 IT-201-I thresholds. The top four rates/thresholds (6.85%, 9.65%, 10.3%, 10.9%) were not touched by Chapter 59 Part A and are carried forward from the 2025 return schedule; the 2026 IT-201 instructions will not be published until late 2026/early 2027 since a 2026 return is filed in 2027 -- this is a normal publication-timing gap, not evidence the 2026 rates are unconfirmed. High-income NY filers are also subject to a 'benefit recapture' add-back (visible as non-monotonic segment rates inside the withholding formula above roughly $107,650) that claws back the value of lower brackets; not modeled in the clean marginal table above. NYC (roughly 3.078%-3.876%) and Yonkers resident/nonresident surtaxes are separate local levies not included here. Standard deduction figures are the 2025 IT-201-I amounts; NY's standard deduction has been statutorily fixed since 2018 with no COLA, so no 2026 change is expected."
+    },
+    {
+      "code": "CT",
+      "name": "Connecticut",
+      "kind": "progressive",
+      "confidence": "verified",
+      "yearConfirmed": 2026,
+      "changedFromPrior": false,
+      "whatChanged": "No numeric change. The key correction is confidence/certainty, not the numbers: CT DRS's own IP 2026(1) (Circular CT, issued 12/12/2025) and TPG-211 ('2026 Withholding Calculation Rules', Rev. 12/25) explicitly state 'the 2026 withholding calculation rules and 2026 withholding tables are unchanged from 2025.' The repo had these exact figures already but flagged them as merely-probable 2025 carryover pending a 2026 CT-1040 TCS return-instruction booklet; that booklet is a return form (filed in 2027 for tax year 2026) and its absence in July 2026 does not mean the rates are unconfirmed -- the withholding guide is the right document and it directly confirms no change.",
+      "brackets": {
+        "single": [
+          {
+            "upTo": 10000,
+            "rate": 0.02
+          },
+          {
+            "upTo": 50000,
+            "rate": 0.045
+          },
+          {
+            "upTo": 100000,
+            "rate": 0.055
+          },
+          {
+            "upTo": 200000,
+            "rate": 0.06
+          },
+          {
+            "upTo": 250000,
+            "rate": 0.065
+          },
+          {
+            "upTo": 500000,
+            "rate": 0.069
+          },
+          {
+            "upTo": null,
+            "rate": 0.0699
+          }
+        ],
+        "marriedSeparate": [
+          {
+            "upTo": 10000,
+            "rate": 0.02
+          },
+          {
+            "upTo": 50000,
+            "rate": 0.045
+          },
+          {
+            "upTo": 100000,
+            "rate": 0.055
+          },
+          {
+            "upTo": 200000,
+            "rate": 0.06
+          },
+          {
+            "upTo": 250000,
+            "rate": 0.065
+          },
+          {
+            "upTo": 500000,
+            "rate": 0.069
+          },
+          {
+            "upTo": null,
+            "rate": 0.0699
+          }
+        ],
+        "marriedJoint": [
+          {
+            "upTo": 20000,
+            "rate": 0.02
+          },
+          {
+            "upTo": 100000,
+            "rate": 0.045
+          },
+          {
+            "upTo": 200000,
+            "rate": 0.055
+          },
+          {
+            "upTo": 400000,
+            "rate": 0.06
+          },
+          {
+            "upTo": 500000,
+            "rate": 0.065
+          },
+          {
+            "upTo": 1000000,
+            "rate": 0.069
+          },
+          {
+            "upTo": null,
+            "rate": 0.0699
+          }
+        ],
+        "headOfHousehold": [
+          {
+            "upTo": 16000,
+            "rate": 0.02
+          },
+          {
+            "upTo": 80000,
+            "rate": 0.045
+          },
+          {
+            "upTo": 160000,
+            "rate": 0.055
+          },
+          {
+            "upTo": 320000,
+            "rate": 0.06
+          },
+          {
+            "upTo": 400000,
+            "rate": 0.065
+          },
+          {
+            "upTo": 800000,
+            "rate": 0.069
+          },
+          {
+            "upTo": null,
+            "rate": 0.0699
+          }
+        ]
+      },
+      "payrollPrograms": [
+        {
+          "name": "CT Paid Leave (CTPL), employee contribution",
+          "rate": 0.005,
+          "wageBase": 184500
+        }
+      ],
+      "sources": [
+        "https://portal.ct.gov/drs (IP 2026(1), Circular CT, Connecticut Employer's Tax Guide, issued 12/12/2025; TPG-211, 2026 Withholding Calculation Rules, Rev. 12/25)",
+        "https://ctpaidleave.org/s/employers"
+      ],
+      "notes": "CT has no standard deduction field populated -- it uses an income-based Personal Exemption (up to $15,000 single/$24,000 MFJ/$12,000 MFS/$19,000 HOH, phasing to $0) plus a separate Personal Tax Credit percentage against computed tax, not represented by this schema's standardDeduction field. CT layers two recapture mechanisms on top of the marginal brackets (a 2% bracket phase-out add-back above roughly $56,500/$100,500/$78,500 CT AGI, and a broader tax recapture above roughly $540,000/$1,080,000/$864,000 CT AGI) that push very-high-income filers toward a near-flat 6.99% effective rate; neither is reflected in the marginal table above. CT Paid Leave employee rate (0.5%) is unchanged for 2026; its wage base equals the federal Social Security/OASDI contribution and benefit base, $184,500 for 2026 (up from $176,100 in 2025)."
+    },
+    {
+      "code": "MA",
+      "name": "Massachusetts",
+      "kind": "flat",
+      "confidence": "probable",
+      "yearConfirmed": 2026,
+      "changedFromPrior": true,
+      "whatChanged": "The repo had the surtax threshold pinned at 2025's $1,083,150 with an explicit note that the 2026 COLA-adjusted figure could not be confirmed. This pass found the 2026 figure: $1,107,750 (inflation-adjusted up from $1,083,150), corroborated across multiple secondary/advisory sources though mass.gov itself still could not be fetched directly (persistent HTTP 403/'Not allowed' responses to both WebFetch and curl, including with a browser user agent). Flat 5% rate and PFML total 0.88% rate are unchanged.",
+      "flatRate": 0.05,
+      "payrollPrograms": [
+        {
+          "name": "Paid Family and Medical Leave (PFML), employee-side share (medical 0.28% + family 0.18%, for employers with 25+ covered individuals; employees below that threshold owe the same 0.46% total)",
+          "rate": 0.0046,
+          "wageBase": 184500
+        }
+      ],
+      "sources": [
+        "https://www.mybenefitadvisor.com (My Benefit Advisor, 'Massachusetts Paid Family Leave 2026 Contributions and Benefits', issued 11/04/2025, citing DFML's announced 2026 figures)",
+        "https://taxfoundation.org/data/all/state/state-income-tax-rates-2026/"
+      ],
+      "notes": "Flat 5% rate applies to most wage/ordinary income (short-term capital gains taxed at 8.5%; not modeled here). A separate 4% surtax ('millionaires tax') applies on top of the 5% rate above the inflation-adjusted threshold, giving a combined ~9% marginal rate above that line; threshold is $1,107,750 for tax year 2026 (up from $1,083,150 in 2025), per routine annual DOR indexing -- kept at 'probable' rather than 'verified' since mass.gov's own page/TIR stating this figure could not be fetched directly this pass, only corroborated via third-party payroll/benefits advisory summaries. Massachusetts has no standard deduction; it uses a personal exemption (~$4,400 single/$8,800 MFJ) that this schema has no field for -- standardDeduction is not populated for MA rather than reported as 0, to avoid implying no relief exists. DFML's 2026 total PFML contribution rate is 0.88% of eligible wages (unchanged since 2024); employee-side share for employers with 25+ covered individuals is capped at 0.46% (0.28% of the 0.70% medical-leave contribution + all of the 0.18% family-leave contribution); the wage base is assumed to equal the 2026 Social Security taxable maximum ($184,500, since MA ties the PFML cap to it) but this specific figure also could not be confirmed directly against ssa.gov or mass.gov this pass."
+    },
+    {
+      "code": "MD",
+      "name": "Maryland",
+      "kind": "progressive",
+      "confidence": "verified",
+      "yearConfirmed": 2026,
+      "changedFromPrior": true,
+      "whatChanged": "The repo's brief description just said 'progressive' with no rate detail, but the underlying record already contained the corrected post-HB-352 bracket structure (two new top brackets, 6.25% and 6.50%, replacing the old single 5.75% top rate). This pass upgrades confidence from 'probable' (Tax Foundation-sourced) to 'verified' by locating and reading the actual Maryland General Assembly Department of Legislative Services Fiscal and Policy Note for HB 352 (2025 Budget Reconciliation and Financing Act), which lays out the exact 'before' and 'after' bracket tables (Exhibit 3) and confirms these rates apply 'to tax year 2025 and beyond,' i.e. unchanged and still current for 2026. No rate/threshold values changed from what the repo already had.",
+      "brackets": {
+        "single": [
+          {
+            "upTo": 1000,
+            "rate": 0.02
+          },
+          {
+            "upTo": 2000,
+            "rate": 0.03
+          },
+          {
+            "upTo": 3000,
+            "rate": 0.04
+          },
+          {
+            "upTo": 100000,
+            "rate": 0.0475
+          },
+          {
+            "upTo": 125000,
+            "rate": 0.05
+          },
+          {
+            "upTo": 150000,
+            "rate": 0.0525
+          },
+          {
+            "upTo": 250000,
+            "rate": 0.055
+          },
+          {
+            "upTo": 500000,
+            "rate": 0.0575
+          },
+          {
+            "upTo": 1000000,
+            "rate": 0.0625
+          },
+          {
+            "upTo": null,
+            "rate": 0.065
+          }
+        ],
+        "marriedSeparate": [
+          {
+            "upTo": 1000,
+            "rate": 0.02
+          },
+          {
+            "upTo": 2000,
+            "rate": 0.03
+          },
+          {
+            "upTo": 3000,
+            "rate": 0.04
+          },
+          {
+            "upTo": 100000,
+            "rate": 0.0475
+          },
+          {
+            "upTo": 125000,
+            "rate": 0.05
+          },
+          {
+            "upTo": 150000,
+            "rate": 0.0525
+          },
+          {
+            "upTo": 250000,
+            "rate": 0.055
+          },
+          {
+            "upTo": 500000,
+            "rate": 0.0575
+          },
+          {
+            "upTo": 1000000,
+            "rate": 0.0625
+          },
+          {
+            "upTo": null,
+            "rate": 0.065
+          }
+        ],
+        "marriedJoint": [
+          {
+            "upTo": 1000,
+            "rate": 0.02
+          },
+          {
+            "upTo": 2000,
+            "rate": 0.03
+          },
+          {
+            "upTo": 3000,
+            "rate": 0.04
+          },
+          {
+            "upTo": 150000,
+            "rate": 0.0475
+          },
+          {
+            "upTo": 175000,
+            "rate": 0.05
+          },
+          {
+            "upTo": 225000,
+            "rate": 0.0525
+          },
+          {
+            "upTo": 300000,
+            "rate": 0.055
+          },
+          {
+            "upTo": 600000,
+            "rate": 0.0575
+          },
+          {
+            "upTo": 1200000,
+            "rate": 0.0625
+          },
+          {
+            "upTo": null,
+            "rate": 0.065
+          }
+        ],
+        "headOfHousehold": [
+          {
+            "upTo": 1000,
+            "rate": 0.02
+          },
+          {
+            "upTo": 2000,
+            "rate": 0.03
+          },
+          {
+            "upTo": 3000,
+            "rate": 0.04
+          },
+          {
+            "upTo": 150000,
+            "rate": 0.0475
+          },
+          {
+            "upTo": 175000,
+            "rate": 0.05
+          },
+          {
+            "upTo": 225000,
+            "rate": 0.0525
+          },
+          {
+            "upTo": 300000,
+            "rate": 0.055
+          },
+          {
+            "upTo": 600000,
+            "rate": 0.0575
+          },
+          {
+            "upTo": 1200000,
+            "rate": 0.0625
+          },
+          {
+            "upTo": null,
+            "rate": 0.065
+          }
+        ]
+      },
+      "standardDeduction": {
+        "single": 3350,
+        "marriedSeparate": 3350,
+        "marriedJoint": 6700,
+        "headOfHousehold": 6700
+      },
+      "payrollPrograms": [],
+      "sources": [
+        "https://mgaleg.maryland.gov/2025RS/fnotes/bil_0002/hb0352.pdf (Dept. of Legislative Services Fiscal and Policy Note for HB 352, Budget Reconciliation and Financing Act of 2025)",
+        "https://paidleave.maryland.gov/"
+      ],
+      "notes": "HB 352 (2025) added two new top brackets (6.25% over $500,000 single/MFS or $600,000 joint/HOH; 6.50% over $1,000,000 single/MFS or $1,200,000 joint/HOH) on top of the pre-existing 2.00%-5.75% schedule, effective tax year 2025 and continuing unchanged into 2026. It also raised the maximum standard deduction from $2,800/$5,600 to $3,350 single-MFS/$6,700 joint-HOH for tax year 2025, 'subject to annual cost-of-living adjustments for tax years after 2025' -- so the true 2026 maximum is somewhat higher than $3,350/$6,700, but the exact COLA-adjusted 2026 figure was not located this pass; treat these as a 2026 floor. Maryland's standard deduction is actually 15% of Maryland AGI subject to a floor and ceiling, not a flat number; the values here are the ceiling. County/Baltimore City local income taxes (roughly 2.25%-3.30%, the cap itself raised from 3.20% to 3.30% by this same bill) are layered on top of the state brackets and are not modeled here. Maryland's FAMLI (Family and Medical Leave Insurance) program has not begun collecting contributions: paidleave.maryland.gov states benefits launch 'starting January 2028' and gives no indication contributions have started, so no employee-side payroll program is listed for 2026; re-verify before assuming this holds into 2027."
+    },
+    {
+      "code": "UT",
+      "name": "Utah",
+      "kind": "flat",
+      "flatRate": 0.0445,
+      "confidence": "verified",
+      "yearConfirmed": 2026,
+      "changedFromPrior": true,
+      "whatChanged": "Flat rate cut from 4.5% (the repo's prior value) to 4.45%, enacted by SB 60 (2026 session), retroactive to January 1, 2026.",
+      "notes": "Verified directly from Utah State Tax Commission Publication 14 (Rev. 4/26), 'Withholding Tax Guide, Utah Withholding Information and Tax Tables,' fetched from files.tax.utah.gov: every withholding schedule instructs 'Multiply line 1 by .0445 (4.45%)', with the tables 'Effective June 1, 2026.' EY Tax News (citing SB 60, signed by Gov. Cox) confirms the 4.45% rate is retroactive to January 1, 2026 and applies to the full 2026 tax year; the June 1 effective date on the withholding tables reflects the normal lag for mid-year catch-up withholding on a retroactive statutory cut (the same pattern Utah used for its 2025 cut), not a split-year rate. This resolves the prior pass's flagged uncertainty between 4.45% and 4.5% in favor of 4.45%. Utah still has no separate standard deduction; it grants a nonrefundable 'taxpayer tax credit' equal to 6% of the federal standard-deduction-equivalent amount (phased out at higher incomes), which is not expressible in this schema, so standardDeduction is omitted as in the prior pass.",
+      "sources": [
+        "https://files.tax.utah.gov/tax/forms/pubs/pub-14.pdf",
+        "https://taxnews.ey.com/news/2026-1045-utah-tax-commission-releases-revised-withholding-formula-reflecting-lower-income-tax-rate-for-2026"
+      ]
+    },
+    {
+      "code": "ID",
+      "name": "Idaho",
+      "kind": "flat",
+      "flatRate": 0.053,
+      "confidence": "verified",
+      "yearConfirmed": 2026,
+      "changedFromPrior": false,
+      "whatChanged": "No change: rate remains 5.3%. Confidence upgraded from 'probable' (confirmed only via a 2025 schedule) to 'verified' now that the rate has been checked against the currently-active official withholding computation page and cross-checked for 2026 legislative changes.",
+      "notes": "Read directly from the Idaho State Tax Commission's 'Computing Withholding' page (tax.idaho.gov/taxes/income-tax/withholding/computing/), whose worked examples use 5.3% throughout (e.g. '5.3% of the amount over $577'). This corresponds to the 'Table for Percentage Computation Method of Withholding' (Rev. 04-28-2025), which remains the current, unrevised version in effect for 2026 (no newer 2026-dated revision has been published, and none was needed). Checked specifically for a 2026 rate-cut bill: House Bill 559, signed by Gov. Little during the 2026 legislative session, reduces state revenue by about $155 million, but only via new exemptions for tips, overtime pay, and Social Security income plus an R&D credit -- it does not touch the flat income tax rate. No bill changing the 5.3% rate itself was found for 2026. Idaho computes tax starting from federal taxable income (which already reflects the federal standard deduction), so there is no separate Idaho standard deduction to report; the tax rate schedule's own 0% first bracket (roughly the first $4,811 single / $9,622 married of Idaho taxable income) is the closest analog, carried forward unchanged from the prior pass.",
+      "sources": [
+        "https://tax.idaho.gov/taxes/income-tax/withholding/computing/",
+        "https://tax.idaho.gov/taxes/income-tax/withholding/withholding-guides/",
+        "https://www.kivitv.com/news/political/inside-the-statehouse/gov-little-signs-tax-cuts-to-align-with-big-beautiful-bill-reducing-state-tax-revenue-by-155-million"
+      ]
+    },
+    {
+      "code": "ND",
+      "name": "North Dakota",
+      "kind": "progressive",
+      "brackets": {
+        "single": [
+          {
+            "upTo": 49575,
+            "rate": 0
+          },
+          {
+            "upTo": 250400,
+            "rate": 0.0195
+          },
+          {
+            "upTo": null,
+            "rate": 0.025
+          }
+        ],
+        "marriedJoint": [
+          {
+            "upTo": 82800,
+            "rate": 0
+          },
+          {
+            "upTo": 304850,
+            "rate": 0.0195
+          },
+          {
+            "upTo": null,
+            "rate": 0.025
+          }
+        ],
+        "marriedSeparate": [
+          {
+            "upTo": 41390,
+            "rate": 0
+          },
+          {
+            "upTo": 152388,
+            "rate": 0.0195
+          },
+          {
+            "upTo": null,
+            "rate": 0.025
+          }
+        ],
+        "headOfHousehold": [
+          {
+            "upTo": 66418,
+            "rate": 0
+          },
+          {
+            "upTo": 277586,
+            "rate": 0.0195
+          },
+          {
+            "upTo": null,
+            "rate": 0.025
+          }
+        ]
+      },
+      "standardDeduction": {
+        "single": 16100,
+        "marriedJoint": 32200,
+        "marriedSeparate": 16100,
+        "headOfHousehold": 24150
+      },
+      "confidence": "probable",
+      "yearConfirmed": 2026,
+      "changedFromPrior": true,
+      "whatChanged": "Bracket dollar thresholds increased roughly 2.27% across the board versus the repo's 2025-labeled figures (inflation indexing); rates themselves (0% / 1.95% / 2.5%) are unchanged. Standard deduction now includes marriedSeparate ($16,100) and headOfHousehold ($24,150), which the repo previously left blank.",
+      "notes": "North Dakota's official 2026 employer withholding booklet ('Income Tax Withholding Rates & Instructions, For wages paid in 2026,' fetched directly from tax.nd.gov) confirms the 0%/1.95%/2.50% rate structure carries into 2026 unchanged, but its own percentage-method tables use 'wages after subtracting withholding allowances' thresholds (e.g. $57,625/$258,450 for Single incl. HoH; $57,500/$168,525 for Married) that bake in a per-allowance offset and collapse Head of Household into the Single bucket -- these cannot be read directly as the ND-1 return's statutory brackets. ND's general individual-income-tax overview page (tax.nd.gov/individual-income-tax) still displayed 2025-labeled brackets (single 48,475/244,825; MFJ 80,975/298,075; MFS 40,475/149,025; HoH 64,950/271,450) as of this check and had not been refreshed for 2026. For the actual 2026 statutory thresholds reported here, I used a secondary tax-data aggregator (ustax.tools) showing single 49,575/250,400 and MFJ 82,800/304,850 for 2026 -- both reflecting a consistent ~2.27% increase over the 2025 DOR figures, matching ND's routine annual inflation indexing and internally self-consistent, but not read on a primary ND.gov page carrying a 2026 label. No source gave MFS or HoH 2026 thresholds directly; the MFS and HoH figures above are my extrapolation, applying that same ~2.27% factor to the 2025 DOR-confirmed MFS/HoH thresholds, and should be treated as estimates rather than verified figures. The standard deduction figures (single/MFS $16,100, MFJ $32,200, HoH $24,150) are inferred from federal conformity -- ND taxes federal taxable income directly, so the federal standard deduction passes through -- rather than read on an ND-specific page; the single/MFJ federal amounts are independently corroborated by Missouri's verified 2026 DOR withholding formula, which explicitly states the same federal figures.",
+      "sources": [
+        "https://www.tax.nd.gov/sites/www/files/documents/forms/individual/2026-iit/2026-income-tax-withholding-rates-booklet.pdf",
+        "https://www.tax.nd.gov/individual-income-tax",
+        "https://ustax.tools/north-dakota-tax-brackets-2026/"
+      ]
+    },
+    {
+      "code": "MO",
+      "name": "Missouri",
+      "kind": "progressive",
+      "brackets": {
+        "single": [
+          {
+            "upTo": 1348,
+            "rate": 0
+          },
+          {
+            "upTo": 2696,
+            "rate": 0.02
+          },
+          {
+            "upTo": 4044,
+            "rate": 0.025
+          },
+          {
+            "upTo": 5392,
+            "rate": 0.03
+          },
+          {
+            "upTo": 6740,
+            "rate": 0.035
+          },
+          {
+            "upTo": 8088,
+            "rate": 0.04
+          },
+          {
+            "upTo": 9436,
+            "rate": 0.045
+          },
+          {
+            "upTo": null,
+            "rate": 0.047
+          }
+        ],
+        "marriedJoint": [
+          {
+            "upTo": 1348,
+            "rate": 0
+          },
+          {
+            "upTo": 2696,
+            "rate": 0.02
+          },
+          {
+            "upTo": 4044,
+            "rate": 0.025
+          },
+          {
+            "upTo": 5392,
+            "rate": 0.03
+          },
+          {
+            "upTo": 6740,
+            "rate": 0.035
+          },
+          {
+            "upTo": 8088,
+            "rate": 0.04
+          },
+          {
+            "upTo": 9436,
+            "rate": 0.045
+          },
+          {
+            "upTo": null,
+            "rate": 0.047
+          }
+        ],
+        "marriedSeparate": [
+          {
+            "upTo": 1348,
+            "rate": 0
+          },
+          {
+            "upTo": 2696,
+            "rate": 0.02
+          },
+          {
+            "upTo": 4044,
+            "rate": 0.025
+          },
+          {
+            "upTo": 5392,
+            "rate": 0.03
+          },
+          {
+            "upTo": 6740,
+            "rate": 0.035
+          },
+          {
+            "upTo": 8088,
+            "rate": 0.04
+          },
+          {
+            "upTo": 9436,
+            "rate": 0.045
+          },
+          {
+            "upTo": null,
+            "rate": 0.047
+          }
+        ],
+        "headOfHousehold": [
+          {
+            "upTo": 1348,
+            "rate": 0
+          },
+          {
+            "upTo": 2696,
+            "rate": 0.02
+          },
+          {
+            "upTo": 4044,
+            "rate": 0.025
+          },
+          {
+            "upTo": 5392,
+            "rate": 0.03
+          },
+          {
+            "upTo": 6740,
+            "rate": 0.035
+          },
+          {
+            "upTo": 8088,
+            "rate": 0.04
+          },
+          {
+            "upTo": 9436,
+            "rate": 0.045
+          },
+          {
+            "upTo": null,
+            "rate": 0.047
+          }
+        ]
+      },
+      "standardDeduction": {
+        "single": 16100,
+        "marriedJoint": 32200,
+        "marriedSeparate": 16100,
+        "headOfHousehold": 24150
+      },
+      "confidence": "verified",
+      "yearConfirmed": 2026,
+      "changedFromPrior": true,
+      "whatChanged": "All 8 bracket dollar thresholds increased for inflation (1,313/2,626/3,939/5,252/6,565/7,878/9,191 to 1,348/2,696/4,044/5,392/6,740/8,088/9,436); rates themselves (0% to 4.7% top rate) are unchanged. Standard deduction increased from 15,750/31,500/15,750/23,625 to 16,100/32,200/16,100/24,150.",
+      "notes": "Verified directly from the Missouri Department of Revenue's official '2026 Missouri Withholding Tax Formula' (dor.mo.gov/forms/Withholding Formula_2026.pdf), explicitly labeled '2026 Missouri Withholding Tax Formula' and '2026,' giving the annual percentage-method bracket table and standard deduction amounts in plain text (confirmed via pdftotext extraction, not just a page summary). The 8-tier rate structure (0% up to a 4.7% top rate) is unchanged from 2025, but every dollar threshold increased for inflation as shown above. The standard deduction section explicitly lists: Single $16,100; Married and Spouse Works (per employee) $16,100; Married Filing Separate $16,100; Married and Spouse Does Not Work $32,200 (mapped to marriedJoint here, since that's the combined-household figure); Head of Household $24,150 -- all matching the federal 2026 standard deduction amounts, since Missouri explicitly conforms to the federal deduction. Missouri's brackets remain identical across all filing statuses (not doubled for joint), consistent with the prior pass's structure.",
+      "sources": [
+        "https://dor.mo.gov/forms/Withholding%20Formula_2026.pdf"
+      ]
+    },
+    {
+      "code": "KS",
+      "name": "Kansas",
+      "kind": "progressive",
+      "brackets": {
+        "single": [
+          {
+            "upTo": 23000,
+            "rate": 0.052
+          },
+          {
+            "upTo": null,
+            "rate": 0.0558
+          }
+        ],
+        "marriedJoint": [
+          {
+            "upTo": 46000,
+            "rate": 0.052
+          },
+          {
+            "upTo": null,
+            "rate": 0.0558
+          }
+        ],
+        "marriedSeparate": [
+          {
+            "upTo": 23000,
+            "rate": 0.052
+          },
+          {
+            "upTo": null,
+            "rate": 0.0558
+          }
+        ],
+        "headOfHousehold": [
+          {
+            "upTo": 23000,
+            "rate": 0.052
+          },
+          {
+            "upTo": null,
+            "rate": 0.0558
+          }
+        ]
+      },
+      "standardDeduction": {
+        "single": 3605,
+        "marriedJoint": 8240,
+        "marriedSeparate": 4120,
+        "headOfHousehold": 6180
+      },
+      "confidence": "verified",
+      "yearConfirmed": 2026,
+      "changedFromPrior": false,
+      "whatChanged": "No change: the SB 269 contingent rate cut did not trigger for 2026 (now confirmed via the official KDOR notice rather than news coverage), so the 5.2%/5.58% two-bracket structure and the standard deduction amounts all carry forward unchanged from the repo's current figures.",
+      "notes": "Verified directly from Kansas Department of Revenue Notice 25-06 (ksrevenue.gov/taxnotices/notice25-06.pdf, dated October 2, 2025; text extracted via pdftotext), which states plainly: 'the Secretary of Revenue will not calculate and publish new income tax rates, and there will be no rate reduction for tax year 2026.' The notice explains why: FY2025 adjusted general revenue fund collections ($6.038B) came in $88.5 million below the inflation-adjusted SB 269 trigger threshold ($6.127B), even though the Budget Stabilization Fund balance (19.1%) cleared the required 15% floor -- both conditions had to be met, and only one was. This confirms the prior pass's Bloomberg-sourced claim as an official fact rather than a news report. The KW-100 Withholding Tax Guide (Rev. 7-24) is still the current, unrevised edition with no 2026 update issued, corroborating no other change to the withholding mechanics. Also checked: House Bill 2629 (2026 session), which would have raised the standard deduction to $3,805/$8,640/$6,480 for tax year 2026, died in the House Taxation Committee on April 11, 2026 and was never enacted, so the standard deduction figures ($3,605/$8,240/$4,120/$6,180) carried forward from the prior pass's Tax Foundation sourcing remain correct for 2026. The exact bracket dollar thresholds ($23,000/$46,000) were not independently re-derived from a primary KDOR page this pass beyond the KW-100 guide's per-pay-period tables, which are broadly consistent but not a clean one-to-one annual check.",
+      "sources": [
+        "https://www.ksrevenue.gov/taxnotices/notice25-06.pdf",
+        "https://www.ksrevenue.gov/pdf/kw100.pdf",
+        "https://news.bloombergtax.com/daily-tax-report-state/kansas-dor-announces-no-2026-income-tax-rate-cut-under-sb-269",
+        "https://kslegislature.gov/b2025_26/measures/documents/hb2629_00_0000",
+        "https://www.billtrack50.com/billdetail/1959054"
+      ]
+    },
+    {
+      "code": "NE",
+      "name": "Nebraska",
+      "kind": "progressive",
+      "confidence": "verified",
+      "yearConfirmed": 2026,
+      "changedFromPrior": true,
+      "whatChanged": "Repo held a 3-bracket schedule (2.46% / 3.51% / 4.55%) described as phasing to a 3.99% top rate by 2027. The verified 2026 Nebraska Circular EN (effective for wages paid on or after Jan 1, 2026, replacing the 2025 Circular EN) instead shows a 6-rate schedule: 0% on the first band, then 2.26%, 3.22%, 4.21%, 4.35%, 4.48%, topping out at 4.60%. None of the repo's three rate values (2.46/3.51/4.55) appear anywhere in the 2026 table. This is a full replacement of the bracket structure, not a partial update.",
+      "brackets": {
+        "single": [
+          {
+            "upTo": 3430,
+            "rate": 0
+          },
+          {
+            "upTo": 6710,
+            "rate": 0.0226
+          },
+          {
+            "upTo": 21810,
+            "rate": 0.0322
+          },
+          {
+            "upTo": 31610,
+            "rate": 0.0421
+          },
+          {
+            "upTo": 40130,
+            "rate": 0.0435
+          },
+          {
+            "upTo": 75370,
+            "rate": 0.0448
+          },
+          {
+            "upTo": null,
+            "rate": 0.046
+          }
+        ],
+        "headOfHousehold": [
+          {
+            "upTo": 3430,
+            "rate": 0
+          },
+          {
+            "upTo": 6710,
+            "rate": 0.0226
+          },
+          {
+            "upTo": 21810,
+            "rate": 0.0322
+          },
+          {
+            "upTo": 31610,
+            "rate": 0.0421
+          },
+          {
+            "upTo": 40130,
+            "rate": 0.0435
+          },
+          {
+            "upTo": 75370,
+            "rate": 0.0448
+          },
+          {
+            "upTo": null,
+            "rate": 0.046
+          }
+        ],
+        "marriedJoint": [
+          {
+            "upTo": 8190,
+            "rate": 0
+          },
+          {
+            "upTo": 13010,
+            "rate": 0.0226
+          },
+          {
+            "upTo": 32400,
+            "rate": 0.0322
+          },
+          {
+            "upTo": 50400,
+            "rate": 0.0421
+          },
+          {
+            "upTo": 62530,
+            "rate": 0.0435
+          },
+          {
+            "upTo": 82920,
+            "rate": 0.0448
+          },
+          {
+            "upTo": null,
+            "rate": 0.046
+          }
+        ],
+        "marriedSeparate": [
+          {
+            "upTo": 3430,
+            "rate": 0
+          },
+          {
+            "upTo": 6710,
+            "rate": 0.0226
+          },
+          {
+            "upTo": 21810,
+            "rate": 0.0322
+          },
+          {
+            "upTo": 31610,
+            "rate": 0.0421
+          },
+          {
+            "upTo": 40130,
+            "rate": 0.0435
+          },
+          {
+            "upTo": 75370,
+            "rate": 0.0448
+          },
+          {
+            "upTo": null,
+            "rate": 0.046
+          }
+        ]
+      },
+      "standardDeduction": {
+        "single": 7900,
+        "marriedJoint": 15800,
+        "marriedSeparate": 7900,
+        "headOfHousehold": 11850
+      },
+      "payrollPrograms": [],
+      "notes": "Bracket rates and thresholds are read directly from the official '2026 Nebraska Circular EN' (revenue.nebraska.gov), whose cover title states it is effective for wages paid on/after Jan 1, 2026, and are mathematically self-consistent (each cumulative dollar amount in the table reconciles against the prior bracket's rate and ceiling). Nebraska's withholding tables give only 'Single-Including Head of Household' and 'Married-Including Surviving Spouse' columns; the Head of Household and Married Filing Separately rows above are inferred (HOH = Single schedule; MFS = Single schedule) by common convention, not separately confirmed. Standard deduction figures are 2025 amounts found via secondary aggregators (not a .gov page); Nebraska's own 2026 standard deduction figure normally appears in the 1040N instructions, which per the task's own framing are a return-year document not yet published for tax year 2026 as of July 2026. The head-of-household standard deduction ($11,850) is an estimate scaled from the single amount and is low-confidence.",
+      "sources": [
+        "https://revenue.nebraska.gov/sites/default/files/doc/business/Cir_En_2025/2026cir_en_whole.pdf"
+      ]
+    },
+    {
+      "code": "WI",
+      "name": "Wisconsin",
+      "kind": "progressive",
+      "confidence": "probable",
+      "yearConfirmed": 2026,
+      "changedFromPrior": false,
+      "whatChanged": "No rate change found. Wisconsin's own January 2026 withholding guide (Publication W-166, rev. 1/26) states under 'Important News': 'Withholding tax rates. Current withholding rates continue for 2025,' confirming the 3.54% / 4.65% / 5.30% / 7.65% rate schedule carries into 2026 unchanged. This matches the repo's existing rate confirmation; the correction here is upgrading the 2026 threshold sourcing from a secondary source to a primary one.",
+      "brackets": {
+        "single": [
+          {
+            "upTo": 14890,
+            "rate": 0.0354
+          },
+          {
+            "upTo": 29780,
+            "rate": 0.0465
+          },
+          {
+            "upTo": 323290,
+            "rate": 0.053
+          },
+          {
+            "upTo": null,
+            "rate": 0.0765
+          }
+        ],
+        "headOfHousehold": [
+          {
+            "upTo": 14890,
+            "rate": 0.0354
+          },
+          {
+            "upTo": 29780,
+            "rate": 0.0465
+          },
+          {
+            "upTo": 323290,
+            "rate": 0.053
+          },
+          {
+            "upTo": null,
+            "rate": 0.0765
+          }
+        ],
+        "marriedJoint": [
+          {
+            "upTo": 19850,
+            "rate": 0.0354
+          },
+          {
+            "upTo": 39700,
+            "rate": 0.0465
+          },
+          {
+            "upTo": 431060,
+            "rate": 0.053
+          },
+          {
+            "upTo": null,
+            "rate": 0.0765
+          }
+        ],
+        "marriedSeparate": [
+          {
+            "upTo": 9925,
+            "rate": 0.0354
+          },
+          {
+            "upTo": 19850,
+            "rate": 0.0465
+          },
+          {
+            "upTo": 215530,
+            "rate": 0.053
+          },
+          {
+            "upTo": null,
+            "rate": 0.0765
+          }
+        ]
+      },
+      "standardDeduction": {
+        "single": 13560,
+        "marriedJoint": 25110,
+        "marriedSeparate": 11930,
+        "headOfHousehold": 17520
+      },
+      "payrollPrograms": [],
+      "notes": "Rates (3.54/4.65/5.30/7.65%) verified directly from Wisconsin DOR's Publication W-166 (dated 1/26, published January 2026), which explicitly states current withholding rates continue for 2025 into the 2026 withholding period -- this directly refutes the prior-pass reasoning that 2026 WI figures were unpublished. The top-bracket thresholds ($323,290 single/HOH, $431,060 MFJ, $215,530 MFS) are read directly from the 2025 Form 1 Tax Computation Worksheet (revenue.wi.gov, the authoritative source for taxable income >= $100,000). The two LOWER bracket thresholds (3.54%->4.65% and 4.65%->5.30% cutoffs) could not be pinned to an exact dollar figure from a government table for amounts under $100,000; the first-bracket cutoff ($14,890) was empirically located by finding the row in the official 2025 Tax Table where the Single/HOH and Married-Jointly tax amounts first diverge (both are identical below that point because both filing statuses are still inside the 3.54% bracket). The second-bracket cutoff and the married-jointly/married-separately breakpoints are extrapolated from that anchor using the ~1.333x single-to-MFJ ratio observed at the verified top bracket, and MFS = 1/2 of MFJ (observed exactly at the top bracket: $215,530 x 2 = $431,060). Standard deduction figures are the maximum (pre-phaseout) amounts from the 2025 Form 1 instructions; Wisconsin's standard deduction phases down as income rises within each filing status, which is not represented in this single-figure schema. The 2026 Form 1 instructions (which would independently confirm 2026 thresholds/standard deduction) are not yet published, consistent with the task's framing that return-year instructions lag withholding guidance.",
+      "sources": [
+        "https://www.revenue.wi.gov/DOR%20Publications/pb166.pdf",
+        "https://www.revenue.wi.gov/TaxForms2025/2025-Form1-Inst.pdf"
+      ]
+    },
+    {
+      "code": "MT",
+      "name": "Montana",
+      "kind": "progressive",
+      "confidence": "verified",
+      "yearConfirmed": 2026,
+      "changedFromPrior": true,
+      "whatChanged": "Repo listed Montana only as 'progressive' with no specifics. Montana's own 2026 Publication 1 (revenuefiles.mt.gov) confirms House Bill 337 (2025 session) took effect for tax year 2026, lowering the top marginal rate and widening the brackets: two brackets at 4.7% and 5.65%, with the 4.7%/5.65% cut point at $47,500 single/MFS, $95,000 MFJ, $71,250 HOH. The bill widens brackets further and drops the top rate to 5.4% for tax year 2027.",
+      "brackets": {
+        "single": [
+          {
+            "upTo": 47500,
+            "rate": 0.047
+          },
+          {
+            "upTo": null,
+            "rate": 0.0565
+          }
+        ],
+        "headOfHousehold": [
+          {
+            "upTo": 71250,
+            "rate": 0.047
+          },
+          {
+            "upTo": null,
+            "rate": 0.0565
+          }
+        ],
+        "marriedJoint": [
+          {
+            "upTo": 95000,
+            "rate": 0.047
+          },
+          {
+            "upTo": null,
+            "rate": 0.0565
+          }
+        ],
+        "marriedSeparate": [
+          {
+            "upTo": 47500,
+            "rate": 0.047
+          },
+          {
+            "upTo": null,
+            "rate": 0.0565
+          }
+        ]
+      },
+      "standardDeduction": {
+        "single": 16100,
+        "marriedJoint": 32200,
+        "marriedSeparate": 16100,
+        "headOfHousehold": 24150
+      },
+      "payrollPrograms": [],
+      "notes": "Rates, cut-points, and the HB 337 attribution are read directly from the Montana Department of Revenue's own '2026 Montana Publication 1' (A Guide to Montana Tax Withholding and Estimated Payments, V1 September 2025) and its 2026 Tax Tables page, plus revenue.mt.gov's HB337 explainer page. Montana's standard deduction is explicitly stated in Publication 1 to equal the federal standard deduction amount for the taxpayer's filing status; figures shown are the 2026 federal standard deduction amounts (IRS Rev. Proc. 2025-32), not independently re-verified on an IRS page in this pass. Montana also taxes net long-term capital gains at a separate 3%/4.1% schedule (not represented in this schema) and increases the state EITC to 20% of the federal credit starting tax year 2026.",
+      "sources": [
+        "https://revenuefiles.mt.gov/files/Forms/Publication-1/Publication-1-2026.pdf",
+        "https://revenue.mt.gov/news/recent-news/HB-337",
+        "https://revenue.mt.gov/taxes/individual-income-tax/"
+      ]
+    },
+    {
+      "code": "NM",
+      "name": "New Mexico",
+      "kind": "progressive",
+      "confidence": "probable",
+      "yearConfirmed": 2026,
+      "changedFromPrior": true,
+      "whatChanged": "Repo listed New Mexico only as 'progressive' with no specifics. Bloomberg Tax's payroll coverage of New Mexico's 2026 withholding formula release confirms rates are unchanged from 2025 (still 1.5% to 5.9% across 6 brackets), but the zero-bracket/exemption threshold built into the withholding formula increased for 2026 (single: $8,050, up from $7,500; married: $16,100, up from $15,000; head of household: $12,075). Net effect versus the repo's blank prior state: same rate schedule as 2025, with inflation-adjusted exemption amounts.",
+      "brackets": {
+        "single": [
+          {
+            "upTo": 5500,
+            "rate": 0.015
+          },
+          {
+            "upTo": 16500,
+            "rate": 0.032
+          },
+          {
+            "upTo": 33500,
+            "rate": 0.043
+          },
+          {
+            "upTo": 66500,
+            "rate": 0.047
+          },
+          {
+            "upTo": 210000,
+            "rate": 0.049
+          },
+          {
+            "upTo": null,
+            "rate": 0.059
+          }
+        ],
+        "headOfHousehold": [
+          {
+            "upTo": 5500,
+            "rate": 0.015
+          },
+          {
+            "upTo": 16500,
+            "rate": 0.032
+          },
+          {
+            "upTo": 33500,
+            "rate": 0.043
+          },
+          {
+            "upTo": 66500,
+            "rate": 0.047
+          },
+          {
+            "upTo": 210000,
+            "rate": 0.049
+          },
+          {
+            "upTo": null,
+            "rate": 0.059
+          }
+        ],
+        "marriedJoint": [
+          {
+            "upTo": 8000,
+            "rate": 0.015
+          },
+          {
+            "upTo": 25000,
+            "rate": 0.032
+          },
+          {
+            "upTo": 50000,
+            "rate": 0.043
+          },
+          {
+            "upTo": 100000,
+            "rate": 0.047
+          },
+          {
+            "upTo": 315000,
+            "rate": 0.049
+          },
+          {
+            "upTo": null,
+            "rate": 0.059
+          }
+        ],
+        "marriedSeparate": [
+          {
+            "upTo": 5500,
+            "rate": 0.015
+          },
+          {
+            "upTo": 16500,
+            "rate": 0.032
+          },
+          {
+            "upTo": 33500,
+            "rate": 0.043
+          },
+          {
+            "upTo": 66500,
+            "rate": 0.047
+          },
+          {
+            "upTo": 210000,
+            "rate": 0.049
+          },
+          {
+            "upTo": null,
+            "rate": 0.059
+          }
+        ]
+      },
+      "standardDeduction": {
+        "single": 16100,
+        "marriedJoint": 32200,
+        "marriedSeparate": 16100,
+        "headOfHousehold": 24150
+      },
+      "payrollPrograms": [],
+      "notes": "The New Mexico 2025 PIT-1 return form was read directly (tax.newmexico.gov, via taxformfinder mirror) and confirms New Mexico's individual income tax uses the FEDERAL standard deduction amount directly (PIT-1 line 12: 'Federal standard or itemized deduction amount, from federal Form 1040, line 12') plus a separate state-specific 'low- and middle-income tax exemption' not represented in this schema. I could not get a readable government-hosted numeric bracket table (FYI-104 and the official Tax Rate Table PDF both returned as unreadable/binary through available tools, and the direct statute mirror at law.justia.com returned 403). The 6-bracket rate/threshold structure above (1.5/3.2/4.3/4.7/4.9/5.9%) is from a secondary tax-reference aggregator (ustax.tools) cross-checked against Bloomberg Tax's professional payroll-industry confirmation that NM's 2026 withholding formula rates are unchanged from 2025 and that the 2026 zero-bracket amounts increased to $8,050 single / $16,100 married / $12,075 HOH. Head of household and married-filing-separately brackets are assumed identical to single (both conventions common for NM), not independently confirmed.",
+      "sources": [
+        "https://www.tax.newmexico.gov/",
+        "https://news.bloombergtax.com/payroll/new-mexico-releases-2026-withholding-formula",
+        "https://www.taxformfinder.org/forms/2025/2025-new-mexico-form-pit-1.pdf"
+      ]
+    },
+    {
+      "code": "OK",
+      "name": "Oklahoma",
+      "kind": "progressive",
+      "confidence": "verified",
+      "yearConfirmed": 2026,
+      "changedFromPrior": true,
+      "whatChanged": "Repo listed Oklahoma only as 'progressive' with no specifics. The official '2026 Oklahoma Income Tax Withholding Tables' (Packet OW-2, Oklahoma Tax Commission, revised 11-2025, effective January 1, 2026) show a simplified 4-tier structure -- 0%, 2.5%, 3.5%, 4.5% -- a marked departure from Oklahoma's historical 6-tier 0.25%-4.75% schedule. This is a genuine, verified structural change, not an artifact of carrying forward stale data.",
+      "brackets": {
+        "single": [
+          {
+            "upTo": 10104,
+            "rate": 0
+          },
+          {
+            "upTo": 11256,
+            "rate": 0.025
+          },
+          {
+            "upTo": 13548,
+            "rate": 0.035
+          },
+          {
+            "upTo": null,
+            "rate": 0.045
+          }
+        ],
+        "headOfHousehold": [
+          {
+            "upTo": 10104,
+            "rate": 0
+          },
+          {
+            "upTo": 11256,
+            "rate": 0.025
+          },
+          {
+            "upTo": 13548,
+            "rate": 0.035
+          },
+          {
+            "upTo": null,
+            "rate": 0.045
+          }
+        ],
+        "marriedJoint": [
+          {
+            "upTo": 20196,
+            "rate": 0
+          },
+          {
+            "upTo": 22500,
+            "rate": 0.025
+          },
+          {
+            "upTo": 27096,
+            "rate": 0.035
+          },
+          {
+            "upTo": null,
+            "rate": 0.045
+          }
+        ],
+        "marriedSeparate": [
+          {
+            "upTo": 10104,
+            "rate": 0
+          },
+          {
+            "upTo": 11256,
+            "rate": 0.025
+          },
+          {
+            "upTo": 13548,
+            "rate": 0.035
+          },
+          {
+            "upTo": null,
+            "rate": 0.045
+          }
+        ]
+      },
+      "standardDeduction": {
+        "single": 6350,
+        "marriedJoint": 12700,
+        "marriedSeparate": 6350,
+        "headOfHousehold": 9350
+      },
+      "payrollPrograms": [],
+      "notes": "Bracket rates and thresholds are read directly from the Oklahoma Tax Commission's official 2026 withholding tables (oklahoma.gov, Packet OW-2, effective Jan 1 2026), specifically the Monthly Payroll Period percentage-method table (Table 4), annualized by x12. Oklahoma's tables give only Single and Married columns (no separate Head of Household column; the instructions note a 'Married, but withhold at higher Single rate' election), so HOH and MFS are assumed to follow the Single schedule by convention, not separately confirmed. IMPORTANT CAVEAT: the wide 0%-rate band shown ($10,104 single / $20,196 MFJ annualized) is a feature of the withholding formula, which nets out only a per-allowance amount (not an explicit standard-deduction line) before applying these brackets -- it is unclear from this document alone whether that 0% band already substitutes for, overlaps with, or sits on top of Oklahoma's standard deduction. The standardDeduction figures shown ($6,350/$12,700/$6,350/$9,350) are Oklahoma's long-standing statutory amounts (unchanged for many years pre-reform); it is possible the same legislation that introduced the 0%/2.5%/3.5%/4.5% withholding structure also changed these, which the 2026 OK-511 return instructions (not yet published) would confirm. Flagging for maintainer review rather than asserting with full confidence.",
+      "sources": [
+        "https://www.oklahoma.gov/content/dam/ok/en/tax/documents/resources/publications/businesses/withholding-tables/WHTables-2026.pdf"
+      ]
+    },
+    {
+      "code": "GA",
+      "name": "Georgia",
+      "kind": "flat",
+      "confidence": "verified",
+      "flatRate": 0.0499,
+      "standardDeduction": {
+        "single": 15000,
+        "marriedJoint": 30000,
+        "marriedSeparate": 15000,
+        "headOfHousehold": 15000
+      },
+      "payrollPrograms": [],
+      "yearConfirmed": 2026,
+      "changedFromPrior": true,
+      "whatChanged": "Rate itself (4.99%) was already correct in the repo, but the standard deduction was stale: repo held $12,000 single / $24,000 MFJ / $18,000 HOH (2024/2025-era figures). Confirmed 2026 figures per the GA DOR Employer's Withholding Tax Guide (revised June 2026): $15,000 for Single, Head of Household, and Married Filing Separate, and $30,000 for Married Filing Jointly -- so HOH is no longer distinct from Single/MFS. HB 463 (signed May 11, 2026) also cut the flat rate from 5.19% to 4.99%, retroactive to Jan 1, 2026, with further 0.125-point annual cuts toward a 3.99% floor contingent on revenue triggers, and raised the dependent deduction from $4,000 to $5,000 (no repo field for dependent deduction).",
+      "notes": "Read directly from Georgia Department of Revenue's own '2026 Employer's Withholding Tax Guide' PDF (revised June 2026, downloaded from dor.georgia.gov). This is the withholding-tables/employer-guide artifact, not a return form, and it explicitly states the changes are effective for taxable years beginning Jan 1, 2026 under HB 463. Employers withhold at 5.19% until May 11, 2026 (bill signature date) then switch to 4.99%, per the guide -- this is a mid-year payroll transition mechanic, not a rate ambiguity; the statutory TY2026 rate is 4.99%. No GA employee-side payroll program (no SDI/PFL).",
+      "sources": [
+        "https://dor.georgia.gov/document/document/2026-employers-tax-guide-updated-june-2026/download",
+        "https://dor.georgia.gov/taxes/withholding-tax-employers",
+        "https://taxnews.ey.com/news/2026-1294-georgia-department-of-revenue-releases-revised-withholding-formula-reflecting-lower-income-tax-rate-for-2026",
+        "https://news.bloombergtax.com/daily-tax-report-state/georgia-dor-issues-revised-2026-employers-withholding-tax-guide"
+      ]
+    },
+    {
+      "code": "MS",
+      "name": "Mississippi",
+      "kind": "flat",
+      "confidence": "probable",
+      "flatRate": 0.04,
+      "standardDeduction": {
+        "single": 2300,
+        "marriedJoint": 4600,
+        "marriedSeparate": 2300,
+        "headOfHousehold": 3400
+      },
+      "payrollPrograms": [],
+      "yearConfirmed": 2026,
+      "changedFromPrior": false,
+      "whatChanged": "No change from the repo's current figures -- both the 4.0% flat rate (down from 4.4% in 2025, per the Build-Up Mississippi Act) and the standard deduction amounts ($2,300 single / $3,400 HOH / $4,600 married) matched exactly against a federal payroll bulletin quoting MS's own published 2026 withholding tables.",
+      "notes": "Mississippi taxes income above a $10,000 per-filer exemption at a flat 4.0% for TY2026 (Build-Up Mississippi Act), with further step-downs scheduled for 2027+ contingent on revenue triggers. I could not directly fetch dor.ms.gov (repeated 'unable to verify the first certificate' TLS errors on this session's tooling) or the specific PDF withholding tables hosted there, so confidence stays 'probable' rather than 'verified' despite corroboration from a USDA National Finance Center federal payroll bulletin (help.nfc.usda.gov/bulletins/2026/1768327516.htm, dated Pay Period 09 2026) that quotes MS's own tables directly, plus Bloomberg Tax and halfpricesoft.com payroll summaries. No MS employee-side payroll program.",
+      "sources": [
+        "https://help.nfc.usda.gov/bulletins/2026/1768327516.htm",
+        "https://www.dor.ms.gov/business/withholding-tax",
+        "https://www.halfpricesoft.com/2026/taxrate-mississippi-2026/"
+      ]
+    },
+    {
+      "code": "KY",
+      "name": "Kentucky",
+      "kind": "flat",
+      "confidence": "verified",
+      "flatRate": 0.035,
+      "standardDeduction": {
+        "single": 3360,
+        "marriedJoint": 3360,
+        "marriedSeparate": 3360,
+        "headOfHousehold": 3360
+      },
+      "payrollPrograms": [],
+      "yearConfirmed": 2026,
+      "changedFromPrior": true,
+      "whatChanged": "Rate (3.5%, down from 4.0% in 2025 per House Bill 1, 2025 Regular Session) was already correct in the repo. The standard deduction was an estimate ($3,370, extrapolated from the 2025 figure) that is now confirmed incorrect: the actual 2026 figure, printed directly on Kentucky's official withholding formula, is $3,360.",
+      "notes": "Read directly from Kentucky Department of Revenue Form 42A003 (TCF)(10-2025), '2026 KENTUCKY WITHHOLDING TAX FORMULA' (fetched from revenue.ky.gov and read as a PDF): states '2026 Kentucky Standard Deduction: $3,360' and '2026 Kentucky Tax Rate: 3.5% of taxable income.' Kentucky's standard deduction is a single inflation-indexed figure not doubled for joint filers (KY does not have separate MFJ/HOH amounts). No KY employee-side payroll program.",
+      "sources": [
+        "https://revenue.ky.gov/Forms/2026%20Withholding%20Formula.pdf",
+        "https://help.nfc.usda.gov/bulletins/2026/1770145550.htm"
+      ]
+    },
+    {
+      "code": "WV",
+      "name": "West Virginia",
+      "kind": "progressive",
+      "confidence": "verified",
+      "brackets": {
+        "single": [
+          {
+            "upTo": 10000,
+            "rate": 0.0211
+          },
+          {
+            "upTo": 25000,
+            "rate": 0.0281
+          },
+          {
+            "upTo": 40000,
+            "rate": 0.0316
+          },
+          {
+            "upTo": 60000,
+            "rate": 0.0422
+          },
+          {
+            "upTo": null,
+            "rate": 0.0458
+          }
+        ],
+        "marriedJoint": [
+          {
+            "upTo": 10000,
+            "rate": 0.0211
+          },
+          {
+            "upTo": 25000,
+            "rate": 0.0281
+          },
+          {
+            "upTo": 40000,
+            "rate": 0.0316
+          },
+          {
+            "upTo": 60000,
+            "rate": 0.0422
+          },
+          {
+            "upTo": null,
+            "rate": 0.0458
+          }
+        ],
+        "marriedSeparate": [
+          {
+            "upTo": 5000,
+            "rate": 0.0211
+          },
+          {
+            "upTo": 12500,
+            "rate": 0.0281
+          },
+          {
+            "upTo": 20000,
+            "rate": 0.0316
+          },
+          {
+            "upTo": 30000,
+            "rate": 0.0422
+          },
+          {
+            "upTo": null,
+            "rate": 0.0458
+          }
+        ],
+        "headOfHousehold": [
+          {
+            "upTo": 10000,
+            "rate": 0.0211
+          },
+          {
+            "upTo": 25000,
+            "rate": 0.0281
+          },
+          {
+            "upTo": 40000,
+            "rate": 0.0316
+          },
+          {
+            "upTo": 60000,
+            "rate": 0.0422
+          },
+          {
+            "upTo": null,
+            "rate": 0.0458
+          }
+        ]
+      },
+      "payrollPrograms": [],
+      "yearConfirmed": 2026,
+      "changedFromPrior": false,
+      "whatChanged": "No change -- the repo's brackets already exactly matched what I independently verified directly on West Virginia's own tax division page. (The repo's stored rate cut is real and correctly reflects SB 392 signed March 31, 2026, a further 5% across-the-board cut retroactive to Jan 1, 2026, stacked on the 2023 and 2024 cuts.)",
+      "notes": "Confirmed directly on tax.wv.gov/Individuals/Pages/PersonalIncomeTaxReductionBill.aspx: 5 brackets, same table used for single/HOH/MFJ ($10k/$25k/$40k/$60k thresholds), MFS uses exactly half of each threshold. West Virginia has no separate state standard deduction -- it starts from federal AGI and uses a $2,000-per-exemption allowance instead, so no standardDeduction object applies. A secondary halfpricesoft.com payroll summary showed different, lower rates (2.22%-4.60%) that appear to reflect an earlier withholding-formula vintage published before SB 392 was signed (March 31, 2026); I treated the primary tax.wv.gov page, which explicitly describes the SB 392 retroactive cut, as authoritative over that conflicting secondary source. No WV employee-side payroll program.",
+      "sources": [
+        "https://tax.wv.gov/Individuals/Pages/PersonalIncomeTaxReductionBill.aspx",
+        "https://www.wvlegislature.gov/Bill_Status/bills_text.cfm?billdoc=sb392%20sub1%20enr.htm&yr=2026&sesstype=RS&i=392"
+      ]
+    },
+    {
+      "code": "VA",
+      "name": "Virginia",
+      "kind": "progressive",
+      "confidence": "probable",
+      "brackets": {
+        "single": [
+          {
+            "upTo": 3000,
+            "rate": 0.02
+          },
+          {
+            "upTo": 5000,
+            "rate": 0.03
+          },
+          {
+            "upTo": 17000,
+            "rate": 0.05
+          },
+          {
+            "upTo": null,
+            "rate": 0.0575
+          }
+        ],
+        "marriedJoint": [
+          {
+            "upTo": 3000,
+            "rate": 0.02
+          },
+          {
+            "upTo": 5000,
+            "rate": 0.03
+          },
+          {
+            "upTo": 17000,
+            "rate": 0.05
+          },
+          {
+            "upTo": null,
+            "rate": 0.0575
+          }
+        ],
+        "marriedSeparate": [
+          {
+            "upTo": 3000,
+            "rate": 0.02
+          },
+          {
+            "upTo": 5000,
+            "rate": 0.03
+          },
+          {
+            "upTo": 17000,
+            "rate": 0.05
+          },
+          {
+            "upTo": null,
+            "rate": 0.0575
+          }
+        ],
+        "headOfHousehold": [
+          {
+            "upTo": 3000,
+            "rate": 0.02
+          },
+          {
+            "upTo": 5000,
+            "rate": 0.03
+          },
+          {
+            "upTo": 17000,
+            "rate": 0.05
+          },
+          {
+            "upTo": null,
+            "rate": 0.0575
+          }
+        ]
+      },
+      "standardDeduction": {
+        "single": 8750,
+        "marriedJoint": 17500,
+        "marriedSeparate": 8750,
+        "headOfHousehold": 8750
+      },
+      "payrollPrograms": [],
+      "yearConfirmed": 2026,
+      "changedFromPrior": false,
+      "whatChanged": "No change -- both the bracket structure and the standard deduction already in the repo matched what I found for 2026.",
+      "notes": "Standard deduction ($8,750 single/MFS, $17,500 MFJ) confirmed directly on tax.virginia.gov/deductions. The bracket structure (2%/3%/5%/5.75% at $3,000/$5,000/$17,000, unchanged for years and not varying by filing status) was corroborated by a payroll-summary secondary source (halfpricesoft.com) rather than a primary VA Tax bracket page -- the specific bracket pages on tax.virginia.gov returned 404s or JS-only shells during this pass, same failure mode noted in the repo's existing notes, so I left confidence at 'probable' rather than upgrading to 'verified.' Per Virginia's own statute this elevated standard deduction has a sunset clause reverting to $3,000/$6,000 for TY2027 absent further legislative extension -- not relevant to TY2026 itself. No VA employee-side payroll program (no state PFL/SDI).",
+      "sources": [
+        "https://www.tax.virginia.gov/deductions",
+        "https://www.tax.virginia.gov/withholding-tax",
+        "https://www.halfpricesoft.com/2026/taxrate-virginia-2026/"
+      ]
+    },
+    {
+      "code": "AL",
+      "name": "Alabama",
+      "kind": "progressive",
+      "confidence": "verified",
+      "yearConfirmed": 2026,
+      "changedFromPrior": false,
+      "whatChanged": "",
+      "brackets": {
+        "single": [
+          {
+            "rate": 0.02,
+            "upTo": 500
+          },
+          {
+            "rate": 0.04,
+            "upTo": 3000
+          },
+          {
+            "rate": 0.05,
+            "upTo": null
+          }
+        ],
+        "marriedJoint": [
+          {
+            "rate": 0.02,
+            "upTo": 1000
+          },
+          {
+            "rate": 0.04,
+            "upTo": 6000
+          },
+          {
+            "rate": 0.05,
+            "upTo": null
+          }
+        ],
+        "marriedSeparate": [
+          {
+            "rate": 0.02,
+            "upTo": 500
+          },
+          {
+            "rate": 0.04,
+            "upTo": 3000
+          },
+          {
+            "rate": 0.05,
+            "upTo": null
+          }
+        ],
+        "headOfHousehold": [
+          {
+            "rate": 0.02,
+            "upTo": 500
+          },
+          {
+            "rate": 0.04,
+            "upTo": 3000
+          },
+          {
+            "rate": 0.05,
+            "upTo": null
+          }
+        ]
+      },
+      "standardDeduction": {
+        "single": 3000,
+        "marriedJoint": 8500,
+        "marriedSeparate": 4250,
+        "headOfHousehold": 5200
+      },
+      "payrollPrograms": [],
+      "notes": "Read directly from the Alabama Department of Revenue's official 'Withholding Tax Tables and Instructions for Employers and Withholding Agents,' REVISED January 2026 (whbooklet_0126.pdf). Bracket structure (2%/4%/5% at $500/$3,000 for Single, MS, and Head of Family; 2%/4%/5% at $1,000/$6,000 for Married Filing Jointly) is unchanged from the repo's current entry and unchanged from 2025 -- Alabama's brackets are fixed dollar amounts in statute, not inflation-indexed. Standard deduction is actually a phase-out schedule by Alabama Adjusted Gross Income, not a single flat figure; the values reported here ($3,000 single / $8,500 MFJ / $4,250 MFS / $5,200 HOH) are the maximum deduction, available to filers with AGI under $26,000 (under $13,000 for MFS), phasing down to a $2,500 floor above $35,500 (above $17,750 for MFS). This phase-out schedule is unchanged from 2025. The repo's prior '$3,000 single' figure matches exactly.",
+      "sources": [
+        "https://www.revenue.alabama.gov/wp-content/uploads/2026/01/whbooklet_0126.pdf"
+      ]
+    },
+    {
+      "code": "AR",
+      "name": "Arkansas",
+      "kind": "progressive",
+      "confidence": "verified",
+      "yearConfirmed": 2026,
+      "changedFromPrior": true,
+      "whatChanged": "Standard deduction updated from $2,410 (2025 figure, marked 'estimated' in the repo) to $2,470, now directly confirmed for tax year 2026. The top marginal rate itself is unchanged at 3.7% (the repo's prior 3.7% turns out to be correct even though it was carried forward as an assumption -- this is now a verified figure rather than an estimate). Bracket thresholds for 2026 are precisely: 0% up to $5,599; 2.0% $5,600-$11,199; 3.0% $11,200-$15,999; 3.4% $16,000-$26,399; 3.7% above $26,400 (unchanged structure from what the repo listed, now with exact confirmed cutoffs).",
+      "brackets": {
+        "single": [
+          {
+            "rate": 0,
+            "upTo": 5599
+          },
+          {
+            "rate": 0.02,
+            "upTo": 11199
+          },
+          {
+            "rate": 0.03,
+            "upTo": 15999
+          },
+          {
+            "rate": 0.034,
+            "upTo": 26399
+          },
+          {
+            "rate": 0.037,
+            "upTo": null
+          }
+        ],
+        "marriedJoint": [
+          {
+            "rate": 0,
+            "upTo": 5599
+          },
+          {
+            "rate": 0.02,
+            "upTo": 11199
+          },
+          {
+            "rate": 0.03,
+            "upTo": 15999
+          },
+          {
+            "rate": 0.034,
+            "upTo": 26399
+          },
+          {
+            "rate": 0.037,
+            "upTo": null
+          }
+        ],
+        "marriedSeparate": [
+          {
+            "rate": 0,
+            "upTo": 5599
+          },
+          {
+            "rate": 0.02,
+            "upTo": 11199
+          },
+          {
+            "rate": 0.03,
+            "upTo": 15999
+          },
+          {
+            "rate": 0.034,
+            "upTo": 26399
+          },
+          {
+            "rate": 0.037,
+            "upTo": null
+          }
+        ],
+        "headOfHousehold": [
+          {
+            "rate": 0,
+            "upTo": 5599
+          },
+          {
+            "rate": 0.02,
+            "upTo": 11199
+          },
+          {
+            "rate": 0.03,
+            "upTo": 15999
+          },
+          {
+            "rate": 0.034,
+            "upTo": 26399
+          },
+          {
+            "rate": 0.037,
+            "upTo": null
+          }
+        ]
+      },
+      "standardDeduction": {
+        "single": 2470,
+        "marriedJoint": 4940,
+        "marriedSeparate": 2470,
+        "headOfHousehold": 2470
+      },
+      "payrollPrograms": [],
+      "notes": "Brackets, rates, and the $2,470 standard deduction figure are read directly from the Arkansas Department of Finance and Administration's official 'Withholding Tax Formula Method,' effective 01/01/2026, explicitly labeled 'Tax Year 2026' (dfa.arkansas.gov). Arkansas applies the same bracket schedule regardless of filing status in its withholding formula; marital status instead affects the personal tax credit ($29/exemption) subtracted after gross tax is computed. The $4,940 married-joint standard deduction is a secondary-source figure (Tax Foundation's 2026 state tax summary) representing two individual $2,470 deductions combined on a joint return -- this specific filing-status breakdown was not itemized in the DFA's own withholding document, so treat the MFJ figure as probable rather than verified. Cross-checked the $2,470 standard deduction against a National Finance Center (help.nfc.usda.gov) 2026 federal-payroll bulletin, which independently reports the same change from $2,410 to $2,470. Note: an unrelated web aggregator (queried via Tax Foundation) reported Arkansas's 2026 top rate as 3.90% with a two-bracket structure (2.0% to $4,600, 3.90% above) -- this conflicts with the state's own formula document and appears to be either outdated or describing a different/superseded schedule. The DFA's own 2026-dated primary document, which explicitly names 'Tax Year 2026,' is authoritative and shows 3.70% as the top rate.",
+      "sources": [
+        "https://www.dfa.arkansas.gov/wp-content/uploads/Withholding-Tax-Formula.pdf",
+        "https://help.nfc.usda.gov/bulletins/2026/1767630235.htm"
+      ]
+    },
+    {
+      "code": "AZ",
+      "name": "Arizona",
+      "kind": "flat",
+      "flatRate": 0.025,
+      "confidence": "verified",
+      "yearConfirmed": 2026,
+      "changedFromPrior": false,
+      "whatChanged": "",
+      "standardDeduction": {
+        "single": 16100,
+        "marriedJoint": 32200,
+        "marriedSeparate": 16100,
+        "headOfHousehold": 24150
+      },
+      "payrollPrograms": [],
+      "notes": "Flat 2.5% rate is read directly from azdor.gov's withholding-calculations page, which states verbatim: 'For tax year 2023 and beyond, the tax rate for Arizona taxable income is 2.5%.' This is unchanged from the repo's entry. Default withholding (when no Form A-4 is on file) remains 2.0%, confirmed via the 2026 Form A-4 employer instructions PDF. Arizona has no employee-side state disability or paid-family-leave withholding; SUTA is employer-paid only and excluded here. Standard deduction: Arizona statute (per HB2785) ties its standard deduction to 'the amount of the federal basic standard deduction pursuant to Section 63 of the IRC,' which is inflation-adjusted annually. The figures reported here ($16,100 single/MFS, $32,200 MFJ, $24,150 HOH) are the IRS's own inflation-adjusted amounts for tax year 2026 (Revenue Procedure 2025-32). Some web sources labeled '2026' actually show $15,750/$31,500/$23,625 -- these are the 2025 federal standard deduction amounts (the first year of the One Big Beautiful Bill Act's enacted figures) and appear to be mislabeled, consistent with the filing-season-vs-tax-year confusion this task warned about. Because I could not find an azdor.gov page stating the exact 2026 dollar figure directly (only the conformity rule), the standard deduction numbers are probable rather than verified, while the 2.5% flat rate itself is verified on a state page.",
+      "sources": [
+        "https://azdor.gov/individuals/withholding-calculations",
+        "https://azdor.gov/sites/default/files/document/FORMS_WITHHOLDING_2026_A-4i.pdf"
+      ]
+    },
+    {
+      "code": "CO",
+      "name": "Colorado",
+      "kind": "flat",
+      "flatRate": 0.044,
+      "confidence": "verified",
+      "yearConfirmed": 2026,
+      "changedFromPrior": false,
+      "whatChanged": "",
+      "standardDeduction": {
+        "single": 16100,
+        "marriedJoint": 32200,
+        "marriedSeparate": 16100,
+        "headOfHousehold": 24150
+      },
+      "payrollPrograms": [
+        {
+          "name": "Paid Family and Medical Leave Insurance (FAMLI)",
+          "rate": 0.0044,
+          "wageBase": 184500
+        }
+      ],
+      "notes": "Flat 4.4% rate is read directly from the Colorado Department of Revenue's official 'DR 1098 (10/21/25) 2026 Colorado Withholding Worksheet for Employers,' which instructs employers to 'Multiply line 2b by 4.40% (0.044).' Unchanged from the repo's entry and unchanged from 2025 (Colorado's rate has been 4.4% since the 2022 Prop 121 cut). Colorado uses federal taxable income as its starting point rather than defining its own standard deduction, so the federal 2026 standard deduction effectively flows through; figures shown match the AZ entry for the same reason (both conform to the federal amount). Added FAMLI: read directly from famli.colorado.gov (Colorado FAMLI Division, official state site), which states the total premium is 0.88% of wages, split 50/50 between employer and employee (0.44% employee-paid), and that premiums are 'paid on wages up to the Federal Social Security Wage Cap.' The $184,500 wage base is the 2026 Social Security taxable maximum (SSA figure, probable-tier cross-check, not itself a Colorado government page). This is a repo gap-fill (FAMLI and the standard-deduction figure were absent from the prior record) rather than a year-over-year rate change, hence changedFromPrior is false; the 4.4% rate itself has not changed.",
+      "sources": [
+        "https://tax.colorado.gov/sites/tax/files/documents/DR_1098_Colorado_Withholding_Worksheet_for_Employees.pdf",
+        "https://famli.colorado.gov/employers"
+      ]
+    },
+    {
+      "code": "IL",
+      "name": "Illinois",
+      "kind": "flat",
+      "flatRate": 0.0495,
+      "confidence": "verified",
+      "yearConfirmed": 2026,
+      "changedFromPrior": true,
+      "whatChanged": "Flat rate unchanged at 4.95%. The personal exemption allowance (Illinois uses this instead of a standard deduction) increased from $2,850 (2025) to $2,925 (2026).",
+      "payrollPrograms": [],
+      "notes": "Read directly from the Illinois Department of Revenue's official 'Booklet IL-700-T (R-12/25), Illinois Withholding Tax Tables': cover page states 'Effective January 1, 2026, Tax rate 4.95%,' and page 3 states 'The income tax rate is 4.95 percent and the exemption allowance is $2,925.' Illinois has no standard deduction; it uses a per-exemption allowance instead, so the standardDeduction field is left blank -- treat the $2,925 exemption-allowance figure (times number of exemptions claimed, doubled for a joint return with both spouses claiming exemptions) as the functional equivalent. Cross-checked the $2,850-to-$2,925 increase against an Illinois Comptroller payroll bulletin (illinoiscomptroller.gov), which independently confirms the same figures. Illinois has no employee-side state disability or paid-family-leave payroll withholding; the state's Paid Leave for All Workers Act mandates employer-provided leave but is not funded through an employee payroll deduction.",
+      "sources": [
+        "https://tax.illinois.gov/content/dam/soi/en/web/tax/forms/withholding/documents/currentyear/il-700-t.pdf",
+        "https://www.illinoiscomptroller.gov"
+      ]
+    },
+    {
+      "code": "HI",
+      "name": "Hawaii",
+      "kind": "progressive",
+      "confidence": "probable",
+      "yearConfirmed": 2026,
+      "changedFromPrior": true,
+      "whatChanged": "Bracket thresholds are substantially different from what's in the repo, which was carrying an older (pre-Act 46 phase-in) schedule. The repo's low end had eight small steps (2,400/4,800/9,600/14,400/19,200/24,000/36,000/48,000); the actual 2026 schedule merges the first two into a single $0-$9,600 band at 1.4% (i.e. drops the 2,400 and 4,800 breakpoints entirely), then matches the repo from 9,600 up through 48,000. Above that, the repo's top end (150,000/175,000/200,000, topping out at 11% over 200,000) is wrong for 2026: the real breakpoints are 125,000/175,000/225,000/275,000/325,000. Concretely, the task's flagged assumption ('9% band around $175,000') is incorrect -- $175,000 is where the 8.25% bracket ENDS and the 8.25%-to-9% transition actually happens at $225,000 (single/MFS/HOH-scaled) or $450,000 (MFJ). Rates themselves (1.4/3.2/5.5/6.4/6.8/7.2/7.6/7.9/8.25/9/10/11 percent) are unchanged; only the dollar breakpoints moved. Standard deduction ($4,400 single, $8,800 MFJ, $6,424 HOH) is unchanged.",
+      "brackets": {
+        "single": [
+          {
+            "upTo": 9600,
+            "rate": 0.014
+          },
+          {
+            "upTo": 14400,
+            "rate": 0.032
+          },
+          {
+            "upTo": 19200,
+            "rate": 0.055
+          },
+          {
+            "upTo": 24000,
+            "rate": 0.064
+          },
+          {
+            "upTo": 36000,
+            "rate": 0.068
+          },
+          {
+            "upTo": 48000,
+            "rate": 0.072
+          },
+          {
+            "upTo": 125000,
+            "rate": 0.076
+          },
+          {
+            "upTo": 175000,
+            "rate": 0.079
+          },
+          {
+            "upTo": 225000,
+            "rate": 0.0825
+          },
+          {
+            "upTo": 275000,
+            "rate": 0.09
+          },
+          {
+            "upTo": 325000,
+            "rate": 0.1
+          },
+          {
+            "upTo": null,
+            "rate": 0.11
+          }
+        ],
+        "marriedJoint": [
+          {
+            "upTo": 19200,
+            "rate": 0.014
+          },
+          {
+            "upTo": 28800,
+            "rate": 0.032
+          },
+          {
+            "upTo": 38400,
+            "rate": 0.055
+          },
+          {
+            "upTo": 48000,
+            "rate": 0.064
+          },
+          {
+            "upTo": 72000,
+            "rate": 0.068
+          },
+          {
+            "upTo": 96000,
+            "rate": 0.072
+          },
+          {
+            "upTo": 250000,
+            "rate": 0.076
+          },
+          {
+            "upTo": 350000,
+            "rate": 0.079
+          },
+          {
+            "upTo": 450000,
+            "rate": 0.0825
+          },
+          {
+            "upTo": 550000,
+            "rate": 0.09
+          },
+          {
+            "upTo": 650000,
+            "rate": 0.1
+          },
+          {
+            "upTo": null,
+            "rate": 0.11
+          }
+        ],
+        "marriedSeparate": [
+          {
+            "upTo": 9600,
+            "rate": 0.014
+          },
+          {
+            "upTo": 14400,
+            "rate": 0.032
+          },
+          {
+            "upTo": 19200,
+            "rate": 0.055
+          },
+          {
+            "upTo": 24000,
+            "rate": 0.064
+          },
+          {
+            "upTo": 36000,
+            "rate": 0.068
+          },
+          {
+            "upTo": 48000,
+            "rate": 0.072
+          },
+          {
+            "upTo": 125000,
+            "rate": 0.076
+          },
+          {
+            "upTo": 175000,
+            "rate": 0.079
+          },
+          {
+            "upTo": 225000,
+            "rate": 0.0825
+          },
+          {
+            "upTo": 275000,
+            "rate": 0.09
+          },
+          {
+            "upTo": 325000,
+            "rate": 0.1
+          },
+          {
+            "upTo": null,
+            "rate": 0.11
+          }
+        ],
+        "headOfHousehold": [
+          {
+            "upTo": 14400,
+            "rate": 0.014
+          },
+          {
+            "upTo": 21600,
+            "rate": 0.032
+          },
+          {
+            "upTo": 28800,
+            "rate": 0.055
+          },
+          {
+            "upTo": 36000,
+            "rate": 0.064
+          },
+          {
+            "upTo": 54000,
+            "rate": 0.068
+          },
+          {
+            "upTo": 72000,
+            "rate": 0.072
+          },
+          {
+            "upTo": 187500,
+            "rate": 0.076
+          },
+          {
+            "upTo": 262500,
+            "rate": 0.079
+          },
+          {
+            "upTo": 337500,
+            "rate": 0.0825
+          },
+          {
+            "upTo": 412500,
+            "rate": 0.09
+          },
+          {
+            "upTo": 487500,
+            "rate": 0.1
+          },
+          {
+            "upTo": null,
+            "rate": 0.11
+          }
+        ]
+      },
+      "standardDeduction": {
+        "single": 4400,
+        "marriedJoint": 8800,
+        "marriedSeparate": 4400,
+        "headOfHousehold": 6424
+      },
+      "payrollPrograms": [
+        {
+          "name": "Temporary Disability Insurance (TDI), employee share",
+          "rate": 0.005,
+          "wageBase": null
+        }
+      ],
+      "notes": "Read the actual 2026 withholding formula directly from Hawaii DOTAX's 'Booklet A Employer's Tax Guide (Rev. 2025)' (files.hawaii.gov/tax/news/pubs/25BkltA.pdf), explicitly effective Dec 5, 2025 for withholding beginning Jan 1, 2026. That document's annualized withholding tables only go up to 7.9% (over $125,000 single / $250,000 married) -- it does NOT show the higher 8.25/9/10/11% brackets at all, which would badly under-withhold high earners if those brackets still exist. To resolve this I cross-checked Tax Foundation's 2026 state income tax rates page (taxfoundation.org/data/all/state/state-income-tax-rates-2026/), whose raw HTML contains an embedded rate table showing Hawaii still has all 12 brackets through 11% for 2026, with the SAME lower 8 breakpoints (9,600/14,400/19,200/24,000/36,000/48,000/125,000) as the Booklet A withholding guide, AND the same $1,144 per-person exemption value quoted in Booklet A -- strong cross-validation that the Tax Foundation table is current for 2026 and that Booklet A's withholding formula is simply a truncated/simplified approximation that stops at 7.9% rather than a sign that the top brackets were repealed. I'm treating the fuller 12-bracket Tax Foundation table as the actual 2026 statutory schedule. HOH thresholds are derived by applying the same 1.5x-of-single multiplier the repo already used (not independently confirmed for 2026 specifically -- Hawaii's actual HOH schedule wasn't in either primary source I could reach). TDI rate/cap not re-verified this session, carried forward from prior data. Given the reliance on cross-referencing two sources to reconcile a real discrepancy rather than reading one clean, complete primary table, I'm marking this 'probable' rather than 'verified' despite the primary-source read.",
+      "sources": [
+        "https://files.hawaii.gov/tax/news/pubs/25BkltA.pdf",
+        "https://taxfoundation.org/data/all/state/state-income-tax-rates-2026/"
+      ]
+    },
+    {
+      "code": "OR",
+      "name": "Oregon",
+      "kind": "progressive",
+      "confidence": "verified",
+      "yearConfirmed": 2026,
+      "changedFromPrior": true,
+      "whatChanged": "Bracket thresholds/rates and the single/MFS/MFJ standard deductions already in the repo are all confirmed correct and unchanged for 2026. The one correction: the repo's headOfHousehold standard deduction was set to $5,820 (same as married), which is wrong -- Oregon's own Publication OR-ESTIMATE (101-026, 2026) shows HOH gets its own distinct, lower standard deduction (~$4,650), not the married amount. HOH's bracket thresholds (doubled, matching married) were already correct in the repo. Paid Leave Oregon's payroll rate (0.6% employee share of a 1% total, $184,500 wage cap) is reconfirmed unchanged.",
+      "brackets": {
+        "single": [
+          {
+            "upTo": 4550,
+            "rate": 0.0475
+          },
+          {
+            "upTo": 11400,
+            "rate": 0.0675
+          },
+          {
+            "upTo": 125000,
+            "rate": 0.0875
+          },
+          {
+            "upTo": null,
+            "rate": 0.099
+          }
+        ],
+        "marriedJoint": [
+          {
+            "upTo": 9100,
+            "rate": 0.0475
+          },
+          {
+            "upTo": 22800,
+            "rate": 0.0675
+          },
+          {
+            "upTo": 250000,
+            "rate": 0.0875
+          },
+          {
+            "upTo": null,
+            "rate": 0.099
+          }
+        ],
+        "marriedSeparate": [
+          {
+            "upTo": 4550,
+            "rate": 0.0475
+          },
+          {
+            "upTo": 11400,
+            "rate": 0.0675
+          },
+          {
+            "upTo": 125000,
+            "rate": 0.0875
+          },
+          {
+            "upTo": null,
+            "rate": 0.099
+          }
+        ],
+        "headOfHousehold": [
+          {
+            "upTo": 9100,
+            "rate": 0.0475
+          },
+          {
+            "upTo": 22800,
+            "rate": 0.0675
+          },
+          {
+            "upTo": 250000,
+            "rate": 0.0875
+          },
+          {
+            "upTo": null,
+            "rate": 0.099
+          }
+        ]
+      },
+      "standardDeduction": {
+        "single": 2910,
+        "marriedJoint": 5820,
+        "marriedSeparate": 2910,
+        "headOfHousehold": 4650
+      },
+      "payrollPrograms": [
+        {
+          "name": "Paid Leave Oregon, employee share",
+          "rate": 0.006,
+          "wageBase": 184500
+        }
+      ],
+      "notes": "Brackets and single/MFS/MFJ standard deductions verified directly from Oregon DOR's 'Oregon Withholding Tax Formulas' (Form 150-206-436, Rev. 12-31-25), explicitly 'Effective January 1, 2026', downloaded and read directly from oregon.gov. That document's FAQ groups head-of-household with 'single' for withholding-formula purposes (using the $2,910 figure), but Oregon's own Publication OR-ESTIMATE (101-026_2026.pdf, also read directly from oregon.gov) shows the true OR-40 standard deduction has three separate tiers for 2026: Single/MFS $2,900, Head of household $4,650, MFJ/qualifying surviving spouse $5,800 -- HOH is genuinely distinct from both, not equal to married as the repo assumed. Note the OR-ESTIMATE figures ($2,900/$5,800) are marked 'Estimated' (preliminary, pre-final-CPI) and are ~$10-20 below the final $2,910/$5,820 in the December withholding formula doc; I used the final $2,910/$5,820 for single/MFS/MFJ and the OR-ESTIMATE's $4,650 for HOH since no later-dated, more-final source for the HOH figure specifically was found -- treat the exact HOH cents as slightly soft (likely $4,650-$4,670) versus the single/married figures which are exact. Paid Leave Oregon rate (60% of a 1% total = 0.6% employee share) and the $184,500 wage cap (+4.7% from $176,100 in 2025, tracking the Social Security taxable maximum) verified directly from the Oregon Employment Department's Nov. 18, 2025 press release, also confirming the rate is unchanged from 2025 (OED explicitly announced both UI tax schedule and Paid Leave contribution rate 'hold steady' for 2026).",
+      "sources": [
+        "https://www.oregon.gov/dor/forms/FormsPubs/withholding-tax-formulas_206-436_2026.pdf",
+        "https://www.oregon.gov/dor/forms/FormsPubs/publication-or-estimate_101-026_2026.pdf",
+        "https://www.oregon.gov/employ/NewsAndMedia/Documents/2025-11-18_Tax_Rate_2026_Press_Release.pdf"
+      ]
+    },
+    {
+      "code": "VT",
+      "name": "Vermont",
+      "kind": "progressive",
+      "confidence": "probable",
+      "yearConfirmed": 2026,
+      "changedFromPrior": false,
+      "brackets": {
+        "single": [
+          {
+            "upTo": 47900,
+            "rate": 0.0335
+          },
+          {
+            "upTo": 116000,
+            "rate": 0.066
+          },
+          {
+            "upTo": 242000,
+            "rate": 0.076
+          },
+          {
+            "upTo": null,
+            "rate": 0.0875
+          }
+        ],
+        "marriedJoint": [
+          {
+            "upTo": 79950,
+            "rate": 0.0335
+          },
+          {
+            "upTo": 193300,
+            "rate": 0.066
+          },
+          {
+            "upTo": 294600,
+            "rate": 0.076
+          },
+          {
+            "upTo": null,
+            "rate": 0.0875
+          }
+        ],
+        "marriedSeparate": [
+          {
+            "upTo": 39975,
+            "rate": 0.0335
+          },
+          {
+            "upTo": 96650,
+            "rate": 0.066
+          },
+          {
+            "upTo": 147300,
+            "rate": 0.076
+          },
+          {
+            "upTo": null,
+            "rate": 0.0875
+          }
+        ],
+        "headOfHousehold": [
+          {
+            "upTo": 64200,
+            "rate": 0.0335
+          },
+          {
+            "upTo": 165700,
+            "rate": 0.066
+          },
+          {
+            "upTo": 268300,
+            "rate": 0.076
+          },
+          {
+            "upTo": null,
+            "rate": 0.0875
+          }
+        ]
+      },
+      "standardDeduction": {
+        "single": 7000,
+        "marriedJoint": 14050,
+        "marriedSeparate": 7000,
+        "headOfHousehold": 10550
+      },
+      "notes": "Could not obtain the actual 2026 figures this pass, so these are carried forward unchanged from the repo's existing CPA-firm-sourced estimate. I did confirm the withholding publication itself exists and is exactly the kind of document the task expects: via DuckDuckGo (which, unlike Google/Bing through the fetch tool, returned real result links), I found the Vermont Dept. of Taxes page 'GB-1210 2026 Income Tax Withholding Instructions, Tables, and Charts' at tax.vermont.gov/document/gb-1210-2026-income-tax-withholding-instructions-tables-and-charts, and a Bloomberg Tax article headlined 'Vermont Tax Department Releases 2026 Income Tax Withholding Instructions, Tables, Charts' dated Dec 23, 2025 -- so the 2026 figures are unambiguously published and the 'not yet published' assumption is wrong for Vermont too. However every attempt to actually read the content failed: tax.vermont.gov returned HTTP 403 to curl (both plain and with a browser user-agent and referer), to WebFetch, and there's no Wayback Machine snapshot from anywhere near 2026. The Bloomberg Tax article itself is paywalled (isAccessibleForFree: false) with no rate content in the raw HTML. So the actual bracket/deduction numbers remain unverified against a primary source in this pass; still worth a direct human check of the GB-1210 PDF or a VT DRA press office contact.",
+      "sources": [
+        "https://tax.vermont.gov/document/gb-1210-2026-income-tax-withholding-instructions-tables-and-charts (confirmed to exist via search; blocked HTTP 403 on every fetch attempt)",
+        "https://news.bloombergtax.com/daily-tax-report-state/vermont-tax-department-releases-2026-income-tax-withholding-instructions-tables-charts (confirms Dec 23, 2025 release date; paywalled, no figures)",
+        "https://www.dh-cpa.com/wp-content/uploads/2026/02/2026TaxTables-WEB-.pdf (existing CPA-firm estimate, figures carried forward unchanged)"
+      ]
+    },
+    {
+      "code": "WA",
+      "name": "Washington",
+      "kind": "none",
+      "confidence": "verified",
+      "yearConfirmed": 2026,
+      "changedFromPrior": true,
+      "whatChanged": "PFML employee-side rate increases to about 0.8072% (from 0.6572%), because ESD raised the total 2026 premium rate to 1.13% (from 0.92% in 2025) while keeping the employee share at 71.43% of the total (0.0113 x 0.7143 = 0.0080716). The taxable wage cap for PFML rises to $184,500 (the 2026 Social Security taxable maximum), same figure already used elsewhere in the repo. WA Cares Fund premium is confirmed unchanged at 0.58% of wages, uncapped.",
+      "payrollPrograms": [
+        {
+          "name": "WA Cares Fund (long-term care)",
+          "rate": 0.0058,
+          "wageBase": null
+        },
+        {
+          "name": "PFML (Paid Family & Medical Leave), employee share",
+          "rate": 0.008072,
+          "wageBase": 184500
+        }
+      ],
+      "notes": "PFML 2026 total premium rate (1.13%) and the 71.43%/28.57% employee/employer split verified directly from the Washington Employment Security Department's own news release, 'Paid Family & Medical Leave premium rate increases to 1.13% in 2026' (esd.wa.gov, released Oct. 29, 2025): '2025 rate is 0.92%... Employers will pay 28.57%... employees will pay 71.43%.' Employee share = 1.13% x 71.43% = 0.8072%. WA Cares Fund rate (0.58% of gross wages, no wage cap) confirmed via University of Washington HR's benefits page (updated Dec. 9, 2025 / Jun 25, 2026), which states the premium 'is set by state law at 0.58% of gross wages' and that WA Cares wages are 'not capped at the taxable maximum for Social Security' -- this is an institutional secondary source rather than a state page directly, so slightly less certain than the PFML figure, though it's simply confirming no change from the prior verified rate. Washington's 'no income tax on wages' classification remains verified and unchanged.",
+      "sources": [
+        "https://esd.wa.gov/about-us/news-release/2025/paid-family-medical-leave-premium-rate-increases-113-2026",
+        "https://hr.uw.edu/benefits/insurance/other/wa-cares-fund/"
+      ]
+    },
+    {
+      "code": "NH",
+      "name": "New Hampshire",
+      "kind": "none",
+      "confidence": "probable",
+      "yearConfirmed": 2026,
+      "changedFromPrior": false,
+      "notes": "Reconfirmed New Hampshire has no personal income tax of any kind for 2026: the Interest and Dividends Tax was repealed effective tax year 2025 (per NH DRA Technical Information Release 2025-001) and stays repealed for 2026, so there's nothing to re-verify a 'withholding table' for -- NH has never withheld on wages and now has zero tax on interest/dividends either. Every direct fetch of revenue.nh.gov (the main site, the interest-and-dividends-tax page, the press release page, and the TIR 2025-001 PDF itself) returned an Akamai 'Access Denied' 403 this session, same as the prior pass. Cross-confirmed via multiple independent secondary sources that all cite the same TIR 2025-001: a law firm summary (mclane.com, already in the repo), plus this session's newly found nhbr.com ('NH Interest and Dividends Tax Repealed as of Jan 1') and manchester.inklink.news ('NH Department of Revenue reminds taxpayers interest and dividends tax no longer exists'). No new information changes the prior conclusion.",
+      "sources": [
+        "https://www.mclane.com/insights/nh-interest-and-dividends-tax-repealed-as-of-january-1/",
+        "https://www.nhbr.com/nh-interest-and-dividends-tax-repealed-as-of-jan-1/",
+        "https://manchester.inklink.news/nh-department-of-revenue-reminds-taxpayers-interest-and-dividends-tax-no-longer-exists/ (primary revenue.nh.gov pages and TIR 2025-001 PDF returned HTTP 403/Akamai block on every direct fetch attempt)"
+      ]
+    }
+  ]
+}

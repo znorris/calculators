@@ -2,12 +2,26 @@ import { useState, useMemo, useEffect, useRef } from "react";
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, CartesianGrid, ReferenceDot, Label } from "recharts";
 import { parseUrlParams, stripUrlParams } from "../shared/urlState.js";
 import { ShareButton } from "../shared/ShareButton.jsx";
+import { DataDisclosure, DataDisclosureLink, WarrantyDisclaimer } from "../shared/DataDisclosure.jsx";
 import { ScenariosMenu } from "../shared/ScenariosMenu.jsx";
 import { ShareBanner } from "../shared/ShareBanner.jsx";
 import { Breadcrumb } from "../shared/Breadcrumb.jsx";
 
 const INPUTS_KEY = "home-purchase-comparison-inputs";
 const SCENARIOS_KEY = "home-purchase-comparison-scenarios";
+
+/** Caveats specific to this calculator, beyond the shared disclosure. */
+const DISCLOSURE_NOTES = [
+  {
+    title: "What this does not account for",
+    body:
+      "Rates, taxes, insurance, and any appreciation you enter are assumptions. Property tax, insurance, and " +
+      "transaction cost figures are estimates and should be verified with a local lender and real estate " +
+      "agent. Closing costs, private mortgage insurance, HOA dues, maintenance, and the cost of selling are " +
+      "not modeled unless you enter them, and each can move the comparison materially.",
+  },
+];
+
 const URL_SCHEMA = {
   booleans: ["includeTxCosts"],
   strings: ["tgtTaxMode"],
@@ -306,6 +320,15 @@ export default function App() {
     </div>
   );
 
+
+  /** Remove this calculator's stored data and reload into a clean state. */
+  function clearStoredData() {
+    for (const key of ["home-purchase-comparison-inputs", "home-purchase-comparison-scenarios"]) {
+      try { localStorage.removeItem(key); } catch (e) {}
+    }
+    window.location.href = window.location.pathname;
+  }
+
   return (
     <>
       <style>{`
@@ -325,6 +348,8 @@ export default function App() {
       }}>
 
         <Breadcrumb current="Home Purchase Comparison" />
+
+        <DataDisclosureLink />
 
         {/* ── Header ── */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16, gap: 12, flexWrap: "wrap" }}>
@@ -655,10 +680,15 @@ export default function App() {
               Property tax and insurance figures are estimates. A local lender quote and a current insurance quote on the target home would refine the actual escrow.
             </li>
           </ul>
-          <p style={{ fontSize: 10.5, color: "#94a3b8", margin: "12px 0 0", fontStyle: "italic", lineHeight: 1.5 }}>
-            This is an analytical comparison, not financial advice. Property tax, insurance, and transaction cost figures are estimates and should be verified with a local lender and real estate agent.
-          </p>
         </Section>
+
+      <DataDisclosure
+        storageKeys={["home-purchase-comparison-inputs", "home-purchase-comparison-scenarios"]}
+        sharesViaUrl
+        onClearStoredData={clearStoredData}
+      />
+
+      <WarrantyDisclaimer extraNotes={DISCLOSURE_NOTES} />
 
       </div>
     </>
