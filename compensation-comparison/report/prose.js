@@ -148,6 +148,62 @@ export function offerSentences({ projection, offer, regimes, baseline, offersByI
     }
   }
 
+  // Benefits, kept distinct from compensation because they are a different
+  // kind of money.
+  const b = firstYear?.benefits;
+  if (b && (b.net !== 0 || firstYear.employerHealth.total > 0)) {
+    const health = firstYear.employerHealth;
+    if (health.total > 0) {
+      out.push({
+        topic: "benefits",
+        text:
+          `The employer puts ${money(health.total)} a year into your health coverage` +
+          `${health.hsaSeed > 0 ? `, ${money(health.hsaSeed)} of it seeding an HSA` : ""}, ` +
+          `which never appears in a paycheck but is real money spent on you.`,
+      });
+    }
+
+    const parts = [];
+    if (b.timeOff > 0) {
+      parts.push(
+        `${b.daysOff} days off worth ${money(b.timeOff)}${offer.unlimitedPto ? ", at the days you expect to actually take" : ""}`,
+      );
+    }
+    if (b.holidays > 0) parts.push(`${offer.paidHolidays} paid holidays worth ${money(b.holidays)}`);
+    if (b.meals > 0) parts.push(`${money(b.meals)} of meals across ${b.onsiteDays} days onsite`);
+    if (b.stipends > 0) parts.push(`${money(b.stipends)} in stipends`);
+    if (parts.length) {
+      out.push({ topic: "benefits", text: `Benefits add ${joinList(parts)}.` });
+    }
+
+    if (b.commuteCost > 0 || b.commuteTimeCost > 0) {
+      out.push({
+        topic: "benefits",
+        text:
+          `Commuting costs ${money(b.commuteCost + b.commuteTimeCost)} a year` +
+          (b.commuteTimeCost > 0
+            ? `, including ${Math.round(b.commuteHours)} hours of unpaid travel priced at your own rate.`
+            : `.`),
+      });
+    }
+
+    if (firstYear.medicalCost > 0) {
+      out.push({
+        topic: "benefits",
+        text: `Expected medical spending of ${money(firstYear.medicalCost)} comes out of that.`,
+      });
+    }
+
+    if (b.parentalLeave > 0) {
+      out.push({
+        topic: "benefits",
+        text:
+          `Parental leave is worth ${money(b.parentalLeave)} if taken, and is excluded from the totals ` +
+          `because it pays once rather than every year.`,
+      });
+    }
+  }
+
   // Tax regime, stated with the threshold that defines it.
   for (const run of regimes.taxElevated) {
     out.push({
@@ -239,6 +295,14 @@ export function assumptionNotes({ projections, offersById, comparison }) {
     }
     notes.push(
       `RSU vesting is treated as ordinary income in the year it vests, so a large vest can push that year into a higher bracket. Employers withhold on vesting at a flat supplemental rate that may be below your actual rate.`,
+    );
+  }
+
+  const withBenefits = projections.filter((p) => p.years[0]?.benefits?.net !== 0);
+  if (withBenefits.length) {
+    notes.push(
+      `Total compensation counts cash, equity, and employer contributions. Dollarized benefits like meals, stipends, and time off are reported separately as total rewards, because they are avoided costs rather than money paid to you.`,
+      `Paid time off is valued at your daily rate, salary divided by 260 working days. For a salaried role this is a way to compare two policies, not extra income: the salary is the same whether or not the days get taken.`,
     );
   }
 

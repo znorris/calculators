@@ -43,6 +43,18 @@ export const CITY_TAX_BASES = [
   { value: "taxable", label: "Income after deductions" },
 ];
 
+export const COVERAGE_TIERS = [
+  { value: "employeeOnly", label: "Just me" },
+  { value: "employeeSpouse", label: "Me and a spouse or partner" },
+  { value: "family", label: "Family" },
+];
+
+export const WORK_ARRANGEMENTS = [
+  { value: "onsite", label: "Onsite" },
+  { value: "hybrid", label: "Hybrid" },
+  { value: "remote", label: "Remote" },
+];
+
 export const EQUITY_INSTRUMENTS = [
   { value: "rsu", label: "RSUs" },
   { value: "nso", label: "Options (NSO)" },
@@ -339,6 +351,172 @@ export const SECTIONS = [
       },
       { id: "cityTaxRate", type: "percent", label: "City tax rate", default: null, help: "Leave blank if none." },
       { id: "cityTaxBase", type: "enum", label: "City tax applies to", default: "gross", options: CITY_TAX_BASES },
+    ],
+  },
+
+  {
+    id: "health",
+    label: "Health and insurance",
+    fields: [
+      {
+        id: "coverageTier",
+        type: "enum",
+        label: "Who is covered",
+        default: "employeeOnly",
+        options: COVERAGE_TIERS,
+        help: "Premiums jump sharply between tiers, so compare offers at the tier you would actually elect.",
+      },
+      {
+        id: "employerPremiumPerPaycheck",
+        type: "money",
+        label: "Employer premium share, per paycheck",
+        default: 0,
+        help: "The employer's contribution. Real money spent on you, so it counts toward total compensation.",
+      },
+      {
+        id: "medicalPremiumPerPaycheck",
+        type: "money",
+        label: "Your medical premium, per paycheck",
+        default: 0,
+        help: "Pre-tax under a Section 125 plan, which lowers both income tax and Social Security and Medicare tax.",
+      },
+      { id: "dentalPremiumPerPaycheck", type: "money", label: "Your dental premium, per paycheck", default: 0 },
+      { id: "visionPremiumPerPaycheck", type: "money", label: "Your vision premium, per paycheck", default: 0 },
+      {
+        id: "deductible",
+        type: "money",
+        label: "Annual deductible",
+        default: 0,
+      },
+      {
+        id: "outOfPocketMax",
+        type: "money",
+        label: "Out-of-pocket maximum",
+        default: 0,
+      },
+      {
+        id: "expectedMedicalSpend",
+        type: "money",
+        label: "Expected medical spending",
+        default: 0,
+        help: "What you expect to pay in a year before the plan pays. Capped at the out-of-pocket maximum.",
+      },
+      {
+        id: "hsaEmployerSeed",
+        type: "money",
+        label: "Employer HSA contribution, yearly",
+        default: 0,
+        help: "Separate from the premium share, and often the difference-maker on a high-deductible plan.",
+      },
+      {
+        id: "hsaEmployeeContribution",
+        type: "money",
+        label: "Your HSA contribution, yearly",
+        default: 0,
+        help: "Through payroll, this is the only common deduction that lowers both income tax and payroll tax.",
+      },
+      {
+        id: "lifeInsurancePerPaycheck",
+        type: "money",
+        label: "Term life premium, per paycheck",
+        default: 0,
+        help: "Taken after tax, so the payout stays untaxed.",
+      },
+      { id: "ltdPerPaycheck", type: "money", label: "Long-term disability, per paycheck", default: 0 },
+      { id: "stdPerPaycheck", type: "money", label: "Short-term disability, per paycheck", default: 0 },
+    ],
+  },
+
+  {
+    id: "timeOff",
+    label: "Time off",
+    fields: [
+      {
+        id: "unlimitedPto",
+        type: "bool",
+        label: "Unlimited PTO",
+        default: false,
+        help: "Unlimited leave has no balance, so it is valued at the days people on the team actually take.",
+      },
+      {
+        id: "ptoDays",
+        type: "int",
+        label: "PTO days per year",
+        default: 0,
+        showIf: (o) => !o.unlimitedPto,
+      },
+      {
+        id: "expectedDaysTaken",
+        type: "int",
+        label: "Days you expect to take",
+        default: 0,
+        help: "Ask what the team's average actually is. A policy with no cap is worth nothing you do not use.",
+        showIf: (o) => o.unlimitedPto,
+      },
+      { id: "paidHolidays", type: "int", label: "Paid holidays per year", default: 0 },
+      { id: "parentalLeaveWeeks", type: "int", label: "Parental leave, weeks at full pay", default: 0 },
+    ],
+  },
+
+  {
+    id: "perks",
+    label: "Perks and commute",
+    fields: [
+      {
+        id: "workArrangement",
+        type: "enum",
+        label: "Work arrangement",
+        default: "onsite",
+        options: WORK_ARRANGEMENTS,
+      },
+      {
+        id: "daysOnsitePerWeek",
+        type: "int",
+        label: "Days onsite per week",
+        default: 5,
+        help: "Gates the value of on-site meals and the cost of commuting. A free lunch is worth nothing on a remote day.",
+        showIf: (o) => o.workArrangement !== "remote",
+      },
+      { id: "breakfastPerDay", type: "money", label: "Free breakfast, value per day", default: 0, showIf: (o) => o.workArrangement !== "remote" },
+      { id: "lunchPerDay", type: "money", label: "Free lunch, value per day", default: 0, showIf: (o) => o.workArrangement !== "remote" },
+      { id: "dinnerPerDay", type: "money", label: "Free dinner, value per day", default: 0, showIf: (o) => o.workArrangement !== "remote" },
+      {
+        id: "commuteCostPerDay",
+        type: "money",
+        label: "Commute cost per day",
+        default: 0,
+        help: "Fuel, transit fare, parking, tolls.",
+        showIf: (o) => o.workArrangement !== "remote",
+      },
+      {
+        id: "commuteMinutesPerDay",
+        type: "int",
+        label: "Commute minutes per day, both ways",
+        default: 0,
+        showIf: (o) => o.workArrangement !== "remote",
+      },
+      {
+        id: "valueCommuteTime",
+        type: "bool",
+        label: "Price commute time as lost time",
+        default: false,
+        help: "Values unpaid travel at your own effective hourly rate. Off by default because it is a judgment, not a cost.",
+        showIf: (o) => o.workArrangement !== "remote",
+      },
+      {
+        id: "stipendsAnnual",
+        type: "money",
+        label: "Stipends, yearly",
+        default: 0,
+        help: "Home office, phone, gym, tuition, and anything else paid or reimbursed.",
+      },
+      {
+        id: "otherPerksAnnual",
+        type: "money",
+        label: "Anything else, yearly",
+        default: 0,
+        help: "The catch-all for whatever this form does not have a field for.",
+      },
     ],
   },
 

@@ -9,6 +9,13 @@ import { federalTables } from "./data/federal.js";
 import { computeAllTaxes } from "./tax.js";
 import { baseWagesForYear, bonusesForYear, retirementForYear, matchVestedFraction } from "./pay.js";
 import { projectEquity, equityRange } from "./equity.js";
+import {
+  benefitDeductions,
+  employerHealthValue,
+  expectedMedicalCost,
+  benefitValue,
+  WORKING_DAYS,
+} from "./benefits.js";
 
 /**
  * Project one offer across the horizon.
@@ -45,9 +52,14 @@ export function projectOffer(offer, context) {
     // contribution reduces nothing, and neither reduces the FICA base.
     const preTaxDeductions = retirement.isPreTax ? retirement.employee : 0;
 
+    // Section 125 premiums and a payroll HSA reduce the income tax base and
+    // the payroll tax base alike, which no single blended rate can express.
+    const deductions = benefitDeductions(offer, offer.payFrequency);
+
     const taxes = computeAllTaxes({
       grossWages,
       preTaxDeductions,
+      ficaExemptDeductions: deductions.reducesBothBases,
       filingStatus,
       taxYear,
       stateCode: offer.state,
@@ -55,20 +67,34 @@ export function projectOffer(offer, context) {
       cityTaxBase: offer.cityTaxBase,
     });
 
-    // Take-home is what reaches the bank account: gross, less tax, less the
-    // employee's own deferral, which is money earned but not received.
-    const takeHome = grossWages - taxes.total - retirement.employee;
+    // Take-home is what reaches the bank account: gross, less tax, less every
+    // deduction, including money earned but diverted before it arrives.
+    const takeHome =
+      grossWages - taxes.total - retirement.employee - deductions.total;
+
+    const employerHealth = employerHealthValue(offer, offer.payFrequency);
 
     // Total compensation counts employer-side dollars, which never appear in
-    // a paycheck. The employer match is counted as contributed, not as a
-    // balance grown at a return rate.
-    const totalCompensation = grossWages + retirement.employer + equity.untaxed[i];
+    // a paycheck: the retirement match, the health premium share, and any HSA
+    // seed. It excludes dollarized perks and time off, which are avoided
+    // costs rather than money, and which are reported beside it instead.
+    const totalCompensation =
+      grossWages + retirement.employer + equity.untaxed[i] + employerHealth.total;
+
+    // Time off and commute time are priced against base pay, since that is
+    // what a day of your time is actually paid at.
+    const benefits = benefitValue(offer, wages.total / WORKING_DAYS);
+    const medicalCost = expectedMedicalCost(offer);
 
     years.push({
       year: i + 1,
       wages,
       bonuses,
       bonusTotal,
+      deductions,
+      employerHealth,
+      benefits,
+      medicalCost,
       equity: {
         taxable: equity.taxable[i],
         untaxed: equity.untaxed[i],
@@ -81,7 +107,9 @@ export function projectOffer(offer, context) {
       retirement,
       takeHome,
       totalCompensation,
-      perPaycheck: perPaycheckBreakdown({ offer, grossWages, taxes, retirement }),
+      /** Compensation plus dollarized benefits, net of commuting. */
+      totalRewards: totalCompensation + benefits.net - medicalCost,
+      perPaycheck: perPaycheckBreakdown({ offer, grossWages, taxes, retirement, deductions }),
     });
   }
 
@@ -96,14 +124,15 @@ export function projectOffer(offer, context) {
 }
 
 /** Per-paycheck view of a year, at the offer's stated pay frequency. */
-function perPaycheckBreakdown({ offer, grossWages, taxes, retirement }) {
+function perPaycheckBreakdown({ offer, grossWages, taxes, retirement, deductions }) {
   const periods = offer.payFrequency || 24;
   return {
     periods,
     gross: grossWages / periods,
     taxes: taxes.total / periods,
     deferral: retirement.employee / periods,
-    net: (grossWages - taxes.total - retirement.employee) / periods,
+    benefits: deductions.total / periods,
+    net: (grossWages - taxes.total - retirement.employee - deductions.total) / periods,
   };
 }
 
@@ -114,6 +143,8 @@ function accumulate(years) {
   let employerRetirement = 0;
   let taxesPaid = 0;
   let equity = 0;
+  let totalRewards = 0;
+  let benefitValue = 0;
 
   return years.map((y) => {
     takeHome += y.takeHome;
@@ -121,10 +152,14 @@ function accumulate(years) {
     employerRetirement += y.retirement.employer;
     taxesPaid += y.taxes.total;
     equity += y.equity.total;
+    totalRewards += y.totalRewards;
+    benefitValue += y.benefits.net - y.medicalCost;
     return {
       year: y.year,
       takeHome,
       totalCompensation,
+      totalRewards,
+      benefitValue,
       employerRetirement,
       taxesPaid,
       equity,

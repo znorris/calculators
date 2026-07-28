@@ -22,9 +22,11 @@ import { taxFromBrackets, marginalRateFromBrackets, bracketsFor, effectiveRate }
  * Additional Medicare surtax applies above a threshold that differs between
  * what the employer withholds and what the employee actually owes.
  */
-export function computeFica(grossWages, filingStatus, taxYear) {
+export function computeFica(grossWages, filingStatus, taxYear, ficaExemptDeductions = 0) {
   const { fica } = federalTables(taxYear);
-  const wages = Math.max(0, grossWages);
+  // Section 125 premiums and payroll-funded HSA contributions come out before
+  // Social Security and Medicare are computed. A traditional 401k does not.
+  const wages = Math.max(0, grossWages - Math.max(0, ficaExemptDeductions));
 
   const socialSecurity = Math.min(wages, fica.socialSecurityWageBase) * fica.socialSecurityRate;
   const medicare = wages * fica.medicareRate;
@@ -135,15 +137,30 @@ export function computeCityTax({ grossWages, taxableIncome, rate, base }) {
 export function computeAllTaxes({
   grossWages,
   preTaxDeductions = 0,
+  ficaExemptDeductions = 0,
   filingStatus,
   taxYear,
   stateCode,
   cityTaxRate,
   cityTaxBase,
 }) {
-  const federal = computeFederalIncomeTax({ grossWages, preTaxDeductions, filingStatus, taxYear });
-  const fica = computeFica(grossWages, filingStatus, taxYear);
-  const state = computeStateTax({ grossWages, preTaxDeductions, filingStatus, stateCode });
+  // Deductions that escape payroll tax also escape income tax, so they are
+  // part of the income tax base reduction as well.
+  const incomeTaxReduction = preTaxDeductions + ficaExemptDeductions;
+
+  const federal = computeFederalIncomeTax({
+    grossWages,
+    preTaxDeductions: incomeTaxReduction,
+    filingStatus,
+    taxYear,
+  });
+  const fica = computeFica(grossWages, filingStatus, taxYear, ficaExemptDeductions);
+  const state = computeStateTax({
+    grossWages,
+    preTaxDeductions: incomeTaxReduction,
+    filingStatus,
+    stateCode,
+  });
   const city = computeCityTax({
     grossWages,
     taxableIncome: federal.taxableIncome,
