@@ -9,6 +9,7 @@ import { federalTables } from "./data/federal.js";
 import { computeAllTaxes } from "./tax.js";
 import { baseWagesForYear, bonusesForYear, retirementForYear, matchVestedFraction } from "./pay.js";
 import { projectEquity, equityRange } from "./equity.js";
+import { variablePayForYear, attainmentScenarios } from "./commission.js";
 import {
   benefitDeductions,
   employerHealthValue,
@@ -38,11 +39,15 @@ export function projectOffer(offer, context) {
     const bonuses = bonusesForYear(offer, i, wages.total);
     const bonusTotal = bonuses.reduce((sum, b) => sum + b.amount, 0);
 
+    // Commission is ordinary income like any other wage.
+    const variable = variablePayForYear(offer, i, wages.total);
+    const variableTotal = variable?.net || 0;
+
     // RSU vesting is ordinary income in the year it vests, so it belongs in
     // gross wages and can push the year into higher brackets. Option value is
     // taxed at exercise, which this build does not model, so it is excluded
     // from the tax base and counted only toward total compensation.
-    const grossWages = wages.total + bonusTotal + equity.taxable[i];
+    const grossWages = wages.total + bonusTotal + variableTotal + equity.taxable[i];
 
     // Retirement contributions are computed on base wages only. Plans differ
     // on whether bonuses and vesting count as eligible compensation.
@@ -91,6 +96,8 @@ export function projectOffer(offer, context) {
       wages,
       bonuses,
       bonusTotal,
+      variable,
+      variableTotal,
       deductions,
       employerHealth,
       benefits,
@@ -118,6 +125,7 @@ export function projectOffer(offer, context) {
     years,
     equity,
     equityBand,
+    attainmentCurve: attainmentScenarios(offer),
     cumulative: accumulate(years),
     exitYears: exitYearSeries(offer, years, equity),
   };

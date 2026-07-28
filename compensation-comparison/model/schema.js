@@ -43,6 +43,16 @@ export const CITY_TAX_BASES = [
   { value: "taxable", label: "Income after deductions" },
 ];
 
+export const COMMISSION_MODES = [
+  { value: "simple", label: "Accelerator and decelerator" },
+  { value: "tiered", label: "Explicit tiers" },
+];
+
+export const TIER_MODES = [
+  { value: "marginal", label: "Marginal, each tier on its own band" },
+  { value: "retroactive", label: "Retroactive, top rate on everything" },
+];
+
 export const COVERAGE_TIERS = [
   { value: "employeeOnly", label: "Just me" },
   { value: "employeeSpouse", label: "Me and a spouse or partner" },
@@ -237,6 +247,132 @@ export const SECTIONS = [
             showIf: (b) => b.recurrence === "annual",
           },
         ],
+      },
+    ],
+  },
+
+  {
+    id: "variablePay",
+    label: "Commission and variable pay",
+    fields: [
+      {
+        id: "targetVariable",
+        type: "money",
+        label: "Target variable pay, yearly",
+        default: 0,
+        help: "What you earn at 100% of quota. Base plus this is your OTE.",
+      },
+      {
+        id: "expectedAttainment",
+        type: "percent",
+        label: "Attainment you expect",
+        default: 1,
+        help: "Ask what share of the team hit quota last year. Industry-wide it runs near 45%.",
+      },
+      {
+        id: "commissionMode",
+        type: "enum",
+        label: "Payout curve",
+        default: "simple",
+        options: COMMISSION_MODES,
+      },
+      {
+        id: "acceleratorThreshold",
+        type: "percent",
+        label: "Accelerator starts at",
+        default: 1,
+        help: "Attainment above which each additional dollar pays more.",
+        showIf: (o) => o.commissionMode === "simple",
+      },
+      {
+        id: "acceleratorMultiplier",
+        type: "percent",
+        label: "Accelerator multiplier",
+        default: 1,
+        help: "200% means every dollar above the threshold pays double.",
+        showIf: (o) => o.commissionMode === "simple",
+      },
+      {
+        id: "deceleratorThreshold",
+        type: "percent",
+        label: "Decelerator below",
+        default: 0,
+        help: "Attainment under which the rate drops. Leave at zero if there is no floor.",
+        showIf: (o) => o.commissionMode === "simple",
+      },
+      {
+        id: "deceleratorMultiplier",
+        type: "percent",
+        label: "Decelerator multiplier",
+        default: 1,
+        showIf: (o) => o.commissionMode === "simple",
+      },
+      {
+        id: "tieredMode",
+        type: "enum",
+        label: "Tier calculation",
+        default: "marginal",
+        options: TIER_MODES,
+        help: "Marginal pays each tier's rate on its own band. Retroactive pays the highest rate reached on everything.",
+        showIf: (o) => o.commissionMode === "tiered",
+      },
+      {
+        id: "tiers",
+        type: "list",
+        label: "Tiers",
+        default: [],
+        addLabel: "Add tier",
+        itemNoun: "Tier",
+        showIf: (o) => o.commissionMode === "tiered",
+        itemFields: [
+          { id: "label", type: "text", label: "Name", default: "", placeholder: "Up to quota" },
+          { id: "upToAttainment", type: "percent", label: "Applies up to", default: 1, help: "Leave the last tier high to make it open-ended." },
+          { id: "multiplier", type: "percent", label: "Rate multiplier", default: 1 },
+        ],
+      },
+      {
+        id: "payoutCapPercent",
+        type: "percent",
+        label: "Payout capped at",
+        default: 0,
+        help: "As a percent of target variable. Zero means no cap.",
+      },
+      {
+        id: "drawAmount",
+        type: "money",
+        label: "Draw, yearly",
+        default: 0,
+        help: "Guaranteed variable pay early on.",
+      },
+      {
+        id: "drawRecoverable",
+        type: "bool",
+        label: "Draw is recoverable",
+        default: false,
+        help: "Recoverable means you owe it back out of later commission if you fall short. Non-recoverable is yours regardless.",
+        showIf: (o) => (o.drawAmount || 0) > 0,
+      },
+      {
+        id: "rampMonths",
+        type: "int",
+        label: "Ramp, months",
+        default: 0,
+        help: "Months at reduced quota while you get started. Affects year one only.",
+      },
+      {
+        id: "rampPayoutPercent",
+        type: "percent",
+        label: "Paid during ramp at",
+        default: 1,
+        help: "Share of target variable paid during ramp regardless of attainment.",
+        showIf: (o) => (o.rampMonths || 0) > 0,
+      },
+      {
+        id: "clawbackPercent",
+        type: "percent",
+        label: "Expected clawback",
+        default: 0,
+        help: "Share of paid commission reclaimed when deals cancel or customers churn.",
       },
     ],
   },

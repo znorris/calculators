@@ -148,6 +148,65 @@ export function offerSentences({ projection, offer, regimes, baseline, offersByI
     }
   }
 
+  // Variable pay, stated as target beside expected, because a quoted OTE is
+  // the payout at exactly 100% and almost nobody lands there.
+  const v = firstYear?.variable;
+  if (v) {
+    const steady = projection.years[1]?.variable || v;
+    out.push({
+      topic: "variable",
+      text:
+        `On-target earnings are ${money(v.ote)}, a ${Math.round((1 - v.payMix) * 100)}/${Math.round(v.payMix * 100)} ` +
+        `split between guaranteed base and at-risk variable pay. At the ${percent(v.attainment, 0)} attainment you ` +
+        `expect, variable pay comes to ${money(steady.net)} rather than ${money(steady.atTarget)}.`,
+    });
+
+    if (v.rampMonths > 0) {
+      out.push({
+        topic: "variable",
+        text:
+          `Year one is protected by a ${v.rampMonths}-month ramp paying ${money(v.rampPay)} regardless of ` +
+          `attainment, so year one earns ${money(v.net)} and the steady state is ${money(steady.net)}.`,
+      });
+    }
+
+    if (v.wasCapped) {
+      out.push({
+        topic: "variable",
+        text: `The payout is capped, so attainment above the cap earns nothing further.`,
+      });
+    }
+
+    if (v.drawShortfall > 0) {
+      out.push({
+        topic: "variable",
+        text:
+          `The draw is recoverable and expected attainment falls short of it by ${money(v.drawShortfall)}, ` +
+          `which is a debt owed back out of later commission rather than money kept.`,
+      });
+    }
+
+    if (v.clawback > 0) {
+      out.push({
+        topic: "variable",
+        text: `Expected clawback on cancelled deals removes ${money(v.clawback)} of what is paid.`,
+      });
+    }
+
+    const curve = projection.attainmentCurve || [];
+    if (curve.length) {
+      const low = curve[0];
+      const high = curve[curve.length - 1];
+      out.push({
+        topic: "variable",
+        text:
+          `Across the plan, ${percent(low.attainment, 0)} of quota pays ${money(low.payout)} and ` +
+          `${percent(high.attainment, 0)} pays ${money(high.payout)}, a spread of ${money(high.payout - low.payout)} ` +
+          `on the same offer.`,
+      });
+    }
+  }
+
   // Benefits, kept distinct from compensation because they are a different
   // kind of money.
   const b = firstYear?.benefits;
@@ -295,6 +354,14 @@ export function assumptionNotes({ projections, offersById, comparison }) {
     }
     notes.push(
       `RSU vesting is treated as ordinary income in the year it vests, so a large vest can push that year into a higher bracket. Employers withhold on vesting at a flat supplemental rate that may be below your actual rate.`,
+    );
+  }
+
+  const withVariable = projections.filter((p) => p.years[0]?.variable);
+  if (withVariable.length) {
+    notes.push(
+      `Variable pay is computed at the attainment you entered, not at 100% of quota. A quoted on-target figure is what the plan pays at exactly quota, which most people do not hit; asking what share of the team hit quota last year is worth more than any assumption here.`,
+      `Territory quality, lead flow, and your own ramp beyond the months entered are not modeled, and all three move real attainment more than the plan's shape does.`,
     );
   }
 
