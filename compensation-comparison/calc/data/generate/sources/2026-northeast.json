@@ -1,0 +1,1246 @@
+{
+  "collectedAt": "2026-07-27",
+  "taxYear": 2026,
+  "note": "Second pass. The first run returned only PA out of the twelve northeast jurisdictions.",
+  "states": [
+    {
+      "code": "NY",
+      "name": "New York",
+      "kind": "progressive",
+      "confidence": "probable",
+      "brackets": {
+        "single": [
+          {
+            "rate": 0.039,
+            "upTo": 8500
+          },
+          {
+            "rate": 0.044,
+            "upTo": 11700
+          },
+          {
+            "rate": 0.0515,
+            "upTo": 13900
+          },
+          {
+            "rate": 0.054,
+            "upTo": 80650
+          },
+          {
+            "rate": 0.059,
+            "upTo": 215400
+          },
+          {
+            "rate": 0.0685,
+            "upTo": 1077550
+          },
+          {
+            "rate": 0.0965,
+            "upTo": 5000000
+          },
+          {
+            "rate": 0.103,
+            "upTo": 25000000
+          },
+          {
+            "rate": 0.109,
+            "upTo": null
+          }
+        ],
+        "marriedJoint": [
+          {
+            "rate": 0.039,
+            "upTo": 17150
+          },
+          {
+            "rate": 0.044,
+            "upTo": 23600
+          },
+          {
+            "rate": 0.0515,
+            "upTo": 27900
+          },
+          {
+            "rate": 0.054,
+            "upTo": 161550
+          },
+          {
+            "rate": 0.059,
+            "upTo": 323200
+          },
+          {
+            "rate": 0.0685,
+            "upTo": 2155350
+          },
+          {
+            "rate": 0.0965,
+            "upTo": 5000000
+          },
+          {
+            "rate": 0.103,
+            "upTo": 25000000
+          },
+          {
+            "rate": 0.109,
+            "upTo": null
+          }
+        ],
+        "marriedSeparate": [
+          {
+            "rate": 0.039,
+            "upTo": 8500
+          },
+          {
+            "rate": 0.044,
+            "upTo": 11700
+          },
+          {
+            "rate": 0.0515,
+            "upTo": 13900
+          },
+          {
+            "rate": 0.054,
+            "upTo": 80650
+          },
+          {
+            "rate": 0.059,
+            "upTo": 215400
+          },
+          {
+            "rate": 0.0685,
+            "upTo": 1077550
+          },
+          {
+            "rate": 0.0965,
+            "upTo": 5000000
+          },
+          {
+            "rate": 0.103,
+            "upTo": 25000000
+          },
+          {
+            "rate": 0.109,
+            "upTo": null
+          }
+        ],
+        "headOfHousehold": [
+          {
+            "rate": 0.039,
+            "upTo": 12800
+          },
+          {
+            "rate": 0.044,
+            "upTo": 17650
+          },
+          {
+            "rate": 0.0515,
+            "upTo": 20900
+          },
+          {
+            "rate": 0.054,
+            "upTo": 107650
+          },
+          {
+            "rate": 0.059,
+            "upTo": 269300
+          },
+          {
+            "rate": 0.0685,
+            "upTo": 1616450
+          },
+          {
+            "rate": 0.0965,
+            "upTo": 5000000
+          },
+          {
+            "rate": 0.103,
+            "upTo": 25000000
+          },
+          {
+            "rate": 0.109,
+            "upTo": null
+          }
+        ]
+      },
+      "standardDeduction": {
+        "single": 8000,
+        "marriedJoint": 16050,
+        "marriedSeparate": 8000,
+        "headOfHousehold": 11200
+      },
+      "payrollPrograms": [
+        {
+          "name": "NY Paid Family Leave (PFL) - employee contribution",
+          "rate": 0.00432,
+          "wageBase": 95349
+        },
+        {
+          "name": "NY State Disability Benefits Law (DBL) - employee contribution",
+          "rate": 0.005,
+          "wageBase": 6240
+        }
+      ],
+      "notes": "Tax year 2026. Bottom five bracket RATES (3.90/4.40/5.15/5.40/5.90%) are directly verified from the official NYS-50-T-NYS (1/26) withholding tables (NY Dept. of Taxation & Finance), effective payrolls 1/1/2026-12/31/2026, which state these reflect rate reductions enacted under Chapter 59 of the Laws of 2025, Part A. Bracket dollar BREAKPOINTS and the top four rates (the 5.90% band's own endpoint, 6.85%, 9.65%, 10.3%, 10.9%) are carried forward unchanged from the 2025 IT-201-I return schedule (tax.ny.gov, IT-201-I (2025)) because Chapter 59 Part A changed rates only (not thresholds) and the 2026 IT-201 instructions/return rate schedule had not yet been published as of July 2026 - hence 'probable' rather than 'verified' for the composite table. Married Filing Jointly and Qualifying Surviving Spouse share one bracket table; Single and Married Filing Separately share another. New York City levies its own separate progressive resident income tax (roughly 3.078%-3.876%) and Yonkers imposes a resident income tax surcharge (16.75% of NYS tax) plus a nonresident earnings tax; neither is folded into the state brackets above. High-income NY filers are also subject to a 'benefit recapture' computation (tax computation worksheets) that claws back the value of lower brackets, separate from the marginal schedule shown. Standard deduction figures are 2025 IT-201-I amounts; NY's standard deduction has been statutorily fixed since 2018 and no 2026 change has been identified, but the exact 2026 figure has not been independently confirmed in a 2026-dated publication.",
+      "sources": [
+        "https://www.tax.ny.gov/pdf/publications/withholding/nys50_t_nys.pdf",
+        "https://www.tax.ny.gov/pdf/current_forms/it/it201i.pdf"
+      ]
+    },
+    {
+      "code": "NJ",
+      "name": "New Jersey",
+      "kind": "progressive",
+      "confidence": "verified",
+      "brackets": {
+        "single": [
+          {
+            "rate": 0.014,
+            "upTo": 20000
+          },
+          {
+            "rate": 0.0175,
+            "upTo": 35000
+          },
+          {
+            "rate": 0.035,
+            "upTo": 40000
+          },
+          {
+            "rate": 0.05525,
+            "upTo": 75000
+          },
+          {
+            "rate": 0.0637,
+            "upTo": 500000
+          },
+          {
+            "rate": 0.0897,
+            "upTo": 1000000
+          },
+          {
+            "rate": 0.1075,
+            "upTo": null
+          }
+        ],
+        "marriedJoint": [
+          {
+            "rate": 0.014,
+            "upTo": 20000
+          },
+          {
+            "rate": 0.0175,
+            "upTo": 50000
+          },
+          {
+            "rate": 0.0245,
+            "upTo": 70000
+          },
+          {
+            "rate": 0.035,
+            "upTo": 80000
+          },
+          {
+            "rate": 0.05525,
+            "upTo": 150000
+          },
+          {
+            "rate": 0.0637,
+            "upTo": 500000
+          },
+          {
+            "rate": 0.0897,
+            "upTo": 1000000
+          },
+          {
+            "rate": 0.1075,
+            "upTo": null
+          }
+        ],
+        "marriedSeparate": [
+          {
+            "rate": 0.014,
+            "upTo": 20000
+          },
+          {
+            "rate": 0.0175,
+            "upTo": 35000
+          },
+          {
+            "rate": 0.035,
+            "upTo": 40000
+          },
+          {
+            "rate": 0.05525,
+            "upTo": 75000
+          },
+          {
+            "rate": 0.0637,
+            "upTo": 500000
+          },
+          {
+            "rate": 0.0897,
+            "upTo": 1000000
+          },
+          {
+            "rate": 0.1075,
+            "upTo": null
+          }
+        ],
+        "headOfHousehold": [
+          {
+            "rate": 0.014,
+            "upTo": 20000
+          },
+          {
+            "rate": 0.0175,
+            "upTo": 50000
+          },
+          {
+            "rate": 0.0245,
+            "upTo": 70000
+          },
+          {
+            "rate": 0.035,
+            "upTo": 80000
+          },
+          {
+            "rate": 0.05525,
+            "upTo": 150000
+          },
+          {
+            "rate": 0.0637,
+            "upTo": 500000
+          },
+          {
+            "rate": 0.0897,
+            "upTo": 1000000
+          },
+          {
+            "rate": 0.1075,
+            "upTo": null
+          }
+        ]
+      },
+      "payrollPrograms": [
+        {
+          "name": "NJ Temporary Disability Insurance (TDI) - employee contribution",
+          "rate": 0.0019,
+          "wageBase": 171100
+        },
+        {
+          "name": "NJ Family Leave Insurance (FLI) - employee contribution",
+          "rate": 0.0023,
+          "wageBase": 171100
+        }
+      ],
+      "notes": "Tax year 2026. NJ Division of Taxation's rate schedule PDF (njtaxratesch.pdf) is explicitly labeled 'New Jersey Tax Rate Schedules - 2020' and distributed on the site's current 'Tax Rate Schedules: 2020 and After' page, meaning these brackets have applied unchanged from tax year 2020 through the present; no 2026-specific revision exists. NJ uses ONE table (Table B) for Married/CU filing jointly, Head of Household, AND Qualifying Widow(er) - shown identically for marriedJoint and headOfHousehold above; and ONE table (Table A) for Single AND Married/CU filing separately - shown identically for single and marriedSeparate above. NJ has NO standard deduction; instead it uses personal exemptions ($1,000 regular exemption per filer/spouse, additional $1,000 for age 65+/blind/disabled, $1,500 per dependent, plus a dependent higher-education-tuition exemption of $1,000) which are not represented in the standardDeduction field (omitted). NJ TDI and FLI rates dropped for 2026 versus 2025 (TDI was 0.23% in 2025, FLI was 0.33% in 2025) on a raised wage base ($171,100 for 2026 vs $165,400 for 2025); max annual employee contributions for 2026 are $325.09 (TDI) and $393.53 (FLI), per NJ Dept. of Labor.",
+      "sources": [
+        "https://www.nj.gov/treasury/taxation/pdf/current/njtaxratesch.pdf",
+        "https://www.nj.gov/labor/myleavebenefits/worker/tdi/",
+        "https://www.nj.gov/labor/myleavebenefits/worker/fli/"
+      ]
+    },
+    {
+      "code": "CT",
+      "name": "Connecticut",
+      "kind": "progressive",
+      "confidence": "probable",
+      "brackets": {
+        "single": [
+          {
+            "rate": 0.02,
+            "upTo": 10000
+          },
+          {
+            "rate": 0.045,
+            "upTo": 50000
+          },
+          {
+            "rate": 0.055,
+            "upTo": 100000
+          },
+          {
+            "rate": 0.06,
+            "upTo": 200000
+          },
+          {
+            "rate": 0.065,
+            "upTo": 250000
+          },
+          {
+            "rate": 0.069,
+            "upTo": 500000
+          },
+          {
+            "rate": 0.0699,
+            "upTo": null
+          }
+        ],
+        "marriedJoint": [
+          {
+            "rate": 0.02,
+            "upTo": 20000
+          },
+          {
+            "rate": 0.045,
+            "upTo": 100000
+          },
+          {
+            "rate": 0.055,
+            "upTo": 200000
+          },
+          {
+            "rate": 0.06,
+            "upTo": 400000
+          },
+          {
+            "rate": 0.065,
+            "upTo": 500000
+          },
+          {
+            "rate": 0.069,
+            "upTo": 1000000
+          },
+          {
+            "rate": 0.0699,
+            "upTo": null
+          }
+        ],
+        "marriedSeparate": [
+          {
+            "rate": 0.02,
+            "upTo": 10000
+          },
+          {
+            "rate": 0.045,
+            "upTo": 50000
+          },
+          {
+            "rate": 0.055,
+            "upTo": 100000
+          },
+          {
+            "rate": 0.06,
+            "upTo": 200000
+          },
+          {
+            "rate": 0.065,
+            "upTo": 250000
+          },
+          {
+            "rate": 0.069,
+            "upTo": 500000
+          },
+          {
+            "rate": 0.0699,
+            "upTo": null
+          }
+        ],
+        "headOfHousehold": [
+          {
+            "rate": 0.02,
+            "upTo": 16000
+          },
+          {
+            "rate": 0.045,
+            "upTo": 80000
+          },
+          {
+            "rate": 0.055,
+            "upTo": 160000
+          },
+          {
+            "rate": 0.06,
+            "upTo": 320000
+          },
+          {
+            "rate": 0.065,
+            "upTo": 400000
+          },
+          {
+            "rate": 0.069,
+            "upTo": 800000
+          },
+          {
+            "rate": 0.0699,
+            "upTo": null
+          }
+        ]
+      },
+      "payrollPrograms": [
+        {
+          "name": "CT Paid Leave - employee contribution",
+          "rate": 0.005,
+          "wageBase": 184500
+        }
+      ],
+      "notes": "FIGURES ARE FOR TAX YEAR 2025 (Form CT-1040 TCS, Rev. 12/25), the latest published Connecticut rate schedule as of July 2026; the 2026 CT-1040 TCS had not yet been issued by CT DRS at time of research, so confidence is set to 'probable' rather than 'verified' for applicability to tax year 2026 (CT's bracket structure and rates have been stable since the 2023 rate cut, with no further legislated changes identified for 2026). Single and Married Filing Separately share one bracket table ('Table B: Single or Married Filing Separately'); shown identically for both statuses above. CT layers TWO distinct recapture/clawback mechanisms on top of the marginal brackets: (1) Table C, '2% Tax Rate Phase-Out Add-Back' - adds back up to $250 (single/MFS), $500 (MFJ/QSS), or $400 (HOH) of tax for filers above roughly $56,500/$100,500/$78,500 Connecticut AGI, phasing out the benefit of the bottom 2% bracket; (2) Table D, 'Tax Recapture' - adds back up to $3,400 (single/MFS), $6,800 (MFJ/QSS), or $5,320 (HOH) of tax for filers above roughly $540,000/$1,080,000/$864,000 Connecticut AGI, phasing out the benefit of the 4.5%-6.9% brackets so that very-high-income filers are taxed at close to a flat 6.99% on all income. CT has NO standard deduction; instead it uses an income-based Personal Exemption (Table A, up to $15,000 single/$24,000 MFJ/$12,000 MFS/$19,000 HOH, phasing to $0 by roughly $44,000/$62,000/$35,000/$56,000 AGI) plus a separate Personal Tax Credit percentage (Table E, up to 75%) applied against computed tax based on AGI; neither is represented in the standardDeduction field (omitted). CT Paid Leave employee contribution rate (0.5% of wages) is unchanged for 2026 per the CT Paid Leave Authority; its wage base equals the federal Social Security/OASDI contribution and benefit base, confirmed by SSA to be $184,500 for calendar year 2026 (up from $176,100 in 2025).",
+      "sources": [
+        "https://portal.ct.gov/-/media/drs/forms/2025/income/ct-1040-tcs_1225.pdf",
+        "https://ctpaidleave.org/s/employers",
+        "https://www.ssa.gov/faqs/en/questions/KA-02387.html"
+      ]
+    },
+    {
+      "code": "MA",
+      "name": "Massachusetts",
+      "kind": "flat",
+      "confidence": "probable",
+      "flatRate": 0.05,
+      "standardDeduction": {
+        "single": 0,
+        "marriedJoint": 0,
+        "marriedSeparate": 0,
+        "headOfHousehold": 0
+      },
+      "payrollPrograms": [
+        {
+          "name": "Paid Family and Medical Leave (PFML) - employee-side share (medical 0.28% + family 0.18%)",
+          "rate": 0.0046,
+          "wageBase": 184500
+        }
+      ],
+      "notes": "Flat 5% rate applies to most wage/ordinary income (short-term capital gains and most interest/dividends are taxed at 8.5%; long-term gains on collectibles at 12% - not modeled here since this record covers wage income). A separate 4% 'millionaires tax' surtax applies on top of the 5% rate to income above an inflation-adjusted threshold, giving a combined ~9% marginal rate above that line. The threshold was $1,083,150 for tax year 2025; the mass.gov pages that publish the FY2026 COLA-adjusted threshold returned HTTP 403 to automated fetch, so the 2026 threshold could not be independently confirmed - treat $1,083,150 as a carried-forward estimate pending verification against a Massachusetts DOR Technical Information Release (TIR) for FY2026. Massachusetts has no standard deduction; it instead uses a personal exemption (approx. $4,400 single / $8,800 MFJ, per recent-year figures) which this schema has no field for, so standardDeduction is reported as 0 for all statuses - do not treat that as 'no relief', treat it as 'not modeled in this shape.' PFML employee-side rate of 0.46% is well-established for employers with 25+ employees (lower/zero for very small employers, not modeled); the wage base is assumed to equal the 2026 Social Security taxable maximum ($184,500) since MA ties the PFML cap to it, but ssa.gov also blocked automated fetch, so this figure is unverified and should be confirmed before use.",
+      "sources": [
+        "https://taxfoundation.org/data/all/state/state-income-tax-rates-2026/ (secondary source, successfully fetched)",
+        "mass.gov DOR pages (mass.gov/info-details/massachusetts-tax-rates, mass.gov/service-details/learn-about-the-tax-on-income-of-more-than-1-million, mass.gov PFML contribution rate pages) - all returned HTTP 403 to automated WebFetch and could not be read directly"
+      ]
+    },
+    {
+      "code": "MD",
+      "name": "Maryland",
+      "kind": "progressive",
+      "confidence": "probable",
+      "brackets": {
+        "single": [
+          {
+            "upTo": 1000,
+            "rate": 0.02
+          },
+          {
+            "upTo": 2000,
+            "rate": 0.03
+          },
+          {
+            "upTo": 3000,
+            "rate": 0.04
+          },
+          {
+            "upTo": 100000,
+            "rate": 0.0475
+          },
+          {
+            "upTo": 125000,
+            "rate": 0.05
+          },
+          {
+            "upTo": 150000,
+            "rate": 0.0525
+          },
+          {
+            "upTo": 250000,
+            "rate": 0.055
+          },
+          {
+            "upTo": 500000,
+            "rate": 0.0575
+          },
+          {
+            "upTo": 1000000,
+            "rate": 0.0625
+          },
+          {
+            "upTo": null,
+            "rate": 0.065
+          }
+        ],
+        "marriedSeparate": [
+          {
+            "upTo": 1000,
+            "rate": 0.02
+          },
+          {
+            "upTo": 2000,
+            "rate": 0.03
+          },
+          {
+            "upTo": 3000,
+            "rate": 0.04
+          },
+          {
+            "upTo": 100000,
+            "rate": 0.0475
+          },
+          {
+            "upTo": 125000,
+            "rate": 0.05
+          },
+          {
+            "upTo": 150000,
+            "rate": 0.0525
+          },
+          {
+            "upTo": 250000,
+            "rate": 0.055
+          },
+          {
+            "upTo": 500000,
+            "rate": 0.0575
+          },
+          {
+            "upTo": 1000000,
+            "rate": 0.0625
+          },
+          {
+            "upTo": null,
+            "rate": 0.065
+          }
+        ],
+        "marriedJoint": [
+          {
+            "upTo": 1000,
+            "rate": 0.02
+          },
+          {
+            "upTo": 2000,
+            "rate": 0.03
+          },
+          {
+            "upTo": 3000,
+            "rate": 0.04
+          },
+          {
+            "upTo": 150000,
+            "rate": 0.0475
+          },
+          {
+            "upTo": 175000,
+            "rate": 0.05
+          },
+          {
+            "upTo": 225000,
+            "rate": 0.0525
+          },
+          {
+            "upTo": 300000,
+            "rate": 0.055
+          },
+          {
+            "upTo": 600000,
+            "rate": 0.0575
+          },
+          {
+            "upTo": 1200000,
+            "rate": 0.0625
+          },
+          {
+            "upTo": null,
+            "rate": 0.065
+          }
+        ],
+        "headOfHousehold": [
+          {
+            "upTo": 1000,
+            "rate": 0.02
+          },
+          {
+            "upTo": 2000,
+            "rate": 0.03
+          },
+          {
+            "upTo": 3000,
+            "rate": 0.04
+          },
+          {
+            "upTo": 150000,
+            "rate": 0.0475
+          },
+          {
+            "upTo": 175000,
+            "rate": 0.05
+          },
+          {
+            "upTo": 225000,
+            "rate": 0.0525
+          },
+          {
+            "upTo": 300000,
+            "rate": 0.055
+          },
+          {
+            "upTo": 600000,
+            "rate": 0.0575
+          },
+          {
+            "upTo": 1200000,
+            "rate": 0.0625
+          },
+          {
+            "upTo": null,
+            "rate": 0.065
+          }
+        ]
+      },
+      "standardDeduction": {
+        "single": 3350,
+        "marriedJoint": 6700,
+        "marriedSeparate": 3350,
+        "headOfHousehold": 6700
+      },
+      "payrollPrograms": [],
+      "notes": "Maryland publishes two rate schedules, not four: Single and Married Filing Separately share one table; Married Filing Jointly, Head of Household, and Qualifying Widow(er) share the other - the duplication above is intentional, not an omission. Every Maryland county (plus Baltimore City) levies its own local income tax on top of the state brackets shown here, currently ranging roughly 2.25% to 3.20% depending on county of residence; this is why take-home pay differs sharply by county even at identical state income and is not incorporated into the brackets above. Maryland's standard deduction is actually computed as 15% of Maryland AGI, subject to a floor and ceiling that differ by filing group; the values reported here ($3,350 single/MFS, $6,700 MFJ/HOH) are the ceiling (maximum) amounts that apply once income is high enough - lower-income filers get a smaller, income-scaled deduction with an approximate floor around $1,700 (single/MFS) and $3,400 (MFJ/HOH) in recent years, not modeled in this single-number field. Maryland's FAMLI (Family and Medical Leave Insurance) program has been enacted but employee/employer contributions have been repeatedly delayed and were not in effect for tax/payroll year 2026 as of this research, so no employee-side payroll program is listed; verify before assuming this stays true for later years. Confidence is 'probable' rather than 'verified' because marylandtaxes.gov / marylandcomptroller.gov pages returned HTTP 403/404 to automated fetch and could not be read directly; figures instead rely on Tax Foundation's 2026 dataset plus consistency with the long-stable Maryland rate schedule.",
+      "sources": [
+        "https://taxfoundation.org/data/all/state/state-income-tax-rates-2026/ (secondary source, successfully fetched)",
+        "https://smartasset.com/taxes/maryland-tax-calculator (secondary, used only to confirm county local rate range of 2.25%-3.20%)",
+        "marylandtaxes.gov / marylandcomptroller.gov primary pages - all attempted URLs returned HTTP 403 or 404 to automated WebFetch and could not be read directly"
+      ]
+    },
+    {
+      "code": "DC",
+      "name": "District of Columbia",
+      "kind": "progressive",
+      "confidence": "verified",
+      "brackets": {
+        "single": [
+          {
+            "upTo": 10000,
+            "rate": 0.04
+          },
+          {
+            "upTo": 40000,
+            "rate": 0.06
+          },
+          {
+            "upTo": 60000,
+            "rate": 0.065
+          },
+          {
+            "upTo": 250000,
+            "rate": 0.085
+          },
+          {
+            "upTo": 500000,
+            "rate": 0.0925
+          },
+          {
+            "upTo": 1000000,
+            "rate": 0.0975
+          },
+          {
+            "upTo": null,
+            "rate": 0.1075
+          }
+        ],
+        "marriedJoint": [
+          {
+            "upTo": 10000,
+            "rate": 0.04
+          },
+          {
+            "upTo": 40000,
+            "rate": 0.06
+          },
+          {
+            "upTo": 60000,
+            "rate": 0.065
+          },
+          {
+            "upTo": 250000,
+            "rate": 0.085
+          },
+          {
+            "upTo": 500000,
+            "rate": 0.0925
+          },
+          {
+            "upTo": 1000000,
+            "rate": 0.0975
+          },
+          {
+            "upTo": null,
+            "rate": 0.1075
+          }
+        ],
+        "marriedSeparate": [
+          {
+            "upTo": 10000,
+            "rate": 0.04
+          },
+          {
+            "upTo": 40000,
+            "rate": 0.06
+          },
+          {
+            "upTo": 60000,
+            "rate": 0.065
+          },
+          {
+            "upTo": 250000,
+            "rate": 0.085
+          },
+          {
+            "upTo": 500000,
+            "rate": 0.0925
+          },
+          {
+            "upTo": 1000000,
+            "rate": 0.0975
+          },
+          {
+            "upTo": null,
+            "rate": 0.1075
+          }
+        ],
+        "headOfHousehold": [
+          {
+            "upTo": 10000,
+            "rate": 0.04
+          },
+          {
+            "upTo": 40000,
+            "rate": 0.06
+          },
+          {
+            "upTo": 60000,
+            "rate": 0.065
+          },
+          {
+            "upTo": 250000,
+            "rate": 0.085
+          },
+          {
+            "upTo": 500000,
+            "rate": 0.0925
+          },
+          {
+            "upTo": 1000000,
+            "rate": 0.0975
+          },
+          {
+            "upTo": null,
+            "rate": 0.1075
+          }
+        ]
+      },
+      "standardDeduction": {
+        "single": 16100,
+        "marriedJoint": 32200,
+        "marriedSeparate": 16100,
+        "headOfHousehold": 24150
+      },
+      "payrollPrograms": [],
+      "notes": "Unlike most states, DC uses a single bracket table for every filing status (single, MFJ, MFS, HOH all identical) - confirmed directly from the DC Office of Tax and Revenue (OTR) page, which states these brackets apply 'for tax years beginning after December 31, 2021,' i.e. they remain current for 2026 with no scheduled change. DC's standard deduction is set equal to the federal standard deduction by DC statute; the $16,100 single / $32,200 MFJ figures were cross-confirmed via Tax Foundation's 2026 dataset, but the MFS ($16,100, same as single under federal rules) and HOH ($24,150) figures are inferred from that same federal-conformity rule and the 2026 federal standard deduction amounts rather than read directly off an OTR page breaking out all four statuses - mark those two as probable within an otherwise verified record if you need per-field granularity. DC has a citywide Universal Paid Leave program, but contributions are employer-paid only (no employee-side withholding), so no entry appears in payrollPrograms per the employee-side-only instruction.",
+      "sources": [
+        "https://otr.cfo.dc.gov/page/dc-individual-and-fiduciary-income-tax-rates (primary source, successfully fetched directly)",
+        "https://taxfoundation.org/data/all/state/state-income-tax-rates-2026/ (secondary source, used to cross-check standard deduction single/MFJ figures)"
+      ]
+    },
+    {
+      "code": "ME",
+      "name": "Maine",
+      "kind": "progressive",
+      "confidence": "verified",
+      "brackets": {
+        "single": [
+          {
+            "rate": 0.058,
+            "upTo": 27400
+          },
+          {
+            "rate": 0.0675,
+            "upTo": 64850
+          },
+          {
+            "rate": 0.0715,
+            "upTo": null
+          }
+        ],
+        "marriedSeparate": [
+          {
+            "rate": 0.058,
+            "upTo": 27400
+          },
+          {
+            "rate": 0.0675,
+            "upTo": 64850
+          },
+          {
+            "rate": 0.0715,
+            "upTo": null
+          }
+        ],
+        "headOfHousehold": [
+          {
+            "rate": 0.058,
+            "upTo": 41100
+          },
+          {
+            "rate": 0.0675,
+            "upTo": 97300
+          },
+          {
+            "rate": 0.0715,
+            "upTo": null
+          }
+        ],
+        "marriedJoint": [
+          {
+            "rate": 0.058,
+            "upTo": 54850
+          },
+          {
+            "rate": 0.0675,
+            "upTo": 129750
+          },
+          {
+            "rate": 0.0715,
+            "upTo": null
+          }
+        ]
+      },
+      "standardDeduction": {
+        "single": 15700,
+        "marriedJoint": 31400,
+        "marriedSeparate": 15700,
+        "headOfHousehold": 23550
+      },
+      "payrollPrograms": [
+        {
+          "name": "Maine Paid Family and Medical Leave (PFML)",
+          "rate": 0.005,
+          "wageBase": 184500
+        }
+      ],
+      "notes": "Single and Married Filing Separately share one identical bracket table on Maine Revenue Services' official 2026 schedule (titled 'Single Individuals and Married Persons Filing Separate Returns'). Thresholds are inflation-indexed annually per 36 M.R.S. sec.5403 (COLA factors 1.303 applied to bracket floors, 1.298 to bracket ceilings for 2026). A 2% income tax surcharge applies to Maine taxable income above $1,000,000 (single), $750,000 (MFS), or $1,500,000 (MFJ/HOH) beginning tax year 2026 - not reflected in the bracket table above, which is pre-surcharge. Maine also allows a $5,300 personal exemption per taxpayer (and spouse if MFJ), on top of the standard deduction, plus additional age/blindness amounts. Do not use this table for wage withholding, which uses separate MRS withholding tables. PFML: total contribution is 1% of wages for employers with 15+ employees (up to half, i.e. 0.5%, may be deducted from employee pay) or 0.5% for employers with <15 employees (who may deduct the entire 0.5% from employee pay); the employee-side rate is capped at 0.5% of wages either way. Wage base equals the federal Social Security Administration's annual taxable wage base ($184,500 for 2026), which is set by the SSA, not Maine, and changes yearly. Payroll contributions began January 1, 2025; benefits became payable May 1, 2026.",
+      "sources": [
+        "https://www.maine.gov/revenue/sites/maine.gov.revenue/files/2026-05/ind_tax_rate_sched_2026_rev.pdf",
+        "https://www.maine.gov/paidleave/docs/2026/employers/faq/employerFAQenglish.pdf"
+      ]
+    },
+    {
+      "code": "VT",
+      "name": "Vermont",
+      "kind": "progressive",
+      "confidence": "probable",
+      "brackets": {
+        "single": [
+          {
+            "rate": 0.0335,
+            "upTo": 47900
+          },
+          {
+            "rate": 0.066,
+            "upTo": 116000
+          },
+          {
+            "rate": 0.076,
+            "upTo": 242000
+          },
+          {
+            "rate": 0.0875,
+            "upTo": null
+          }
+        ],
+        "marriedJoint": [
+          {
+            "rate": 0.0335,
+            "upTo": 79950
+          },
+          {
+            "rate": 0.066,
+            "upTo": 193300
+          },
+          {
+            "rate": 0.076,
+            "upTo": 294600
+          },
+          {
+            "rate": 0.0875,
+            "upTo": null
+          }
+        ],
+        "marriedSeparate": [
+          {
+            "rate": 0.0335,
+            "upTo": 39975
+          },
+          {
+            "rate": 0.066,
+            "upTo": 96650
+          },
+          {
+            "rate": 0.076,
+            "upTo": 147300
+          },
+          {
+            "rate": 0.0875,
+            "upTo": null
+          }
+        ],
+        "headOfHousehold": [
+          {
+            "rate": 0.0335,
+            "upTo": 64200
+          },
+          {
+            "rate": 0.066,
+            "upTo": 165700
+          },
+          {
+            "rate": 0.076,
+            "upTo": 268300
+          },
+          {
+            "rate": 0.0875,
+            "upTo": null
+          }
+        ]
+      },
+      "standardDeduction": {
+        "single": 7000,
+        "marriedJoint": 14050,
+        "marriedSeparate": 7000,
+        "headOfHousehold": 10550
+      },
+      "payrollPrograms": [],
+      "notes": "Bracket figures come from a Vermont CPA firm's published 2026 tax-planning tables, whose Vermont individual-rate section is explicitly labeled '(ESTIMATED)' by the preparer. Every attempted fetch of tax.vermont.gov (main personal income tax page, the '/individuals/personal-income-tax/rates' page, and the '2026-vt-rate-schedules' document URL) returned HTTP 403, so the figures could not be cross-checked directly against the primary source in this session. Internal consistency check: Married Filing Separately thresholds are exactly half of Married Filing Jointly thresholds at every breakpoint (39,975/96,650/147,300 = half of 79,950/193,300/294,600), which matches Vermont's standard bracket-splitting convention and supports the figures; the same CPA-firm table also contained an unexplained sub-breakpoint at $75,000-ish levels within same-rate bands that did not correspond to an actual rate change and was collapsed out of the reported thresholds. Vermont also indexes a $5,100 per-person personal exemption (separate from the standard deduction shown above). Vermont does NOT have a mandatory, employee-funded paid-leave payroll tax: it operates a voluntary Family and Medical Leave Insurance program (VT-FMLI, expanded to private employers with 2+ employees in July 2024) funded by an employer contribution of 0.55% of wages (up to 200% of the SSA wage base), with employers required to cover at least 50% of that contribution and any employee-side share left to employer discretion - so no employee payroll program is listed. Given the 'ESTIMATED' label and inaccessible primary source, treat these bracket/deduction numbers as needing direct verification against a live tax.vermont.gov page before use in any authoritative context.",
+      "sources": [
+        "https://www.dh-cpa.com/wp-content/uploads/2026/02/2026TaxTables-WEB-.pdf (Davis & Hodgdon Advisory Group, Williston/Rutland VT CPA firm, '2026 Tax Tables'; Vermont bracket table explicitly marked 'ESTIMATED' by the preparer)",
+        "https://taxfoundation.org/wp-content/uploads/2025/10/TF-2026-STCI-Vermont.pdf (Tax Foundation 2026 State Tax Competitiveness Index - Vermont profile; corroborates multi-bracket structure and 8.75% top marginal rate only, no full schedule)"
+      ]
+    },
+    {
+      "code": "NH",
+      "name": "New Hampshire",
+      "kind": "none",
+      "confidence": "probable",
+      "payrollPrograms": [],
+      "notes": "New Hampshire has no tax on wage or salary income. Its former Interest and Dividends Tax (which had been phasing down, at 3% for tax year 2024) was fully repealed for tax years beginning on or after January 1, 2025, per NH Department of Revenue Administration Technical Information Release TIR 2025-001. This confirms kind is 'none' outright for 2026 (no bracket table, no flat rate, and no remaining tax on interest/dividend income for individuals), not merely an exemption limited to wages. Every attempt to fetch revenue.nh.gov pages directly (the news-and-media repeal announcement, the TIR 2025-001 PDF itself, the 'taxes-glance' overview, and the interest-and-dividends FAQ) returned HTTP 403 in this session, so the primary source could not be read directly; the repeal date and TIR citation are confirmed via a law firm summary (McLane Middleton) that names the specific TIR number and effective date, corroborated by two independent accounting-firm summaries (Grott Luker; Maloney and Kennedy) found via search, all agreeing on January 1, 2025 as the repeal date. New Hampshire does not operate a mandatory, employee-funded payroll program: its NH PFML program (60% wage replacement up to the SSA wage cap) is voluntary for both employers and employees. Pending 2026 legislation (HB 1761) would create a mandatory, employee-funded Family and Medical Leave Insurance program, but it had not been enacted as of this review, so no payroll program is listed.",
+      "sources": [
+        "https://www.mclane.com/insights/nh-interest-and-dividends-tax-repealed-as-of-january-1/ (law firm summary citing NH DRA Technical Information Release 2025-001; primary revenue.nh.gov pages returned HTTP 403 and could not be read directly)"
+      ]
+    },
+    {
+      "code": "DE",
+      "name": "Delaware",
+      "kind": "progressive",
+      "confidence": "verified",
+      "brackets": {
+        "single": [
+          {
+            "upTo": 2000,
+            "rate": 0
+          },
+          {
+            "upTo": 5000,
+            "rate": 0.022
+          },
+          {
+            "upTo": 10000,
+            "rate": 0.039
+          },
+          {
+            "upTo": 20000,
+            "rate": 0.048
+          },
+          {
+            "upTo": 25000,
+            "rate": 0.052
+          },
+          {
+            "upTo": 60000,
+            "rate": 0.0555
+          },
+          {
+            "upTo": null,
+            "rate": 0.066
+          }
+        ],
+        "marriedJoint": [
+          {
+            "upTo": 2000,
+            "rate": 0
+          },
+          {
+            "upTo": 5000,
+            "rate": 0.022
+          },
+          {
+            "upTo": 10000,
+            "rate": 0.039
+          },
+          {
+            "upTo": 20000,
+            "rate": 0.048
+          },
+          {
+            "upTo": 25000,
+            "rate": 0.052
+          },
+          {
+            "upTo": 60000,
+            "rate": 0.0555
+          },
+          {
+            "upTo": null,
+            "rate": 0.066
+          }
+        ],
+        "marriedSeparate": [
+          {
+            "upTo": 2000,
+            "rate": 0
+          },
+          {
+            "upTo": 5000,
+            "rate": 0.022
+          },
+          {
+            "upTo": 10000,
+            "rate": 0.039
+          },
+          {
+            "upTo": 20000,
+            "rate": 0.048
+          },
+          {
+            "upTo": 25000,
+            "rate": 0.052
+          },
+          {
+            "upTo": 60000,
+            "rate": 0.0555
+          },
+          {
+            "upTo": null,
+            "rate": 0.066
+          }
+        ],
+        "headOfHousehold": [
+          {
+            "upTo": 2000,
+            "rate": 0
+          },
+          {
+            "upTo": 5000,
+            "rate": 0.022
+          },
+          {
+            "upTo": 10000,
+            "rate": 0.039
+          },
+          {
+            "upTo": 20000,
+            "rate": 0.048
+          },
+          {
+            "upTo": 25000,
+            "rate": 0.052
+          },
+          {
+            "upTo": 60000,
+            "rate": 0.0555
+          },
+          {
+            "upTo": null,
+            "rate": 0.066
+          }
+        ]
+      },
+      "standardDeduction": {
+        "single": 3250,
+        "marriedJoint": 6500,
+        "marriedSeparate": 3250,
+        "headOfHousehold": 3250
+      },
+      "payrollPrograms": [],
+      "notes": "Data is Tax Year 2025 (forms revised 03/26/26, filed by April 30, 2026) — the latest published year as of this research (July 2026); Delaware's brackets and standard deduction are fixed dollar amounts set by statute (30 Del. C. §1102, §1108), not annually inflation-indexed, so no separate 2026 schedule has been or is expected to be issued with different figures. Delaware uses ONE bracket table for all filing statuses (single, MFJ, MFS, HOH) — only the standard deduction differs by status ($6,500 joint vs. $3,250 for single/MFS/HOH). An additional $2,500 standard deduction is allowed per filer age 65+ or blind (not reflected in the base amounts above). Delaware has no employee-side state disability or paid-family-leave payroll tax (payrollPrograms is empty). Separately from the state brackets, the City of Wilmington levies a local wage tax of 1.25% on gross earned income of both residents and nonresidents working within city limits — this is a municipal tax, not part of the state's progressive schedule, and is not folded into the brackets above; confirmed via secondary source (city tax documentation referenced through search), not read directly on a primary Wilmington government page.",
+      "sources": [
+        "https://revenuefiles.delaware.gov/2025/TY25_taxtable.pdf",
+        "https://revenuefiles.delaware.gov/2025/PITForms_Instructions/Instructions/PIT-RES_Instructions_2025-01.pdf"
+      ]
+    },
+    {
+      "code": "RI",
+      "name": "Rhode Island",
+      "kind": "progressive",
+      "confidence": "verified",
+      "brackets": {
+        "single": [
+          {
+            "upTo": 82050,
+            "rate": 0.0375
+          },
+          {
+            "upTo": 186450,
+            "rate": 0.0475
+          },
+          {
+            "upTo": null,
+            "rate": 0.0599
+          }
+        ],
+        "marriedJoint": [
+          {
+            "upTo": 82050,
+            "rate": 0.0375
+          },
+          {
+            "upTo": 186450,
+            "rate": 0.0475
+          },
+          {
+            "upTo": null,
+            "rate": 0.0599
+          }
+        ],
+        "marriedSeparate": [
+          {
+            "upTo": 82050,
+            "rate": 0.0375
+          },
+          {
+            "upTo": 186450,
+            "rate": 0.0475
+          },
+          {
+            "upTo": null,
+            "rate": 0.0599
+          }
+        ],
+        "headOfHousehold": [
+          {
+            "upTo": 82050,
+            "rate": 0.0375
+          },
+          {
+            "upTo": 186450,
+            "rate": 0.0475
+          },
+          {
+            "upTo": null,
+            "rate": 0.0599
+          }
+        ]
+      },
+      "standardDeduction": {
+        "single": 11200,
+        "marriedJoint": 22400,
+        "marriedSeparate": 11200,
+        "headOfHousehold": 16800
+      },
+      "payrollPrograms": [
+        {
+          "name": "Temporary Disability Insurance (TDI)",
+          "rate": 0.011,
+          "wageBase": 100000
+        }
+      ],
+      "notes": "Tax Year 2026 figures, from RI Division of Taxation Advisory ADV 2025-22 (issued Nov 3, 2025), which sets inflation-adjusted brackets/standard deductions effective for tax years beginning on/after Jan 1, 2026 (these appear on returns filed in early 2027, not the 2025 returns filed in 2026). Rhode Island uses ONE 'uniform tax rate schedule' applied to ALL filing statuses (single, MFJ/qualifying widow(er), MFS, HOH) — only the standard deduction and phase-out thresholds differ by status. A personal/dependency exemption of $5,250 per person (2026) also applies on top of the standard deduction (Delaware, by contrast, has no separate exemption amount). Standard deduction and exemption amounts phase out entirely for federal AGI (as RI-modified) between $261,000 and $290,800 for 2026; the phaseout increment is $7,450. TDI rate and wage base are also confirmed for 2026 (effective Jan 1, 2026) via RI Dept. of Labor & Training: rate fell from 1.3% (2025) to 1.1%, while the wage base rose from $89,200 (2025) to $100,000 (2026) per HB 6066. RI's TDI includes the Temporary Caregiver Insurance (TCI) paid-family-leave benefit within the same combined rate/wage base — there is no separate employee-side PFL tax.",
+      "sources": [
+        "https://tax.ri.gov/sites/g/files/xkgbur541/files/2025-11/ADV_2025_22_Inflation_Adjustments.pdf",
+        "https://dlt.ri.gov/press-releases/2026-tax-rates-unemployment-insurance-and-temporary-disability-insurance"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Compensation Comparison</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        font-family: system-ui, -apple-system, sans-serif;
+        background: #f8f9fa;
+        color: #1a1a1a;
+      }
+      button:disabled { opacity: 0.4; cursor: default; }
+
+      /*
+        Section headers span the full width of a card that clips its overflow,
+        so an outward focus ring loses its left and right edges. Draw it
+        inward instead. Inline style objects cannot express :focus-visible,
+        which is why this lives here.
+      */
+      .section-toggle:focus-visible {
+        outline: none;
+        box-shadow: inset 0 0 0 2px #4f46e5;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="./main.jsx"></script>
+  </body>
+</html>
