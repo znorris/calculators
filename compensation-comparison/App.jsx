@@ -375,7 +375,9 @@ export default function App() {
         </p>
       </header>
 
-      <DataDisclosureLink />
+      <DataDisclosureLink
+        extraLinks={[{ label: "Assumptions and tax data", href: "assumptions/" }]}
+      />
 
       {importNotice && (
         <div

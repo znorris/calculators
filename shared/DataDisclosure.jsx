@@ -39,8 +39,14 @@ const section = {
 
 const heading = { fontSize: 14, fontWeight: 700, color: ink, margin: "0 0 10px" };
 
-/** One line placed near the top of a page, linking down to both sections. */
-export function DataDisclosureLink() {
+/**
+ * One line placed near the top of a page, linking down to both sections.
+ *
+ * @param extraLinks  [{ label, href }] appended to the trail. Only the
+ *   compensation calculator has an assumptions page, so it passes one and the
+ *   others do not.
+ */
+export function DataDisclosureLink({ extraLinks = [] }) {
   const link = { color: accent, textDecoration: "underline", textUnderlineOffset: 2 };
   return (
     <p style={{ fontSize: 11.5, color: muted, margin: "0 0 14px", lineHeight: 1.5 }}>
@@ -52,6 +58,14 @@ export function DataDisclosureLink() {
       <a href={`#${WARRANTY_ANCHOR}`} style={link}>
         Disclaimer
       </a>
+      {extraLinks.map((extra) => (
+        <span key={extra.href}>
+          {" · "}
+          <a href={extra.href} style={link}>
+            {extra.label}
+          </a>
+        </span>
+      ))}
     </p>
   );
 }
