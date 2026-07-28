@@ -7,7 +7,7 @@ import { ColumnStrip } from "./components/ColumnStrip.jsx";
 import { OfferColumn } from "./components/OfferColumn.jsx";
 import { ReportColumn } from "./components/ReportColumn.jsx";
 import { SettingsBar } from "./components/SettingsBar.jsx";
-import { DataDisclosure, DataDisclosureLink } from "./components/DataDisclosure.jsx";
+import { DataDisclosure, DataDisclosureLink } from "../shared/DataDisclosure.jsx";
 import { createOffer, duplicateOffer, setField, sectionsWithData } from "./model/offer.js";
 import {
   createComparison,
@@ -35,6 +35,20 @@ import {
 import { parseShareUrl, stripShareParam, buildShareUrl } from "./model/urlCodec.js";
 import { projectAll } from "./calc/project.js";
 import { color } from "./theme.js";
+
+/** Caveats specific to this calculator, beyond the shared disclosure. */
+const COMP_DISCLOSURE_NOTES = [
+  {
+    title: "Where the tax figures come from",
+    body:
+      "Federal brackets, the standard deduction, payroll tax caps, and retirement limits come from the IRS " +
+      "and Social Security Administration for the selected tax year. State figures come from each state's " +
+      "revenue department where published, and each state record carries a confidence marker; where a state " +
+      "has not yet released the current year, the prior year is carried forward. City income taxes beyond a " +
+      "rate you enter, and several equity mechanisms, are not modeled. The Assumptions section of the report " +
+      "lists what is and is not included.",
+  },
+];
 
 /**
  * A first visit gets two empty offers so the column layout is visible without
@@ -281,7 +295,12 @@ export default function App() {
         onActivate={setActiveColumn}
       />
 
-      <DataDisclosure onClearStoredData={handleClearStoredData} />
+      <DataDisclosure
+        storageKeys={["comp-comparison:offers", "comp-comparison:current"]}
+        sharesViaUrl
+        extraNotes={COMP_DISCLOSURE_NOTES}
+        onClearStoredData={handleClearStoredData}
+      />
     </div>
   );
 }
