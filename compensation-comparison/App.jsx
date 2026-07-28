@@ -1,7 +1,7 @@
 // Composition root. State lives here; every calculation is a pure function
 // called from useMemo, and every record shape comes from the model layer.
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Breadcrumb } from "../shared/Breadcrumb.jsx";
 import { ColumnStrip } from "./components/ColumnStrip.jsx";
 import { OfferColumn } from "./components/OfferColumn.jsx";
@@ -17,7 +17,6 @@ import {
 } from "./model/offer.js";
 import {
   createComparison,
-  normalizeComparison,
   addOffer,
   removeOffer,
   moveOffer,
@@ -32,15 +31,21 @@ import {
 import {
   loadOffers,
   saveOffers,
-  loadCurrentComparison,
-  saveCurrentComparison,
+  loadComparisons,
+  saveComparisons,
+  loadActiveComparisonId,
+  saveActiveComparisonId,
   clearStoredData,
+  removeOfferFromComparison,
+  deleteComparison,
   indexById,
   upsertOffer,
 } from "./model/storage.js";
+import { remapShared } from "./model/importShare.js";
+import { ComparisonsMenu } from "./components/ComparisonsMenu.jsx";
 import { parseShareUrl, stripShareParam, buildShareUrl } from "./model/urlCodec.js";
 import { projectAll } from "./calc/project.js";
-import { color } from "./theme.js";
+import { color, button as buttonStyle } from "./theme.js";
 
 /** Caveats specific to this calculator, beyond the shared disclosure. */
 const COMP_DISCLOSURE_NOTES = [
@@ -67,82 +72,95 @@ function seedOffers() {
 }
 
 /**
- * Resolve the starting state once. A share link wins over stored offers, and
- * a first visit gets a seeded pair. Building this in a single pass matters:
- * calling the seed twice would mint two sets of ids and leave the comparison
- * pointing at offers that do not exist.
+ * Resolve the starting state once.
+ *
+ * A share link ADDS a comparison rather than replacing anything, so opening a
+ * colleague's link cannot touch what you already saved. That is a property of
+ * the shape: import only ever appends, so there is nothing to guard against.
  */
 function initialState() {
-  const shared = parseShareUrl();
-  if (shared) return { offers: shared.offers, comparison: shared.comparison, fromShare: true };
+  const storedOffers = loadOffers();
+  const storedComparisons = loadComparisons();
 
-  const stored = loadOffers();
-  const offers = stored.length ? stored : seedOffers();
-  const ids = offers.map((o) => o.id);
+  let offers = storedOffers;
+  let comparisons = storedComparisons;
 
-  // Restore the working comparison, which carries everything scoped to the
-  // person rather than to an offer. Its offer references are re-checked
-  // against the library, since an offer could have been deleted since.
-  const savedComparison = loadCurrentComparison();
-  if (savedComparison) {
-    const restored = normalizeComparison(savedComparison);
-    const present = new Set(ids);
-    restored.offerIds = restored.offerIds.filter((id) => present.has(id));
-    // Deliberately NOT re-appending library offers the comparison omits. An
-    // earlier version did, which made Remove a session-only hide: every reload
-    // put the removed offer straight back. There is no way to create an offer
-    // outside a comparison today, so an omitted one was removed on purpose.
-    if (!restored.offerIds.includes(restored.baselineId)) {
-      restored.baselineId = restored.offerIds[0] ?? null;
-    }
-    return { offers, comparison: restored, fromShare: false };
+  // First visit: one comparison holding a seeded pair.
+  if (comparisons.length === 0) {
+    offers = storedOffers.length ? storedOffers : seedOffers();
+    const ids = offers.map((o) => o.id);
+    comparisons = [
+      createComparison({ name: "My comparison", offerIds: ids, baselineId: ids[0] ?? null }),
+    ];
   }
 
-  return {
-    offers,
-    comparison: createComparison({ offerIds: ids, baselineId: ids[0] ?? null }),
-    fromShare: false,
-  };
+  let activeId = loadActiveComparisonId();
+  let importedName = null;
+
+  const shared = parseShareUrl();
+  if (shared) {
+    const imported = remapShared(shared);
+    if (imported) {
+      offers = [...offers, ...imported.offers];
+      comparisons = [...comparisons, imported.comparison];
+      activeId = imported.comparison.id;
+      importedName = imported.comparison.name;
+    }
+  }
+
+  if (!comparisons.some((c) => c.id === activeId)) activeId = comparisons[0]?.id ?? null;
+
+  // Drop references to offers that are no longer in the library. Deliberately
+  // not re-adding library offers a comparison omits: an earlier version did,
+  // which made Remove a session-only hide that every reload undid.
+  const present = new Set(offers.map((o) => o.id));
+  comparisons = comparisons.map((c) => {
+    const offerIds = c.offerIds.filter((id) => present.has(id));
+    return {
+      ...c,
+      offerIds,
+      baselineId: offerIds.includes(c.baselineId) ? c.baselineId : (offerIds[0] ?? null),
+    };
+  });
+
+  return { offers, comparisons, activeId, importedName, fromShare: Boolean(shared) };
 }
 
 export default function App() {
   const [initial] = useState(initialState);
   const [offers, setOffers] = useState(initial.offers);
-  const [comparison, setComparison] = useState(initial.comparison);
-  const fromShare = initial.fromShare;
+  const [comparisons, setComparisons] = useState(initial.comparisons);
+  const [activeId, setActiveId] = useState(initial.activeId);
+  const [importNotice, setImportNotice] = useState(initial.importedName);
   const [manualSections, setManualSections] = useState(() => new Map());
   const [activeColumn, setActiveColumn] = useState(null);
 
   useEffect(() => {
-    if (fromShare) stripShareParam();
-  }, [fromShare]);
+    if (initial.fromShare) stripShareParam();
+  }, [initial.fromShare]);
 
-  /**
-   * Opening a share link must not overwrite what the visitor already saved.
-   *
-   * These effects fire on mount, so without a guard a shared comparison
-   * replaced the reader's own offers in localStorage before they touched
-   * anything. State only changes afterward through user action, so skipping the
-   * mount write is enough: look at a colleague's link and leave, and your own
-   * data is untouched; change one field and it becomes yours to keep.
-   */
-  const hasMounted = useRef(false);
-  const skipMountWrite = fromShare && !hasMounted.current;
-
+  // Import appends rather than replaces, so these can write unconditionally.
   useEffect(() => {
-    if (skipMountWrite) return;
     saveOffers(offers);
-  }, [offers, skipMountWrite]);
+  }, [offers]);
 
   useEffect(() => {
-    if (skipMountWrite) return;
-    saveCurrentComparison(comparison);
-  }, [comparison, skipMountWrite]);
+    saveComparisons(comparisons);
+  }, [comparisons]);
 
-  // Declared after the writes above so they observe false on the first pass.
   useEffect(() => {
-    hasMounted.current = true;
-  }, []);
+    saveActiveComparisonId(activeId);
+  }, [activeId]);
+
+  const comparison = useMemo(
+    () => comparisons.find((c) => c.id === activeId) || comparisons[0] || createComparison(),
+    [comparisons, activeId],
+  );
+
+  /** Apply a change to the open comparison, leaving the others alone. */
+  function updateComparison(fn) {
+    setComparisons((prev) => prev.map((c) => (c.id === comparison.id ? fn(c) : c)));
+  }
 
   const offersById = useMemo(() => indexById(offers), [offers]);
 
@@ -215,14 +233,14 @@ export default function App() {
   function handleAddOffer() {
     const offer = createOffer({ name: nextOfferName(offers) });
     setOffers((prev) => upsertOffer(prev, offer));
-    setComparison((prev) => addOffer(prev, offer.id));
+    updateComparison((prev) => addOffer(prev, offer.id));
     setActiveColumn(offer.id);
   }
 
   function handleDuplicate(offerId) {
     const copy = duplicateOffer(offersById[offerId]);
     setOffers((prev) => upsertOffer(prev, copy));
-    setComparison((prev) => addOffer(prev, copy.id));
+    updateComparison((prev) => addOffer(prev, copy.id));
     setActiveColumn(copy.id);
   }
 
@@ -234,10 +252,42 @@ export default function App() {
    * without a comparison referencing it is unreachable. Keeping it would leak a
    * record the user believes they deleted.
    */
+  /**
+   * Remove drops the offer from THIS comparison, and deletes the record only
+   * when no other comparison references it. An offer can belong to several
+   * comparisons, so dropping it from one must not destroy it for the rest.
+   */
   function handleRemove(offerId) {
-    setComparison((prev) => removeOffer(prev, offerId));
-    setOffers((prev) => prev.filter((o) => o.id !== offerId));
+    const next = removeOfferFromComparison(offers, comparisons, comparison.id, offerId);
+    setComparisons(next.comparisons);
+    setOffers(next.offers);
     setActiveColumn(null);
+  }
+
+  function handleCreateComparison() {
+    const seeded = [createOffer({ name: "Offer A" }), createOffer({ name: "Offer B" })];
+    const ids = seeded.map((o) => o.id);
+    const fresh = createComparison({
+      name: `Comparison ${comparisons.length + 1}`,
+      offerIds: ids,
+      baselineId: ids[0],
+    });
+    setOffers((prev) => [...prev, ...seeded]);
+    setComparisons((prev) => [...prev, fresh]);
+    setActiveId(fresh.id);
+    setActiveColumn(null);
+  }
+
+  function handleRenameComparison(id, name) {
+    setComparisons((prev) => prev.map((c) => (c.id === id ? { ...c, name } : c)));
+  }
+
+  function handleDeleteComparison(id) {
+    if (comparisons.length === 1) return;
+    const next = deleteComparison(offers, comparisons, id);
+    setComparisons(next.comparisons);
+    setOffers(next.offers);
+    if (id === activeId) setActiveId(next.comparisons[0]?.id ?? null);
   }
 
   function handleShare() {
@@ -255,8 +305,11 @@ export default function App() {
    */
   function handleClearStoredData() {
     clearStoredData();
+    const fresh = createComparison({ name: "My comparison" });
     setOffers([]);
-    setComparison(createComparison());
+    setComparisons([fresh]);
+    setActiveId(fresh.id);
+    setImportNotice(null);
     setActiveColumn(null);
   }
 
@@ -274,7 +327,7 @@ export default function App() {
           baseline={baseline}
           comparison={comparison}
           isPinned={comparison.pinnedId === REPORT_COLUMN_ID}
-          onHorizonChange={(years) => setComparison((prev) => ({ ...prev, horizonYears: years }))}
+          onHorizonChange={(years) => updateComparison((prev) => ({ ...prev, horizonYears: years }))}
         />
       ),
     },
@@ -290,11 +343,11 @@ export default function App() {
           openSections={openSections}
           onToggleSection={toggleSection}
           onChangeField={(fieldId, value) => updateOffer(offer.id, fieldId, value)}
-          onMakeBaseline={() => setComparison((prev) => setBaseline(prev, offer.id))}
+          onMakeBaseline={() => updateComparison((prev) => setBaseline(prev, offer.id))}
           onDuplicate={() => handleDuplicate(offer.id)}
           onRemove={() => handleRemove(offer.id)}
-          onMoveLeft={() => setComparison((prev) => moveOffer(prev, offer.id, i - 1))}
-          onMoveRight={() => setComparison((prev) => moveOffer(prev, offer.id, i + 1))}
+          onMoveLeft={() => updateComparison((prev) => moveOffer(prev, offer.id, i - 1))}
+          onMoveRight={() => updateComparison((prev) => moveOffer(prev, offer.id, i + 1))}
           canMoveLeft={i > 0}
           canMoveRight={i < activeOffers.length - 1}
           factors={comparison.factors}
@@ -304,7 +357,8 @@ export default function App() {
     })),
   ];
 
-  const activeId = activeColumn ?? columnOrder(comparison)[0];
+  // Distinct from the active COMPARISON id above; this is which column shows.
+  const activeColumnId = activeColumn ?? columnOrder(comparison)[0];
 
   return (
     <div style={{ maxWidth: 1400, margin: "0 auto", padding: "20px 16px 60px" }}>
@@ -322,21 +376,65 @@ export default function App() {
 
       <DataDisclosureLink />
 
+      {importNotice && (
+        <div
+          style={{
+            background: color.accentSoft,
+            border: `1px solid #c7d2fe`,
+            borderLeft: `4px solid ${color.accent}`,
+            borderRadius: 8,
+            padding: "9px 12px",
+            marginBottom: 12,
+            fontSize: 12,
+            color: color.body,
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+            flexWrap: "wrap",
+          }}
+        >
+          <span style={{ flex: 1, minWidth: 0 }}>
+            Added <strong>{importNotice}</strong> from a shared link as a new comparison. Nothing you had saved was
+            changed.
+          </span>
+          <button
+            type="button"
+            onClick={() => setImportNotice(null)}
+            style={{ ...buttonStyle, minHeight: 30, flex: "0 0 auto" }}
+          >
+            Dismiss
+          </button>
+        </div>
+      )}
+
+      <ComparisonsMenu
+        comparisons={comparisons}
+        activeId={comparison.id}
+        offersById={offersById}
+        onSelect={(id) => {
+          setActiveId(id);
+          setActiveColumn(null);
+        }}
+        onCreate={handleCreateComparison}
+        onRename={handleRenameComparison}
+        onDelete={handleDeleteComparison}
+      />
+
       <SettingsBar
         comparison={comparison}
-        onChange={(patch) => setComparison((prev) => ({ ...prev, ...patch }))}
+        onChange={(patch) => updateComparison((prev) => ({ ...prev, ...patch }))}
         onAddOffer={handleAddOffer}
         onShare={handleShare}
-        onAddFactor={() => setComparison((prev) => addFactor(prev))}
-        onUpdateFactor={(id, patch) => setComparison((prev) => updateFactor(prev, id, patch))}
-        onRemoveFactor={(id) => setComparison((prev) => removeFactor(prev, id))}
+        onAddFactor={() => updateComparison((prev) => addFactor(prev))}
+        onUpdateFactor={(id, patch) => updateComparison((prev) => updateFactor(prev, id, patch))}
+        onRemoveFactor={(id) => updateComparison((prev) => removeFactor(prev, id))}
       />
 
       <ColumnStrip
         columns={columns}
         pinnedId={comparison.pinnedId}
-        onPin={(id) => setComparison((prev) => setPinned(prev, id))}
-        activeId={activeId}
+        onPin={(id) => updateComparison((prev) => setPinned(prev, id))}
+        activeId={activeColumnId}
         onActivate={setActiveColumn}
       />
 

@@ -1586,11 +1586,11 @@
             "rate": 0.103
           },
           {
-            "upTo": 1485906,
+            "upTo": 1000000,
             "rate": 0.113
           },
           {
-            "upTo": 2000000,
+            "upTo": 1485906,
             "rate": 0.123
           },
           {
@@ -1604,35 +1604,35 @@
             "rate": 0.01
           },
           {
-            "upTo": 52539,
+            "upTo": 52530,
             "rate": 0.02
           },
           {
-            "upTo": 67717,
+            "upTo": 67716,
             "rate": 0.04
           },
           {
-            "upTo": 83822,
+            "upTo": 83805,
             "rate": 0.06
           },
           {
-            "upTo": 99015,
+            "upTo": 98990,
             "rate": 0.08
           },
           {
-            "upTo": 505325,
+            "upTo": 505208,
             "rate": 0.093
           },
           {
-            "upTo": 606297,
+            "upTo": 606251,
             "rate": 0.103
           },
           {
-            "upTo": 1010435,
+            "upTo": 1000000,
             "rate": 0.113
           },
           {
-            "upTo": 1000000,
+            "upTo": 1010417,
             "rate": 0.123
           },
           {
@@ -1642,17 +1642,16 @@
         ]
       },
       "standardDeduction": {
-        "single": 5540,
-        "marriedSeparate": 5540,
-        "marriedJoint": 11080,
-        "headOfHousehold": 11080
+        "single": 5706,
+        "marriedSeparate": 5706,
+        "marriedJoint": 11412,
+        "headOfHousehold": 11412
       },
-      "confidence": "probable",
+      "confidence": "verified",
       "sources": [
-        "https://taxfoundation.org/data/all/state/state-income-tax-rates-2026/",
-        "https://www.ftb.ca.gov/"
+        "https://edd.ca.gov/siteassets/files/pdf_pub_ctr/de44.pdf"
       ],
-      "notes": "9 statutory brackets from 1% to 12.3%, plus a separate 1% Mental Health Services Act surcharge on taxable income over $1,000,000 (shown here folded into a 13.3% top marginal rate for income above $1,000,000; technically it is a distinct add-on tax, not a 13.3% bracket rate, and the $1,000,000 MHSA threshold does not itself inflation-index). Married-filing-jointly thresholds are exactly double the single/MFS thresholds. Head-of-household thresholds in the 1%-8% range were independently derived by proportionally scaling the last confirmed (2023) FTB Schedule Z figures to the 2026 single-schedule inflation factor, because FTB's final 2026 indexed figures had not been independently confirmed in this pass; the 9.3% and higher HOH thresholds are similarly scaled estimates. FTB officially publishes final inflation-indexed brackets late in the year, so early-year 2026 figures (including the ones here) are runway/projected numbers, not yet FTB-confirmed."
+      "notes": "Read directly from EDD's DE 44 Rev. 52 (4-26), 'California Withholding Schedules for 2026' (Method B exact-calculation tables). Those tables gross up the true FTB statutory rates by a factor of 1.1 for withholding purposes (e.g. the real 9.3% bracket appears there as 10.23%); the rates below are the true FTB rates recovered by dividing back out that factor, and the dollar thresholds (which are not grossed up) are taken as-is. A separate 1% Mental Health Services Act (MHSA) surcharge applies to taxable income over a flat $1,000,000 (not itself inflation-indexed) regardless of filing status, folded into the tables above as extra rate steps at the $1,000,000 line rather than tracked as a separate field. Single/MFS and head-of-household thresholds through 8% are correct as read; married-filing-jointly thresholds through 8% are exactly double the single/MFS thresholds. CORRECTED: the true 11.3% FTB bracket for MFJ runs 891,542-1,485,906, and because the fixed $1,000,000 MHSA line falls inside that bracket (it is not doubled for joint filers), income from 891,542-1,000,000 is 11.3% and income from 1,000,000-1,485,906 is 11.3%+1%=12.3%, with the true 12.3% bracket plus MHSA (13.3%) starting only at 1,485,906. The prior version of this record had that wrong (11.3% running unsplit to 1,485,906, then an invented 12.3%-only band to a fabricated $2,000,000, then 13.3%); fixed here. Head-of-household thresholds, previously marked as scaled estimates, are now the exact DE 44 Table 7/Table 10 figures, with the same $1,000,000 MHSA split applied (true 11.3% HOH bracket is 606,251-1,010,417). Standard deduction ($5,706 single/MFS, $11,412 MFJ/HOH, DE 44 Table 3 for 2026) is up from $5,540/$11,080 in 2025 via the state's routine annual inflation indexing. SDI/PFL confirmed unchanged at 1.3% with no wage cap (Senate Bill 951, effective January 1, 2024)."
     },
     {
       "code": "CO",

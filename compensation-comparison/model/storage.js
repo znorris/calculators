@@ -52,28 +52,24 @@ export function saveComparisons(comparisons) {
 }
 
 /**
- * The comparison currently being edited.
+ * Which saved comparison is open.
  *
- * Distinct from the named comparisons above, which are a library the user
- * saves into deliberately. This is the working state, and it holds everything
- * scoped to the comparison rather than to an offer: filing status, tax year,
- * horizon, the baseline pointer, the pinned column, and the factor weights.
- * Without it, every one of those resets on reload.
+ * Only the id is stored. The comparisons themselves live in one list, so
+ * keeping a second copy of the open one would let the two drift apart.
  */
-export function loadCurrentComparison() {
+export function loadActiveComparisonId() {
   try {
     const raw = localStorage.getItem(CURRENT_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw);
-    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : null;
+    return typeof raw === "string" && raw ? raw : null;
   } catch {
     return null;
   }
 }
 
-export function saveCurrentComparison(comparison) {
+export function saveActiveComparisonId(id) {
   try {
-    localStorage.setItem(CURRENT_KEY, JSON.stringify(comparison));
+    if (id) localStorage.setItem(CURRENT_KEY, String(id));
+    else localStorage.removeItem(CURRENT_KEY);
     return true;
   } catch {
     return false;
@@ -119,6 +115,43 @@ export function upsertOffer(offers, offer) {
   const next = [...offers];
   next[i] = offer;
   return next;
+}
+
+/**
+ * Remove a comparison, and with it any offer no remaining comparison uses.
+ *
+ * Nothing can reach an offer outside a comparison, so leaving one behind is a
+ * record the user cannot see or delete.
+ */
+export function deleteComparison(offers, comparisons, comparisonId) {
+  const remaining = comparisons.filter((c) => c.id !== comparisonId);
+  const stillUsed = new Set(remaining.flatMap((c) => c.offerIds));
+  return {
+    comparisons: remaining,
+    offers: offers.filter((o) => stillUsed.has(o.id)),
+  };
+}
+
+/**
+ * Remove an offer from one comparison, deleting the record only when no other
+ * comparison references it. An offer can belong to several comparisons, so
+ * dropping it from one must not destroy it for the rest.
+ */
+export function removeOfferFromComparison(offers, comparisons, comparisonId, offerId) {
+  const nextComparisons = comparisons.map((c) =>
+    c.id === comparisonId
+      ? {
+          ...c,
+          offerIds: c.offerIds.filter((id) => id !== offerId),
+          baselineId: c.baselineId === offerId ? (c.offerIds.find((id) => id !== offerId) ?? null) : c.baselineId,
+        }
+      : c,
+  );
+  const stillUsed = new Set(nextComparisons.flatMap((c) => c.offerIds));
+  return {
+    comparisons: nextComparisons,
+    offers: offers.filter((o) => stillUsed.has(o.id)),
+  };
 }
 
 export function upsertComparison(comparisons, comparison) {
