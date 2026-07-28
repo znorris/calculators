@@ -126,10 +126,19 @@ export function projectEquity(offer, horizonYears, growthRate) {
   for (let year = 1; year <= horizonYears; year += 1) {
     let forfeited = 0;
     for (const grant of grants) {
-      // Value the unvested remainder at the price it would reach by the exit
-      // year, so the forfeiture is stated in the same terms as the vested
-      // value it sits beside.
-      const grown = grantBaseValue(grant) * Math.pow(1 + growthRate, year);
+      const grantYear = grant.grantYear || 1;
+
+      // A grant not yet issued at the exit cannot be forfeited. Without this,
+      // a refresher scheduled for year 5 reads as fully forfeited by someone
+      // leaving in year 1, who never received it.
+      if (year < grantYear) continue;
+
+      // Growth runs from the grant's own origin, not from the start of the
+      // horizon. Using the horizon year credits a later grant with growth from
+      // before it existed, which overstated forfeiture by 36% on a year-5
+      // refresher at 8% growth.
+      const yearsHeld = year - (grantYear - 1);
+      const grown = grantBaseValue(grant) * Math.pow(1 + growthRate, yearsHeld);
       forfeited += grown * unvestedFraction(grant, year);
     }
     forfeitedIfLeavingAfter.push(forfeited);

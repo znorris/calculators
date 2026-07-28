@@ -245,3 +245,31 @@ describe("exit-year series", () => {
     for (let i = 1; i < values.length; i += 1) expect(values[i]).toBeGreaterThan(values[i - 1]);
   });
 });
+
+describe("total compensation is the sum of its parts", () => {
+  // The composition chart must show every one of these or its bars will not
+  // add up to the figure the rest of the report states.
+  it("equals wages plus bonus plus commission plus taxable equity plus employer match and health", () => {
+    const offer = salaried({
+      retirementOffered: true,
+      employerMatchRate: 0.04,
+      employerPremiumPerPaycheck: 400,
+      hsaEmployerSeed: 800,
+      targetVariable: 40000,
+      expectedAttainment: 1,
+      bonuses: [{ id: "b", label: "Perf", basis: "amount", amount: 10000, recurrence: "annual", realizationRate: 1 }],
+      grants: [{ id: "g", label: "RSU", instrument: "rsu", grantYear: 1, grantValue: 100000, vestingPreset: "even4" }],
+    });
+    const [year] = projectOffer(offer, CONTEXT).years;
+
+    const parts =
+      year.wages.total +
+      year.bonusTotal +
+      year.variableTotal +
+      year.equity.total +
+      year.retirement.employer +
+      year.employerHealth.total;
+
+    expect(year.totalCompensation).toBeCloseTo(parts, 6);
+  });
+});

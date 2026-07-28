@@ -131,7 +131,9 @@ export function setPinned(comparison, columnId) {
 export function normalizeComparison(raw) {
   const base = createComparison();
   const out = { ...base, ...raw };
-  out.offerIds = Array.isArray(raw?.offerIds) ? raw.offerIds.filter(Boolean) : [];
+  // Deduped: a repeated id double-counts that offer in the trend charts and
+  // collides React keys in the column strip.
+  out.offerIds = Array.isArray(raw?.offerIds) ? [...new Set(raw.offerIds.filter(Boolean))] : [];
   if (!out.offerIds.includes(out.baselineId)) out.baselineId = out.offerIds[0] ?? null;
   out.horizonYears = clampHorizon(out.horizonYears);
   out.factors = Array.isArray(raw?.factors) && raw.factors.length

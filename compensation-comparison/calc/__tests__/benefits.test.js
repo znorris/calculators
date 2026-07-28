@@ -7,7 +7,7 @@ import {
   benefitValue,
   WORKING_DAYS,
 } from "../benefits.js";
-import { computeFica, computeAllTaxes } from "../tax.js";
+import { computeFica, computeAllTaxes, computeStateTax } from "../tax.js";
 import { createOffer } from "../../model/offer.js";
 import { projectOffer } from "../project.js";
 
@@ -221,5 +221,21 @@ describe("benefits inside the full projection", () => {
 
   it("shows the benefit deduction on the paycheck", () => {
     expect(year.perPaycheck.benefits).toBeCloseTo(200, 6);
+  });
+});
+
+describe("state payroll programs and pre-tax deductions", () => {
+  const base = { grossWages: 120000, filingStatus: "single", stateCode: "CA" };
+
+  it("charges disability on wages after Section 125 and HSA, as FICA does", () => {
+    const full = computeStateTax(base);
+    const reduced = computeStateTax({ ...base, ficaExemptDeductions: 6000 });
+    expect(full.payrollTotal - reduced.payrollTotal).toBeCloseTo(6000 * 0.013, 6);
+  });
+
+  it("leaves the program charge alone for a 401k deferral, which does not escape payroll tax", () => {
+    const full = computeStateTax(base);
+    const with401k = computeStateTax({ ...base, preTaxDeductions: 6000 });
+    expect(with401k.payrollTotal).toBeCloseTo(full.payrollTotal, 6);
   });
 });

@@ -1,7 +1,7 @@
 // Composition root. State lives here; every calculation is a pure function
 // called from useMemo, and every record shape comes from the model layer.
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Breadcrumb } from "../shared/Breadcrumb.jsx";
 import { ColumnStrip } from "./components/ColumnStrip.jsx";
 import { OfferColumn } from "./components/OfferColumn.jsx";
@@ -88,9 +88,10 @@ function initialState() {
     const restored = normalizeComparison(savedComparison);
     const present = new Set(ids);
     restored.offerIds = restored.offerIds.filter((id) => present.has(id));
-    // An offer added outside this comparison should still show up rather than
-    // being invisible with no way to reach it.
-    for (const id of ids) if (!restored.offerIds.includes(id)) restored.offerIds.push(id);
+    // Deliberately NOT re-appending library offers the comparison omits. An
+    // earlier version did, which made Remove a session-only hide: every reload
+    // put the removed offer straight back. There is no way to create an offer
+    // outside a comparison today, so an omitted one was removed on purpose.
     if (!restored.offerIds.includes(restored.baselineId)) {
       restored.baselineId = restored.offerIds[0] ?? null;
     }
@@ -116,13 +117,32 @@ export default function App() {
     if (fromShare) stripShareParam();
   }, [fromShare]);
 
-  useEffect(() => {
-    saveOffers(offers);
-  }, [offers]);
+  /**
+   * Opening a share link must not overwrite what the visitor already saved.
+   *
+   * These effects fire on mount, so without a guard a shared comparison
+   * replaced the reader's own offers in localStorage before they touched
+   * anything. State only changes afterward through user action, so skipping the
+   * mount write is enough: look at a colleague's link and leave, and your own
+   * data is untouched; change one field and it becomes yours to keep.
+   */
+  const hasMounted = useRef(false);
+  const skipMountWrite = fromShare && !hasMounted.current;
 
   useEffect(() => {
+    if (skipMountWrite) return;
+    saveOffers(offers);
+  }, [offers, skipMountWrite]);
+
+  useEffect(() => {
+    if (skipMountWrite) return;
     saveCurrentComparison(comparison);
-  }, [comparison]);
+  }, [comparison, skipMountWrite]);
+
+  // Declared after the writes above so they observe false on the first pass.
+  useEffect(() => {
+    hasMounted.current = true;
+  }, []);
 
   const offersById = useMemo(() => indexById(offers), [offers]);
 
@@ -158,10 +178,18 @@ export default function App() {
     return result;
   }, [activeOffers, manualSections]);
 
+  /**
+   * Toggle a section, dropping the override once it agrees with the automatic
+   * state. Keeping it meant a section closed by hand stayed closed for the rest
+   * of the session even after an offer gained data that should reopen it.
+   */
   function toggleSection(sectionId) {
+    const auto = sectionsWithData(activeOffers).has(sectionId);
+    const wanted = !openSections.has(sectionId);
     setManualSections((prev) => {
       const next = new Map(prev);
-      next.set(sectionId, !openSections.has(sectionId));
+      if (wanted === auto) next.delete(sectionId);
+      else next.set(sectionId, wanted);
       return next;
     });
   }
@@ -198,8 +226,18 @@ export default function App() {
     setActiveColumn(copy.id);
   }
 
+  /**
+   * Remove drops the offer from the comparison AND deletes the record.
+   *
+   * Offers are standalone records so they can be reused, but nothing can
+   * create one outside a comparison yet, so an offer left in the library
+   * without a comparison referencing it is unreachable. Keeping it would leak a
+   * record the user believes they deleted.
+   */
   function handleRemove(offerId) {
     setComparison((prev) => removeOffer(prev, offerId));
+    setOffers((prev) => prev.filter((o) => o.id !== offerId));
+    setActiveColumn(null);
   }
 
   function handleShare() {

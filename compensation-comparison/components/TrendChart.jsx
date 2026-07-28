@@ -46,6 +46,7 @@ export function TrendChart({ data, series, caption }) {
   });
 
   const banded = series.filter((s) => s.bandLowKey && s.bandHighKey);
+  const syntheticKeys = new Set(banded.flatMap((s) => [`${s.key}__base`, `${s.key}__span`]));
 
   return (
     <div style={{ marginBottom: 16 }}>
@@ -70,10 +71,11 @@ export function TrendChart({ data, series, caption }) {
               tickFormatter={(v) => (Math.abs(v) >= 1000 ? `$${Math.round(v / 1000)}k` : `$${Math.round(v)}`)}
             />
             <Tooltip
-              // Hide the two synthetic band series from the readout; the band
-              // is described in the caption instead of as two mystery numbers.
-              formatter={(value, name) =>
-                String(name).includes("__") ? null : [money(value), name]
+              // Hide the synthetic band series from the readout by key
+              // identity. Matching the display name for "__" also dropped any
+              // offer a user had named with a double underscore.
+              formatter={(value, name, item) =>
+                syntheticKeys.has(item?.dataKey) ? null : [money(value), name]
               }
               labelFormatter={(year) => `Year ${year}`}
               contentStyle={{ fontSize: 11, borderRadius: 8, border: `1px solid ${color.hairline}` }}

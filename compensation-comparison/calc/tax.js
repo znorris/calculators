@@ -76,7 +76,13 @@ export function computeFederalIncomeTax({ grossWages, preTaxDeductions = 0, fili
  * can say so instead of reporting zero, which would make a high-tax state
  * look free.
  */
-export function computeStateTax({ grossWages, preTaxDeductions = 0, filingStatus, stateCode }) {
+export function computeStateTax({
+  grossWages,
+  preTaxDeductions = 0,
+  ficaExemptDeductions = 0,
+  filingStatus,
+  stateCode,
+}) {
   const table = stateTable(stateCode);
   if (!table) {
     return { available: false, stateCode, tax: 0, payrollPrograms: [], payrollTotal: 0, total: 0 };
@@ -98,9 +104,13 @@ export function computeStateTax({ grossWages, preTaxDeductions = 0, filingStatus
     marginalRate = marginalRateFromBrackets(taxable, brackets);
   }
 
+  // Section 125 premiums and a payroll HSA come out before these programs are
+  // computed, the same as they do before FICA. Charging them on raw gross
+  // overstated the deduction by the premium times the rate.
+  const programBase = Math.max(0, grossWages - Math.max(0, ficaExemptDeductions));
   const payrollPrograms = (table.payrollPrograms || []).map((program) => ({
     name: program.name,
-    amount: Math.min(grossWages, program.wageBase ?? Infinity) * program.rate,
+    amount: Math.min(programBase, program.wageBase ?? Infinity) * program.rate,
   }));
   const payrollTotal = payrollPrograms.reduce((sum, p) => sum + p.amount, 0);
 
@@ -158,6 +168,7 @@ export function computeAllTaxes({
   const state = computeStateTax({
     grossWages,
     preTaxDeductions: incomeTaxReduction,
+    ficaExemptDeductions,
     filingStatus,
     stateCode,
   });

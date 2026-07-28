@@ -129,8 +129,9 @@ export function isFieldFilled(field, values) {
   const value = values[field.id];
   if (value == null || value === "") return false;
   if (Array.isArray(value)) return value.length > 0;
-  if (field.type === "bool") return value !== field.default;
-  if (typeof value === "number") return value !== 0 && value !== field.default;
+  // Compared only against the default. An earlier version also required a
+  // nonzero value, which read an explicit 0 as unfilled, so entering zero
+  // onsite days left the section looking untouched.
   return value !== field.default;
 }
 

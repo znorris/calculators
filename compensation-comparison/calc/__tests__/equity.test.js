@@ -247,3 +247,26 @@ describe("equity inside the full projection", () => {
     expect(exit.realized).toBeCloseTo(projection.cumulative[4].takeHome, 4);
   });
 });
+
+describe("forfeiture regressions", () => {
+  const later = { ...rsu({ grantYear: 5, grantValue: 200000 }), id: "g-late" };
+
+  it("grows a later grant from its own origin, not from the start of the horizon", () => {
+    const equity = projectEquity(createOffer({ grants: [later] }), 10, 0.08);
+    // Exit at end of year 6. The grant has existed 2 years and is half vested.
+    const expected = 200000 * Math.pow(1.08, 2) * 0.5;
+    expect(equity.forfeitedIfLeavingAfter[5]).toBeCloseTo(expected, 2);
+  });
+
+  it("forfeits nothing for a grant not yet issued at the exit", () => {
+    const equity = projectEquity(createOffer({ grants: [later] }), 10, 0.08);
+    for (const year of [0, 1, 2, 3]) {
+      expect(equity.forfeitedIfLeavingAfter[year], `exit year ${year + 1}`).toBe(0);
+    }
+  });
+
+  it("still forfeits the whole of a year-one grant inside its cliff", () => {
+    const equity = projectEquity(createOffer({ grants: [rsu({ vestingPreset: "cliff4" })] }), 5, 0);
+    expect(equity.forfeitedIfLeavingAfter[0]).toBeCloseTo(200000, 6);
+  });
+});

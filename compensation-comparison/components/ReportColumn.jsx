@@ -20,11 +20,17 @@ import { offerColor } from "../theme.js";
 import { money, signedMoney, signedPercent } from "../format.js";
 import { card, color } from "../theme.js";
 
+// Every component of totalCompensation, so the stacked bar sums to the same
+// figure the rest of the report shows. Omitting commission and the employer
+// health contribution made the bar read tens of thousands short for anyone with
+// either.
 const SERIES = [
   { key: "base", label: "Base pay", fill: "#4f46e5" },
+  { key: "variable", label: "Commission", fill: "#0891b2" },
   { key: "bonus", label: "Bonus", fill: "#0284c7" },
   { key: "equity", label: "Equity", fill: "#7c3aed" },
   { key: "retirement", label: "Employer retirement", fill: "#047857" },
+  { key: "health", label: "Employer health", fill: "#65a30d" },
 ];
 
 function Heading({ children }) {
@@ -346,9 +352,11 @@ function TrendSection({ projections, offersById, horizonYears }) {
 /** How each stacked series reads its value out of a projected year. */
 const SERIES_VALUE = {
   base: (y) => y.wages.total,
+  variable: (y) => y.variableTotal || 0,
   bonus: (y) => y.bonusTotal,
   equity: (y) => y.equity.total,
   retirement: (y) => y.retirement.employer,
+  health: (y) => y.employerHealth?.total || 0,
 };
 
 /**
@@ -383,13 +391,11 @@ function MixChart({ projections, offersById, baseline, horizonYears }) {
   if (!subject) return null;
   const subjectName = offersById[subject.offerId]?.name?.trim() || "Offer";
 
-  const data = subject.years.slice(0, horizonYears).map((y, i) => ({
-    year: `Y${i + 1}`,
-    base: Math.round(y.wages.total),
-    bonus: Math.round(y.bonusTotal),
-    equity: Math.round(y.equity.total),
-    retirement: Math.round(y.retirement.employer),
-  }));
+  const data = subject.years.slice(0, horizonYears).map((y, i) => {
+    const row = { year: `Y${i + 1}` };
+    for (const [key, read] of Object.entries(SERIES_VALUE)) row[key] = Math.round(read(y));
+    return row;
+  });
 
   // Show a component only when some offer actually has it, matching the rule
   // the section containers already use: present if any offer has data, absent
