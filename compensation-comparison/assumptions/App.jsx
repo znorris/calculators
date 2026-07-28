@@ -33,7 +33,15 @@ export default function App() {
 
   return (
     <div style={{ maxWidth: 980, margin: "0 auto", padding: "20px 16px 60px" }}>
-      <Breadcrumb current="Assumptions" />
+      {/* Two levels up to the index, one to the calculator. Matches the
+          BreadcrumbList declared in this page's structured data. */}
+      <Breadcrumb
+        trail={[
+          { label: "Calculators", href: "../../" },
+          { label: "Compensation Comparison", href: "../" },
+        ]}
+        current="Assumptions"
+      />
 
       <header style={{ marginBottom: 18 }}>
         <h1 style={{ fontSize: 20, fontWeight: 700, color: color.ink, margin: "0 0 6px" }}>
