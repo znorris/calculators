@@ -9,6 +9,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, Cart
 import { overviewSentences, offerSentences, assumptionNotes } from "../report/prose.js";
 import { deriveRegimes } from "../report/regimes.js";
 import { scoreAll, moneyAndFitAgree } from "../calc/fit.js";
+import { MIN_HORIZON_YEARS, MAX_HORIZON_YEARS, clampHorizon } from "../model/comparison.js";
 import { money, signedMoney, signedPercent } from "../format.js";
 import { card, color } from "../theme.js";
 
@@ -71,7 +72,7 @@ function last(arr) {
   return arr[arr.length - 1];
 }
 
-export function ReportColumn({ projections, offersById, baseline, comparison, isPinned }) {
+export function ReportColumn({ projections, offersById, baseline, comparison, isPinned, onHorizonChange }) {
   const horizonYears = comparison.horizonYears;
 
   if (projections.length === 0) {
@@ -96,8 +97,48 @@ export function ReportColumn({ projections, offersById, baseline, comparison, is
     >
       <header style={{ padding: "10px 12px", borderBottom: `1px solid ${color.hairline}` }}>
         <h2 style={{ fontSize: 14, fontWeight: 700, color: color.ink, margin: 0 }}>Report</h2>
-        <p style={{ fontSize: 11.5, color: color.muted, margin: "3px 0 0" }}>
-          {horizonYears}-year comparison{isPinned ? " · pinned" : ""}
+        {/*
+          The horizon sets the report's own time window, so it belongs here
+          rather than in the settings bar. This is the one editable control in
+          an otherwise read-only column, and it edits the report rather than
+          any offer.
+        */}
+        <p
+          style={{
+            fontSize: 11.5,
+            color: color.muted,
+            margin: "4px 0 0",
+            display: "flex",
+            alignItems: "center",
+            gap: 4,
+          }}
+        >
+          <label htmlFor="horizon-years" style={{ display: "contents" }}>
+            <input
+              id="horizon-years"
+              type="number"
+              inputMode="numeric"
+              min={MIN_HORIZON_YEARS}
+              max={MAX_HORIZON_YEARS}
+              value={horizonYears}
+              onChange={(e) => onHorizonChange(clampHorizon(e.target.value))}
+              aria-label="Comparison horizon in years"
+              style={{
+                width: 46,
+                padding: "3px 5px",
+                fontSize: 11.5,
+                fontWeight: 700,
+                textAlign: "center",
+                color: color.ink,
+                border: `1px solid ${color.rule}`,
+                borderRadius: 4,
+                background: color.surface,
+                fontFamily: "inherit",
+              }}
+            />
+            <span>year comparison</span>
+          </label>
+          {isPinned && <span style={{ color: color.faint }}>· pinned</span>}
         </p>
       </header>
 

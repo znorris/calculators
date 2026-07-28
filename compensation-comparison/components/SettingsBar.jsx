@@ -11,7 +11,7 @@ import { Field } from "./Field.jsx";
 import { useIsNarrow } from "./ColumnStrip.jsx";
 import { FILING_STATUSES } from "../model/schema.js";
 import { AVAILABLE_TAX_YEARS } from "../calc/data/federal.js";
-import { MIN_HORIZON_YEARS, MAX_HORIZON_YEARS, clampHorizon, MAX_WEIGHT } from "../model/comparison.js";
+import { MAX_WEIGHT } from "../model/comparison.js";
 import { card, color, button, buttonPrimary, label as labelStyle, input as inputStyle } from "../theme.js";
 
 const FILING_FIELD = {
@@ -91,10 +91,12 @@ export function SettingsBar({ comparison, onChange, onAddOffer, onShare, onUpdat
   const [open, setOpen] = useState(false);
   const expanded = !isNarrow || open;
 
+  // The horizon is not listed here. It is set in the report header, so
+  // repeating it in a summary of controls that live in this bar would point at
+  // something this bar cannot change.
   const summary = [
     FILING_SHORT[comparison.filingStatus] || comparison.filingStatus,
     comparison.taxYear,
-    `${comparison.horizonYears} years`,
   ].join(" · ");
 
   return (
@@ -151,21 +153,6 @@ export function SettingsBar({ comparison, onChange, onAddOffer, onShare, onUpdat
               field={TAX_YEAR_FIELD}
               value={comparison.taxYear}
               onChange={(v) => onChange({ taxYear: Number(v) })}
-            />
-          </div>
-          <div style={{ flex: "0 1 140px", minWidth: 110 }}>
-            <label htmlFor="horizon" style={labelStyle}>
-              Horizon (years)
-            </label>
-            <input
-              id="horizon"
-              type="number"
-              inputMode="numeric"
-              min={MIN_HORIZON_YEARS}
-              max={MAX_HORIZON_YEARS}
-              value={comparison.horizonYears}
-              onChange={(e) => onChange({ horizonYears: clampHorizon(e.target.value) })}
-              style={inputStyle}
             />
           </div>
 

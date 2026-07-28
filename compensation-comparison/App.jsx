@@ -230,6 +230,7 @@ export default function App() {
           baseline={baseline}
           comparison={comparison}
           isPinned={comparison.pinnedId === REPORT_COLUMN_ID}
+          onHorizonChange={(years) => setComparison((prev) => ({ ...prev, horizonYears: years }))}
         />
       ),
     },
