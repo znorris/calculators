@@ -49,10 +49,7 @@ export default function App() {
         </h1>
         <p style={{ fontSize: 12.5, color: color.body, margin: 0, maxWidth: 720, lineHeight: 1.6 }}>
           Every figure below is read at page load from the same modules that compute your results. If a number
-          looks wrong, it is wrong in the calculator too.{" "}
-          <a href="../" style={{ color: color.accent }}>
-            Back to the calculator
-          </a>
+          looks wrong, it is wrong in the calculator too.
         </p>
       </header>
 
