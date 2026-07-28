@@ -3,7 +3,63 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Calculators</title>
+    <title>Financial Calculators</title>
+    <meta name="description" content="Free browser-based financial calculators for comparing job offers, mortgage payoff strategies, and home purchases. Everything is computed locally and nothing you enter is sent anywhere." />
+    <link rel="canonical" href="https://znorris.github.io/calculators/" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="author" content="Zach Norris" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Financial Calculators" />
+    <meta property="og:title" content="Financial Calculators" />
+    <meta property="og:description" content="Free browser-based financial calculators for comparing job offers, mortgage payoff strategies, and home purchases. Everything is computed locally and nothing you enter is sent anywhere." />
+    <meta property="og:url" content="https://znorris.github.io/calculators/" />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Financial Calculators" />
+    <meta name="twitter:description" content="Free browser-based financial calculators for comparing job offers, mortgage payoff strategies, and home purchases. Everything is computed locally and nothing you enter is sent anywhere." />
+
+    <script type="application/ld+json">
+[
+      {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "Financial Calculators",
+            "url": "https://znorris.github.io/calculators/",
+            "description": "Free browser-based financial calculators for comparing job offers, mortgage payoff strategies, and home purchases. Everything is computed locally and nothing you enter is sent anywhere.",
+            "author": {
+                  "@type": "Person",
+                  "name": "Zach Norris"
+            },
+            "inLanguage": "en-US"
+      },
+      {
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "name": "Calculators",
+            "itemListElement": [
+                  {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "url": "https://znorris.github.io/calculators/compensation-comparison/",
+                        "name": "Compensation Comparison Calculator"
+                  },
+                  {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "url": "https://znorris.github.io/calculators/mortgage-strategy-comparison/",
+                        "name": "Mortgage Strategy Comparison Calculator"
+                  },
+                  {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "url": "https://znorris.github.io/calculators/home-purchase-comparison/",
+                        "name": "Home Purchase Comparison Calculator"
+                  }
+            ]
+      }
+]
+    </script>
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body { font-family: system-ui, -apple-system, sans-serif; background: #f8f9fa; color: #1a1a1a; padding: 2rem; }
@@ -22,11 +78,19 @@
       .card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
       .card h2 { font-size: 1.1rem; margin-bottom: 0.5rem; }
       .card p { font-size: 0.9rem; color: #555; }
+      .disclosure-link { font-size: 0.8rem; color: #64748b; margin: -1.2rem 0 2rem; }
+      .disclosure-link a { color: #4f46e5; text-decoration: underline; text-underline-offset: 2px; }
+      .disclosure { background: #fff; border: 1px solid #e2e5ea; border-radius: 8px; padding: 1.1rem 1.2rem; margin-top: 2.5rem; scroll-margin-top: 1rem; }
+      .disclosure h2 { font-size: 0.95rem; margin-bottom: 0.7rem; color: #0f172a; }
+      .disclosure h3 { font-size: 0.8rem; margin: 0 0 0.2rem; color: #374151; }
+      .disclosure p { font-size: 0.78rem; line-height: 1.6; color: #374151; margin: 0 0 0.75rem; }
+      .disclosure code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.72rem; background: #f1f5f9; padding: 1px 4px; border-radius: 3px; }
     </style>
   </head>
   <body>
     <h1>Calculators</h1>
     <p class="subtitle">A collection of useful calculators.</p>
+    <p class="disclosure-link">Everything here is computed in your browser and nothing you enter is sent anywhere. <a href="#data-handling">How your data is handled</a></p>
     <div class="grid">
       <a class="card" href="mortgage-strategy-comparison/">
         <h2>Mortgage Strategy Comparison</h2>
@@ -41,5 +105,45 @@
         <p>Compare job offers side by side over a multi-year horizon. Models take-home pay, bonuses, retirement contributions, and what you keep if you leave early.</p>
       </a>
     </div>
+
+    <section class="disclosure" id="data-handling" aria-labelledby="data-handling-heading">
+      <h2 id="data-handling-heading">How your data is handled</h2>
+
+      <h3>Nothing you enter is transmitted</h3>
+      <p>These calculators have no server behind them. Every figure is computed in your browser from what you
+        type, and none of them makes a network request of any kind with your data. There is no account, no login,
+        and no submit step.</p>
+
+      <h3>What is stored, and where</h3>
+      <p>This index page stores nothing. Each calculator saves your inputs in that browser's local storage on the
+        device you are using, so your work survives a reload. It stays on the device until you clear it, and it is
+        not synced or backed up anywhere. Every calculator names its own storage keys in its own copy of this
+        notice and offers a button to delete them.</p>
+
+      <h3>Share links are the one exception</h3>
+      <p>Where a calculator offers a share link, that link contains your inputs encoded into the URL itself. The
+        data travels wherever you send the link, and it is encoded rather than encrypted, so anyone holding the
+        link can read it. Anything that handles a URL may also retain it, including chat and email services,
+        browser history, and server logs. Treat a share link as you would a document containing the figures in
+        it, because that is what it is.</p>
+
+      <h3>No tracking of any kind</h3>
+      <p>There is no analytics, no cookies, no tracking pixels, no third-party scripts, and no externally loaded
+        fonts. These pages use only fonts already on your system.</p>
+
+      <h3>What the host can see</h3>
+      <p>The site is static files served by GitHub Pages. Whoever serves them can see that a browser requested a
+        page, along with the usual things any web server records such as an IP address and a timestamp. They
+        cannot see what you typed, because it never reaches them.</p>
+
+      <h3>No warranty</h3>
+      <p>These calculators are provided as is, with no warranty of any kind, express or implied, including any
+        warranty of accuracy, merchantability, or fitness for a particular purpose. They are estimates built on
+        assumptions you supply and on published figures that change, and they may contain errors. Nothing here is
+        tax, legal, investment, or financial advice, and using it creates no professional relationship. Verify
+        anything you intend to rely on with a qualified professional and with primary sources. You are solely
+        responsible for any decision you make, and the author accepts no liability for any loss arising from use
+        of these tools or from reliance on their output.</p>
+    </section>
   </body>
 </html>

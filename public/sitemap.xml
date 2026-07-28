@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Deployed to https://znorris.github.io/calculators/sitemap.xml
+
+  A sitemap only covers URLs at or below its own directory, which every URL
+  here satisfies. Submit it directly in Google Search Console, or reference it
+  from a robots.txt at the domain root; a robots.txt inside /calculators/ is
+  not read by crawlers.
+
+  Share links are deliberately absent. They carry user data in the URL and must
+  never be advertised to a crawler.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://znorris.github.io/calculators/</loc>
+    <lastmod>2026-07-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://znorris.github.io/calculators/compensation-comparison/</loc>
+    <lastmod>2026-07-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://znorris.github.io/calculators/mortgage-strategy-comparison/</loc>
+    <lastmod>2026-07-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://znorris.github.io/calculators/home-purchase-comparison/</loc>
+    <lastmod>2026-07-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>
