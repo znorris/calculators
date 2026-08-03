@@ -1,0 +1,42 @@
+{
+  "meta": {
+    "source": "PVWatts API v8, National Laboratory of the Rockies, formerly NREL (https://developer.nlr.gov/docs/solar/pvwatts/v8/)",
+    "fetchedFor": {
+      "site": {
+        "name": "Lodi, CA",
+        "lat": 38.13,
+        "lon": -121.29
+      },
+      "referenceYear": 2026,
+      "note": "PVWatts uses a representative typical-meteorological-year (TMY) weather file for the given location, not actual 2026 weather. Hour indices (0-8759) are treated as reference year 2026 local standard time, no DST, matching the calculator convention."
+    },
+    "params": {
+      "system_capacity": 1,
+      "module_type": 0,
+      "array_type": 1,
+      "losses": 14,
+      "dc_ac_ratio": 1.2,
+      "inv_eff": 96,
+      "timeframe": "hourly",
+      "tilts": [
+        10,
+        20,
+        30,
+        40
+      ],
+      "azimuths": [
+        90,
+        135,
+        180,
+        225,
+        270
+      ]
+    },
+    "apiKeyUsed": "DEMO_KEY",
+    "generatedNote": "Values are AC output in kWh per hour per kW-DC of installed capacity (PVWatts outputs.ac is in Wh for a 1 kW-DC system; divided by 1000 here). Grid keys are t{tilt}_a{azimuth}, e.g. t20_a180 = 20 degree tilt, 180 degree azimuth (due south).",
+    "generatedAt": "2026-08-02T01:52:50.682Z",
+    "gridPointsRequested": 20,
+    "gridPointsFetched": 20,
+    "failedGridPoints": []
+  }
+}

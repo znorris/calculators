@@ -1,0 +1,477 @@
+{
+  "meta": {
+    "diurnal": {
+      "structure": "diurnal.<season> is a 24-value array (index = hour of day, 0 = 00:00-01:00 local standard time) of unitless multipliers with an exact discrete mean of 1.0. Multiply by a mean wind speed (or mean wind power) to get an hourly shape.",
+      "methodology": "Stylized single-cosine model, value(h) = 1 + amplitude*cos(2*pi*(h-16)/24), peaking at hour 16 (4pm) and troughing at hour 4 (4am), per meteorological season (winter=Dec-Feb amplitude 0.20, spring=Mar-May amplitude 0.38, summer=Jun-Aug amplitude 0.42, fall=Sep-Nov amplitude 0.30). This is a hand-authored model calibrated to match the qualitative diurnal pattern documented for California's Central Valley (afternoon/early-evening wind maximum, pre-dawn minimum, amplitude strongest in summer when the land-sea thermal contrast driving the \"Delta Breeze\" is largest), not a digitized instrument time series for the Lodi site specifically (no public hourly wind-speed climatology for Lodi was found).",
+      "sources": [
+        {
+          "title": "Diurnal Evolution of Three-Dimensional Wind and Temperature Structure in California's Central Valley",
+          "url": "https://journals.ametsoc.org/view/journals/apme/43/11/jam2154.1.xml",
+          "note": "Zhong et al., J. Applied Meteorology & Climatology 43(11), 2004. Documents a pronounced low-level diurnal wind oscillation in the Central Valley with a late-afternoon/early-evening speed maximum."
+        },
+        {
+          "title": "Call me the (Delta) Breeze - our cooling Summer wind",
+          "url": "https://kmph.com/news/local/call-me-the-delta-breeze-our-cooling-summer-wind",
+          "note": "Describes the Delta Breeze: a thermally-driven afternoon/evening wind pulled into the Central Valley through the Sacramento-San Joaquin Delta, strongest in summer."
+        }
+      ]
+    },
+    "seasonal": {
+      "structure": "seasonal is a 12-value array (index 0 = January) of unitless monthly multipliers with an exact discrete mean of 1.0.",
+      "methodology": "Stylized single-cosine model, value(m) = 1 + amplitude*cos(2*pi*(m-7)/12) with amplitude 0.35, peaking in July and troughing in January. Calibrated to match the documented Delta Breeze / Altamont Pass windy season (elevated output May-October, per the Altamont Pass wind farm generation record), not a digitized wind-speed time series for Lodi specifically.",
+      "sources": [
+        {
+          "title": "Altamont Pass wind farm (Wikipedia)",
+          "url": "https://en.wikipedia.org/wiki/Altamont_Pass_wind_farm",
+          "note": "Notes the Altamont Pass (Central Valley/Delta wind resource area, same regional wind regime as Lodi) produces most of its electricity during the windy season, May through October."
+        }
+      ]
+    },
+    "powerCurves": {
+      "structure": "presets[].curve is an array of {ms, kw} points from the cited certification/manufacturer data, in ascending wind speed order. Values below the turbine's cut-in wind speed that were reported as small negative numbers (parasitic/controller power draw) in the source data have been clamped to 0 kW. Linear interpolation between points is expected at calculation time; do not extrapolate past the last point (treat wind speeds at or above the last curve point as flat-lined at that point's kw, since both source turbines exhibit power roll-off from blade pitch/stall regulation near cut-out that these tables do not fully capture). presets[].cutOutMS is optional: if a preset defines it, calculation should treat it as a hard shutdown above which output is 0 kW instead of flat-lining. Neither shipped preset defines one -- see each preset's notes."
+    }
+  },
+  "diurnal": {
+    "winter": [
+      0.9,
+      0.85858,
+      0.82679,
+      0.80681,
+      0.8,
+      0.80681,
+      0.82679,
+      0.85858,
+      0.9,
+      0.94824,
+      1,
+      1.05176,
+      1.1,
+      1.14142,
+      1.17321,
+      1.19319,
+      1.2,
+      1.19319,
+      1.17321,
+      1.14142,
+      1.1,
+      1.05176,
+      1,
+      0.94824
+    ],
+    "spring": [
+      0.81,
+      0.7313,
+      0.67091,
+      0.63295,
+      0.62,
+      0.63295,
+      0.67091,
+      0.7313,
+      0.81,
+      0.90165,
+      1,
+      1.09835,
+      1.19,
+      1.2687,
+      1.32909,
+      1.36705,
+      1.38,
+      1.36705,
+      1.32909,
+      1.2687,
+      1.19,
+      1.09835,
+      1,
+      0.90165
+    ],
+    "summer": [
+      0.79,
+      0.70302,
+      0.63627,
+      0.59431,
+      0.58,
+      0.59431,
+      0.63627,
+      0.70302,
+      0.79,
+      0.8913,
+      1,
+      1.1087,
+      1.21,
+      1.29698,
+      1.36373,
+      1.40569,
+      1.42,
+      1.40569,
+      1.36373,
+      1.29698,
+      1.21,
+      1.1087,
+      1,
+      0.8913
+    ],
+    "fall": [
+      0.85,
+      0.78787,
+      0.74019,
+      0.71022,
+      0.7,
+      0.71022,
+      0.74019,
+      0.78787,
+      0.85,
+      0.92235,
+      1,
+      1.07765,
+      1.15,
+      1.21213,
+      1.25981,
+      1.28978,
+      1.3,
+      1.28978,
+      1.25981,
+      1.21213,
+      1.15,
+      1.07765,
+      1,
+      0.92235
+    ]
+  },
+  "seasonal": [
+    0.65,
+    0.69689,
+    0.825,
+    1,
+    1.175,
+    1.30311,
+    1.35,
+    1.30311,
+    1.175,
+    1,
+    0.825,
+    0.69689
+  ],
+  "powerCurves": {
+    "presets": [
+      {
+        "id": "bergey-excel-6",
+        "label": "Bergey Excel 6",
+        "ratedKW": 5.5,
+        "hubHeightDefaultM": 24,
+        "curve": [
+          {
+            "ms": 1.57,
+            "kw": 0
+          },
+          {
+            "ms": 1.97,
+            "kw": 0
+          },
+          {
+            "ms": 2.53,
+            "kw": 0.042
+          },
+          {
+            "ms": 3.01,
+            "kw": 0.134
+          },
+          {
+            "ms": 3.5,
+            "kw": 0.23
+          },
+          {
+            "ms": 4.01,
+            "kw": 0.369
+          },
+          {
+            "ms": 4.52,
+            "kw": 0.529
+          },
+          {
+            "ms": 5.01,
+            "kw": 0.707
+          },
+          {
+            "ms": 5.52,
+            "kw": 0.931
+          },
+          {
+            "ms": 6.01,
+            "kw": 1.19
+          },
+          {
+            "ms": 6.52,
+            "kw": 1.49
+          },
+          {
+            "ms": 7.01,
+            "kw": 1.82
+          },
+          {
+            "ms": 7.5,
+            "kw": 2.193
+          },
+          {
+            "ms": 8,
+            "kw": 2.597
+          },
+          {
+            "ms": 8.49,
+            "kw": 3.051
+          },
+          {
+            "ms": 8.99,
+            "kw": 3.562
+          },
+          {
+            "ms": 9.51,
+            "kw": 4.097
+          },
+          {
+            "ms": 9.98,
+            "kw": 4.57
+          },
+          {
+            "ms": 10.47,
+            "kw": 5.041
+          },
+          {
+            "ms": 10.98,
+            "kw": 5.532
+          },
+          {
+            "ms": 11.48,
+            "kw": 5.892
+          },
+          {
+            "ms": 12.03,
+            "kw": 6.116
+          },
+          {
+            "ms": 12.48,
+            "kw": 6.288
+          },
+          {
+            "ms": 13.02,
+            "kw": 6.269
+          },
+          {
+            "ms": 13.46,
+            "kw": 6.517
+          },
+          {
+            "ms": 13.89,
+            "kw": 6.611
+          },
+          {
+            "ms": 14.49,
+            "kw": 6.439
+          },
+          {
+            "ms": 15.08,
+            "kw": 6.595
+          },
+          {
+            "ms": 15.57,
+            "kw": 6.579
+          },
+          {
+            "ms": 16.03,
+            "kw": 6.659
+          },
+          {
+            "ms": 16.39,
+            "kw": 6.586
+          },
+          {
+            "ms": 17.04,
+            "kw": 6.545
+          },
+          {
+            "ms": 17.66,
+            "kw": 6.629
+          },
+          {
+            "ms": 17.9,
+            "kw": 6.539
+          },
+          {
+            "ms": 18.56,
+            "kw": 6.231
+          }
+        ],
+        "notes": "AWEA-rated power is 5.5 kW @ 11 m/s per SWCC certification; peak measured output ~6.6-6.7 kW near 16 m/s (model name \"Excel 6\" refers to the nameplate/marketing class, not the AWEA-rated figure). Bergey's own tower-requirements document (bundled in the SWCC report) specifies a 60 ft (18 m) minimum tower with 80 ft (24 m) or higher recommended; hubHeightDefaultM uses the manufacturer-recommended value. No cutOutMS: Bergey's published spec sheets give no operational shutdown wind speed for this model -- overspeed/furling protection is designed to hold the machine online up to its design wind speed (134 mph / ~60 m/s), well outside this curve's range -- so this preset intentionally has no cutOutMS and relies on the flat-line-above-last-point behavior.",
+        "sources": [
+          {
+            "title": "SWCC Summary Report - Bergey Excel 6 (Certification SWCC-10-11)",
+            "url": "https://www.bergey.com/wp-content/uploads/2017/02/bb3c3d0bdbab76108b968a518b0e624b.pdf",
+            "note": "Solar Rating & Certification Corporation (SRCC) / Small Wind Certification Council report per AWEA Standard 9.1-2009, including the tabulated power curve at sea-level air density (1.225 kg/m3) and AEP table."
+          },
+          {
+            "title": "BERGEY EXCEL 6 Performance spec sheet",
+            "url": "https://www.bergey.com/wp-content/uploads/2013/10/a41cf01997324f90ec4cb7e51e8e1b04.pdf",
+            "note": "Manufacturer performance sheet; lists cut-in and rated wind speed but no cut-out/shutdown wind speed."
+          }
+        ]
+      },
+      {
+        "id": "skystream-3.7",
+        "label": "Southwest Windpower Skystream 3.7 (1.8 kW)",
+        "ratedKW": 1.8,
+        "hubHeightDefaultM": 10,
+        "curve": [
+          {
+            "ms": 0.56,
+            "kw": 0
+          },
+          {
+            "ms": 1.04,
+            "kw": 0
+          },
+          {
+            "ms": 1.52,
+            "kw": 0
+          },
+          {
+            "ms": 2.02,
+            "kw": 0
+          },
+          {
+            "ms": 2.51,
+            "kw": 0
+          },
+          {
+            "ms": 3,
+            "kw": 0.003
+          },
+          {
+            "ms": 3.51,
+            "kw": 0.034
+          },
+          {
+            "ms": 4.03,
+            "kw": 0.084
+          },
+          {
+            "ms": 4.46,
+            "kw": 0.132
+          },
+          {
+            "ms": 5,
+            "kw": 0.203
+          },
+          {
+            "ms": 5.49,
+            "kw": 0.285
+          },
+          {
+            "ms": 6,
+            "kw": 0.391
+          },
+          {
+            "ms": 6.5,
+            "kw": 0.51
+          },
+          {
+            "ms": 6.99,
+            "kw": 0.643
+          },
+          {
+            "ms": 7.49,
+            "kw": 0.799
+          },
+          {
+            "ms": 7.99,
+            "kw": 0.968
+          },
+          {
+            "ms": 8.5,
+            "kw": 1.146
+          },
+          {
+            "ms": 8.99,
+            "kw": 1.333
+          },
+          {
+            "ms": 9.48,
+            "kw": 1.531
+          },
+          {
+            "ms": 9.98,
+            "kw": 1.745
+          },
+          {
+            "ms": 10.47,
+            "kw": 1.938
+          },
+          {
+            "ms": 10.97,
+            "kw": 2.101
+          },
+          {
+            "ms": 11.47,
+            "kw": 2.242
+          },
+          {
+            "ms": 11.93,
+            "kw": 2.301
+          },
+          {
+            "ms": 12.45,
+            "kw": 2.363
+          },
+          {
+            "ms": 12.97,
+            "kw": 2.403
+          },
+          {
+            "ms": 13.5,
+            "kw": 2.403
+          },
+          {
+            "ms": 13.99,
+            "kw": 2.425
+          },
+          {
+            "ms": 14.52,
+            "kw": 2.388
+          },
+          {
+            "ms": 15.02,
+            "kw": 2.412
+          },
+          {
+            "ms": 15.45,
+            "kw": 2.403
+          },
+          {
+            "ms": 15.99,
+            "kw": 2.393
+          },
+          {
+            "ms": 16.5,
+            "kw": 2.321
+          }
+        ],
+        "notes": "Manufacturer rated capacity is 1.8 kW rated / 2.4 kW peak; cut-in wind speed 3.5 m/s, rated wind speed 9.4 m/s, survival wind speed 63 m/s per manufacturer spec sheet. Skystream towers range 10.2 m (33 ft, used here as default) to 33.5 m (110 ft); taller towers increase energy yield. No cutOutMS: per the owner's manual, Skystream enters a self-limiting reduced-power mode above ~11 m/s (already reflected in the curve's flattening top end) and only fully shuts down above 29 m/s (65 mph) as a temporary storm response, restarting after about an hour. That is not a sustained-mean-wind-speed shutdown, so it does not map onto a static cutOutMS in an annual model; this preset relies on the flat-line-above-last-point behavior instead.",
+        "sources": [
+          {
+            "title": "Skystream 3.7 Technical Specifications (Southwest Windpower spec sheet DOC# 0370 REV D 4-07)",
+            "url": "http://www.desertpowerinc.com/pdf/0370_skystream_spec.pdf",
+            "note": "Manufacturer spec sheet: rated capacity, cut-in/rated/survival wind speeds, rotor diameter, tower height range."
+          },
+          {
+            "title": "NREL/turbine-models power curve archive - Skystream3.7_2.1kW_3.7.csv",
+            "url": "https://raw.githubusercontent.com/NREL/turbine-models/main/turbine_models/data/Distributed/Skystream3.7_2.1kW_3.7.csv",
+            "note": "Tabulated wind-speed-vs-power-output curve (with Cp) used as the numeric curve source. The \"2.1kW\" in the archive filename reflects the field-tested peak bin, above the 1.8 kW nameplate rating."
+          },
+          {
+            "title": "Skystream 3.7 Owner's Manual",
+            "url": "https://balanceinnature.org/assets/files/skystreamOwnerManual.pdf",
+            "note": "Describes storm-response behavior: enters reduced power mode above ~25 mph (11 m/s), and at 65 mph (29 m/s) shuts down for about one hour before resuming, rather than a permanent cut-out."
+          }
+        ]
+      }
+    ]
+  }
+}

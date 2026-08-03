@@ -1,0 +1,178 @@
+{
+  "asOf": "2026-08",
+  "meta": {
+    "note": "US installed costs before incentives (i.e., before the federal residential clean energy credit, which the One Big Beautiful Bill Act eliminated for battery/solar installations placed in service in 2026). Fields marked as estimates in a preset's `estimatedFields` array are not manufacturer-disclosed figures; treat them as directional, not specification-grade.",
+    "priceVolatilityNote": "Installed costs for batteries and solar vary substantially by installer, region, and system size; installedCostUSD and costPerWattInstalled are representative point estimates within the cited ranges, not quotes."
+  },
+  "batteries": [
+    {
+      "id": "tesla-powerwall-3",
+      "label": "Tesla Powerwall 3",
+      "chemistry": "LFP",
+      "usableKWh": 13.5,
+      "dodFrac": 1.0,
+      "roundTripEff": 0.975,
+      "maxChargeKW": 11.5,
+      "maxDischargeKW": 11.5,
+      "cycleLife": 6000,
+      "calendarLifeYears": 10,
+      "installedCostUSD": 14500,
+      "estimatedFields": ["cycleLife"],
+      "notes": "11.5 kW continuous on-grid (15.4 kW peak off-grid) per EnergySage/manufacturer spec; installedCostUSD is the midpoint of the $13,000-$16,500 2026 installed-price range reported across sources. Tesla's warranty is unlimited-cycle / time-and-capacity based (10 years, >=70% capacity retention), not a stated cycle-count limit; cycleLife of 6,000 is a representative LFP cell figure used for modeling, not a Tesla-published number."
+    },
+    {
+      "id": "enphase-iq-5p",
+      "label": "Enphase IQ Battery 5P",
+      "chemistry": "LFP",
+      "usableKWh": 5.0,
+      "dodFrac": 1.0,
+      "roundTripEff": 0.96,
+      "maxChargeKW": 3.84,
+      "maxDischargeKW": 3.84,
+      "cycleLife": 6000,
+      "calendarLifeYears": 15,
+      "installedCostUSD": 7000,
+      "estimatedFields": [],
+      "notes": "3.84 kW continuous (7.68 kW peak for 3s, 6.14 kW for 10s), 100% depth of discharge, 15-year/6,000-cycle limited warranty per Enphase datasheet. roundTripEff of 96% is Enphase's stated DC round-trip figure; AC round-trip (including the built-in microinverters) is reported closer to 90% in some reviews. installedCostUSD ($7,000) sits within the widely reported $5,000-$8,000 per-unit range (~$1,000-1,600/kWh usable)."
+    },
+    {
+      "id": "franklinwh-apower-2",
+      "label": "FranklinWH aPower 2",
+      "chemistry": "LFP",
+      "usableKWh": 15,
+      "dodFrac": 1.0,
+      "roundTripEff": 0.96,
+      "maxChargeKW": 10,
+      "maxDischargeKW": 10,
+      "cycleLife": 6000,
+      "calendarLifeYears": 12,
+      "installedCostUSD": 17000,
+      "estimatedFields": ["cycleLife"],
+      "notes": "10 kW continuous (15 kW surge), inverter-agnostic via the aGate hub, 12-year warranty per manufacturer/review specs. installedCostUSD is the midpoint of the reported $1,100-$1,200/kWh ($16,500-$18,000 per unit) range. Exact cycle-life was not found in a manufacturer datasheet during this pass; 6,000 is a representative LFP figure, flagged as estimated."
+    },
+    {
+      "id": "unigrid-na-casa",
+      "label": "UNIGRID Na+Casa (sodium-ion)",
+      "chemistry": "Na-ion",
+      "usableKWh": 9.25,
+      "dodFrac": 1.0,
+      "roundTripEff": 0.92,
+      "maxChargeKW": 4.6,
+      "maxDischargeKW": 4.6,
+      "cycleLife": 10000,
+      "calendarLifeYears": 25,
+      "installedCostUSD": 10500,
+      "estimatedFields": ["roundTripEff", "maxChargeKW", "maxDischargeKW", "installedCostUSD"],
+      "notes": "First-generation residential sodium-ion product (NCO sodium-ion chemistry), shipping in Europe as of July 2026 with US installations targeted for late 2026 pending UL 9540 certification -- as of this writing it is not yet a purchasable US-installed product, so installedCostUSD is not a real quote. Manufacturer-disclosed: 9.25 kWh usable, 10,000 cycles at 100% depth of discharge, 25-year design life/warranty, -40F to 140F operating range. roundTripEff, max charge/discharge power, and installedCostUSD were not disclosed by the manufacturer; the values here are estimates (roundTripEff scaled down from LFP's ~96% to reflect sodium-ion's typically lower reported round-trip efficiency; charge/discharge power scaled from comparable ~9-10kWh LFP units' roughly 0.5C rating; installedCostUSD extrapolated from the manufacturer's claim of pricing 'competitively with lithium-ion' applied to comparable small-format LFP $/kWh installed costs). A different sodium-ion entrant, Natron Energy, was considered but is excluded: it shut down operations in September 2025 (assignment for the benefit of creditors) and has no current product to price."
+    }
+  ],
+  "batteryDefaultsByChemistry": {
+    "LFP": {
+      "dodFrac": 1.0,
+      "roundTripEff": 0.96,
+      "cycleLife": 6000,
+      "calendarLifeYears": 12,
+      "note": "Representative of modern LFP home-battery products (Powerwall 3, Enphase 5P, FranklinWH aPower 2 above); used as fallback defaults when no specific preset is selected."
+    },
+    "NMC": {
+      "dodFrac": 0.9,
+      "roundTripEff": 0.92,
+      "cycleLife": 3500,
+      "calendarLifeYears": 10,
+      "note": "NMC home batteries (e.g., older Powerwall 2, LG RESU) are typically specified to a shallower recommended depth of discharge and shorter cycle/calendar life than LFP, per widely reported industry comparisons; no single current product was used to derive these figures, so treat as directional."
+    },
+    "Na-ion": {
+      "dodFrac": 1.0,
+      "roundTripEff": 0.92,
+      "cycleLife": 8000,
+      "calendarLifeYears": 20,
+      "note": "Blends the UNIGRID Na+Casa preset above with more conservative published cycle-life claims (8,000-10,000 cycles) from sodium-ion cell/pack makers reporting on residential-scale applications; the category is early enough that a single product should not be treated as fully representative."
+    }
+  },
+  "solar": {
+    "costPerWattInstalled": {
+      "value": 3.0,
+      "note": "Roughly the midpoint between EnergySage's marketplace average ($2.58-$2.60/W in early 2026, a competitive online-quote sample) and Lawrence Berkeley National Laboratory's Tracking the Sun median cash price for residential PV ($3.50/W, 2024 data, the broader real-world figure including non-competitive/single-quote installs). Before any incentives."
+    },
+    "panelPresets": [
+      { "id": "panel-350w", "label": "350 W module", "watts": 350 },
+      { "id": "panel-400w", "label": "400 W module", "watts": 400 },
+      { "id": "panel-440w", "label": "440 W module", "watts": 440 },
+      { "id": "panel-500w", "label": "500 W module", "watts": 500 }
+    ],
+    "inverterEffDefault": 0.97,
+    "lossStackDefaultFrac": 0.14,
+    "degradationRateDefault": 0.005,
+    "inverterReplacement": {
+      "defaultYear": 12,
+      "costPerWattInstalled": {
+        "value": 0.3,
+        "note": "String inverters are commonly cited as needing replacement within a 10-15 year window (this preset's defaultYear of 12 sits mid-range); $0.30/W is a representative planning figure for the replacement itself, not a competitive-quote figure the way costPerWattInstalled above is -- installed string-inverter replacement quotes for a typical residential system size were found spanning roughly $0.15-0.60/W depending on system size and labor, with sources in the $0.25-0.35/W band for a mid-size (6-10 kW) system most consistent with this figure. No single manufacturer-disclosed or EnergySage-marketplace-quality figure was found for this line item specifically; treat as directional, like this file's other estimatedFields."
+      }
+    }
+  },
+  "wind": {
+    "costPerKWInstalled": {
+      "value": 8000,
+      "note": "Median installed cost for small wind (residential-scale, <100 kW) per NREL's Distributed Wind Market Report, cited at ~$8,000/kW with a broader ~$4,000-$12,000/kW range depending on tower height, site complexity, and system size."
+    }
+  },
+  "sources": [
+    {
+      "title": "Tesla Powerwall 3 Review in 2026 | EnergySage",
+      "url": "https://www.energysage.com/energy-storage/best-home-batteries/tesla-powerwall-battery-complete-review/"
+    },
+    {
+      "title": "Tesla Powerwall 3 Price 2026: $13,000-$16,500 Installed | SmartEnergyUSA",
+      "url": "https://www.smartenergyusa.com/energy-storage/batteries/tesla-powerwall-3/"
+    },
+    {
+      "title": "Tesla Powerwall Limited Warranty (USA)",
+      "url": "https://energylibrary.tesla.com/docs/Public/EnergyStorage/Powerwall/General/Warranty/en-us/Powerwall-Warranty-EN.pdf"
+    },
+    {
+      "title": "Enphase IQ Battery 5P data sheet",
+      "url": "https://enphase.com/en-gb/download/iq-battery-5p-data-sheet"
+    },
+    {
+      "title": "Enphase IQ Battery 5P (IQBATTERY-5P-1P-NA) | RES Supply",
+      "url": "https://ressupply.com/batteries-and-enclosures/enphase-iq-battery-5p-iqbattery-5p-1p-na"
+    },
+    {
+      "title": "FranklinWH aPower 2 Review 2026 | OhmSnap",
+      "url": "https://www.ohmsnap.com/blog/franklinwh-apower-2-review-2026"
+    },
+    {
+      "title": "FranklinWH aPower 2 Review: Performance, Pricing & Comparison | NRG Clean Power",
+      "url": "https://nrgcleanpower.com/learning-center/franklinwh-battery-review/"
+    },
+    {
+      "title": "UNIGRID's sodium-ion home battery debuts in Europe, US is next | Electrek",
+      "url": "https://electrek.co/2026/07/10/unigrid-sodium-ion-home-battery-debuts-in-europe-us/"
+    },
+    {
+      "title": "UNIGRID unveils sodium-ion residential energy storage systems | pv magazine Global",
+      "url": "https://www.pv-magazine.com/2026/07/08/unigrid-unveils-sodium-ion-residential-energy-storage-systems/"
+    },
+    {
+      "title": "Sodium-ion battery maker Natron Energy shuts down, halts $1.4B factory plans | Construction Dive",
+      "url": "https://www.constructiondive.com/news/sodium-ion-battery-natron-energy-shutters-halts-NC-factory-plans/759603/"
+    },
+    {
+      "title": "Solar Panel Cost In 2026 | EnergySage",
+      "url": "https://www.energysage.com/local-data/solar-panel-cost/"
+    },
+    {
+      "title": "First-of-Its-Kind Report Benchmarks Costs for U.S. Small Wind Projects (NREL Distributed Wind Market Report) | energy.gov",
+      "url": "https://www.energy.gov/cmei/systems/articles/first-its-kind-report-benchmarks-costs-us-small-wind-projects"
+    },
+    {
+      "title": "How Much Does a Solar Inverter Cost? [2026 Data] | Angi",
+      "url": "https://www.angi.com/articles/solar-inverter-cost.htm"
+    },
+    {
+      "title": "Solar Inverter Replacement Cost 2026 -- String, Micro & Hybrid Pricing | USA Solar Cost",
+      "url": "https://usa-solar-cost.com/solar-inverter-cost"
+    }
+  ]
+}
