@@ -12,6 +12,8 @@ export default defineConfig({
         "home-purchase-comparison": "home-purchase-comparison/index.html",
         "compensation-comparison": "compensation-comparison/index.html",
         "compensation-assumptions": "compensation-comparison/assumptions/index.html",
+        "energy-system-comparison": "energy-system-comparison/index.html",
+        "energy-assumptions": "energy-system-comparison/assumptions/index.html",
       },
     },
   },
